@@ -3,6 +3,7 @@
 @prefix nastya: <http://www.example.com/nastya#> .
 @prefix thomas: <http://www.example.com/thomas#> .
 @prefix lars: <http://www.example.com/lars#> .
+@prefix xhulio: <http://www.example.com/xhulio#> .
 
 
 ### christophe mapping
@@ -821,5 +822,535 @@ thomas:ScheduleTripleMap
     rr:subjectMap [
         rr:template "http://www.example.com/lars#review_{rating_id}"; 
         rr:class lars:Review ;
+    ] ;
+.
+
+<#DeliveryCompanies>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.delivery_companies"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/xhulio#company_{name}" ;
+        rr:class xhulio:DeliveryCompanies;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate xhulio:companyName ;
+        rr:objectMap [rr:column "name"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate xhulio:branch_id ; # need to create this one.
+        rr:objectMap [rr:column "branch_id"] ;
+    ] ;
+.
+
+<#Address>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.address"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/xhulio#address_{address_id}" ;
+        rr:class xhulio:Addres;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate xhulio:streetName ;
+        rr:objectMap [rr:column "street_name"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:postalCode ;
+        rr:objectMap [rr:column "postal_code"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:city ;
+        rr:objectMap [rr:column "city_"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:region ;
+        rr:objectMap [rr:column "region"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:addressId ;
+        rr:objectMap [rr:column "address_id"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:buildingNumber ;
+        rr:objectMap [rr:column "building_number"] ;
+    ] ;
+.
+
+<#PhysicalDeliveryPointsLocation>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.physical_delivery_points_locations"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/xhulio#location_{delivery_point_id}" ;
+        rr:class xhulio:PhysicalDeliveryPointsLocation;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate xhulio:deliveryPointId ;
+        rr:objectMap [rr:column "delivery_point_id"] ;
+    ] ;
+
+     rr:predicateObjectMap [
+        rr:predicate xhulio:have ;
+        rr:objectMap [
+            rr:parentTriplesMap <#DeliveryCompanies>;
+            rr:joinCondition [
+                rr:child "name" ;
+                rr:parent "name" ;
+            ];
+        ];
+    ];
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:include ;
+        rr:objectMap [
+            rr:parentTriplesMap <#Address>;
+            rr:joinCondition [
+                rr:child "address_id" ;
+                rr:parent "address_id" ;
+            ];
+        ];
+    ];
+    
+.
+
+<#Departments>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.departments"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/xhulio#department_{department_id}" ;
+        rr:class xhulio:Departments;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate xhulio:departmentId ;
+        rr:objectMap [rr:column "department_id"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:departmentName ;
+        rr:objectMap [rr:column "department_name"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:numberOfEmployees ;
+        rr:objectMap [rr:column "number_of_employees"] ;
+    ] ;    
+.
+
+<#Employee>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.deliverycompanyemploye"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/xhulio#employee_{emp_id}" ;
+        rr:class xhulio:Employee;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate xhulio:employeeId ;
+        rr:objectMap [rr:column "emp_id"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:employeeFirstName ;
+        rr:objectMap [rr:column "first_name"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:employeeLastName ;
+        rr:objectMap [rr:column "last_name"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:employeeEmail ;
+        rr:objectMap [rr:column "email"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:employeeContactNumber ;
+        rr:objectMap [rr:column "contact_number"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:EmployeeSalary ;
+        rr:objectMap [rr:column "salary"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:hires ; 
+        rr:objectMap [
+            rr:parentTriplesMap <#Departments>;
+            rr:joinCondition [
+                rr:child "department_id" ;
+                rr:parent "department_id" ;
+            ];
+        ];
+    ];
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:supervize ; 
+        rr:objectMap [
+            rr:parentTriplesMap <#Employee>;
+            rr:joinCondition [
+                rr:child "supervize_emp_id" ;
+                rr:parent "emp_id" ;
+            ];
+        ];
+    ];
+.
+
+<#CallCustomerService>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.call_customer_service"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/xhulio#customer_service_{supporter_id}" ;
+        rr:class xhulio:CallCustomerService;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate xhulio:phoneNumber ;
+        rr:objectMap [rr:column "phone_number"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:supporterId ;
+        rr:objectMap [rr:column "supporter_id"] ;
+    ] ;
+
+     rr:predicateObjectMap [
+        rr:predicate xhulio:supporterFirstName ;
+        rr:objectMap [rr:column "supporter_first_name"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:supporterLastName ;
+        rr:objectMap [rr:column "supporter_last_name"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:review ;
+        rr:objectMap [rr:column "review"] ;
+    ] ;
+
+   rr:predicateObjectMap [
+       rr:predicate xhulio:isOfferedBy ; 
+       rr:objectMap [
+           rr:parentTriplesMap <#Departments>;
+           rr:joinCondition [
+               rr:child "department_id" ;
+               rr:parent "department_id" ;
+           ];
+       ];
+   ];
+.
+
+<#DeliveryVehicles>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.delivery_vehicles"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/xhulio#vehicle_{vechicle_series_number}" ;
+        rr:class xhulio:DeliveryVehicles;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate xhulio:plateNumber ;
+        rr:objectMap [rr:column "plate_number"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:type ;
+        rr:objectMap [rr:column "type"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:brandName ;
+        rr:objectMap [rr:column "brand_name"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:consumption ;
+        rr:objectMap [rr:column "consumption"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:vehicleSeriesNumber ;
+        rr:objectMap [rr:column "vechicle_series_number"] ;
+    ] ;
+
+   rr:predicateObjectMap [
+       rr:predicate xhulio:isFacilitatedBy ; 
+       rr:objectMap [
+           rr:parentTriplesMap <#Departments>;
+           rr:joinCondition [
+               rr:child "department_id" ;
+               rr:parent "department_id" ;
+           ];
+       ];
+   ];
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:use ; 
+        rr:objectMap [
+            rr:parentTriplesMap <#Courier>;
+            rr:joinCondition [
+                rr:child "courier_id" ;
+                rr:parent "courier_id" ;
+            ];
+        ];
+    ];
+.
+
+<#Courier>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.courier"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/xhulio#courier_{courier_id}" ;
+        rr:class xhulio:Courier;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate xhulio:courierId ;
+        rr:objectMap [rr:column "courier_id"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:courierLastName ;
+        rr:objectMap [rr:column "last_name"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:courierFirstName ;
+        rr:objectMap [rr:column "first_name"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:gender ;
+        rr:objectMap [rr:column "gender"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:dateOfBirth ;
+        rr:objectMap [rr:column "date_of_birth"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:courierSalary ;
+        rr:objectMap [rr:column "salary"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:isRecruitedBy ; 
+        rr:objectMap [
+            rr:parentTriplesMap <#Departments>;
+            rr:joinCondition [
+                rr:child "department_id" ;
+                rr:parent "department_id" ;
+            ];
+        ];
+    ];
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:isManagedBy ; 
+        rr:objectMap [
+            rr:parentTriplesMap <#Employee>;
+            rr:joinCondition [
+                rr:child "emp_id" ;
+                rr:parent "emp_id" ;
+            ];
+        ];
+    ];
+.
+
+<#Customer>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.custemer"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/xhulio#customer_{customer_id}" ;
+        rr:class xhulio:Customer;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate xhulio:customerId ;
+        rr:objectMap [rr:column "customer_id"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:customerName ;
+        rr:objectMap [rr:column "name"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:customerSurname ;
+        rr:objectMap [rr:column "surname"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:customerEmail ;
+        rr:objectMap [rr:column "email"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:customerPhoneNumber ;
+        rr:objectMap [rr:column "phone_number"] ;
+    ] ;
+
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:isRegisteredBy ; 
+        rr:objectMap [
+            rr:parentTriplesMap <#Departments>;
+            rr:joinCondition [
+                rr:child "department_id" ;
+                rr:parent "department_id" ;
+            ];
+        ];
+    ];
+    
+.
+
+<#DeliveryOrder>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.delivery_order"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/xhulio#delivery_order_{deliver_id}" ;
+        rr:class xhulio:DeliveryOrder;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate xhulio:deliveryID ;
+        rr:objectMap [rr:column "deliver_id"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:packageWeight ;
+        rr:objectMap [rr:column "package_weight"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:stage ;
+        rr:objectMap [rr:column "stage"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:shippingType ;
+        rr:objectMap [rr:column "shipping_type"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:comments ;
+        rr:objectMap [rr:column "comments"] ;
+    ] ;
+
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:isRecorded ; 
+        rr:objectMap [
+            rr:parentTriplesMap <#Departments>;
+            rr:joinCondition [
+                rr:child "department_id" ;
+                rr:parent "department_id" ;
+            ];
+        ];
+    ];
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:owns ; 
+        rr:objectMap [
+            rr:parentTriplesMap <#Address>;
+            rr:joinCondition [
+                rr:child "address_id" ;
+                rr:parent "address_id" ;
+            ];
+        ];
+    ];
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:purchase ; 
+        rr:objectMap [
+            rr:parentTriplesMap <#Customer>;
+            rr:joinCondition [
+                rr:child "customer_id" ;
+                rr:parent "customer_id" ;
+            ];
+        ];
+    ];
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:isEnabled ; 
+        rr:objectMap [
+            rr:parentTriplesMap <#Courier>;
+            rr:joinCondition [
+                rr:child "courier_id" ;
+                rr:parent "courier_id" ;
+            ];
+        ];
+    ];
+.
+
+<#PositionHistory>
+    a rr:TriplesMap ;
+
+    #rr:logicalTable [rr:sqlQuery """SELECT * FROM webshop.position_history ph FULL OUTER JOIN webshop.deliverycompanyemploye dce on emp_id=emp_id"""] ;
+    rr:logicalTable [rr:tableName "webshop.position_history"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/xhulio#{emp_id}_{position_name}" ;
+        rr:class xhulio:PositionHistory;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate xhulio:startDate ;
+        rr:objectMap [rr:column "start_date"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate xhulio:endDate ;
+        rr:objectMap [rr:column "end_date"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:positionName ;
+        rr:objectMap [rr:column "position_name"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:involve ; 
+        rr:objectMap [
+            rr:parentTriplesMap <#Employee>;
+            rr:joinCondition [
+                rr:child "emp_id" ;
+                rr:parent "emp_id" ;
+            ];
+        ];
+    ];
+.
+
+<#CompaniesDividedIntoDepartment> 
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.is_divided"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/xhulio#company_{name}" ;
+
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate xhulio:isDivided ;
+        rr:objectMap [ rr:template "http://www.example.com/xhulio#department_{department_id}"] ;
+    ] ;
+.
+
+<#CustomersCallCustomerService> 
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.\"call\""] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/xhulio#customer_{customer_id}" ;
+    
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate xhulio:call ;
+        rr:objectMap [ rr:template "http://www.example.com/xhulio#customer_service_{supporter_id}"] ;
     ] ;
 .

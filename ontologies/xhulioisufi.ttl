@@ -469,18 +469,6 @@ xhulio:call rdf:type owl:ObjectProperty;
     rdfs:comment "This relationship shows that customers can call customer service"@en ;
     rdfs:label "call"@en.
 
-
-
-
-
-
-
-
-
-
-
-
-
 # Data Properties
 
 xhulio:companyName rdf:type owl:DatatypeProperty;

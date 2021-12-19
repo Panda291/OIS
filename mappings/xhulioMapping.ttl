@@ -1,7 +1,6 @@
 @prefix rr: <http://www.w3.org/ns/r2rml#> .
 @prefix xhulio: <http://www.example.com/xhulio#> .
 
-
 <#DeliveryCompanies>
     a rr:TriplesMap ;
 
@@ -117,20 +116,7 @@
     rr:predicateObjectMap [
         rr:predicate xhulio:numberOfEmployees ;
         rr:objectMap [rr:column "number_of_employees"] ;
-    ] ;
-
-
-    rr:predicateObjectMap [
-        rr:predicate xhulio:heads ; # if it doesn't work try isHeadedBy
-        rr:objectMap [
-            rr:parentTriplesMap <#Employee>;
-            rr:joinCondition [
-                rr:child "emp_id" ;
-                rr:parent "emp_id" ;
-            ];
-        ];
-    ];
-    
+    ] ;    
 .
 
 <#Employee>
@@ -227,16 +213,16 @@
         rr:objectMap [rr:column "review"] ;
     ] ;
 
-    rr:predicateObjectMap [
-        rr:predicate xhulio:offers ; 
-        rr:objectMap [
-            rr:parentTriplesMap <#Departments>;
-            rr:joinCondition [
-                rr:child "department_id" ;
-                rr:parent "department_id" ;
-            ];
-        ];
-    ];
+   rr:predicateObjectMap [
+       rr:predicate xhulio:isOfferedBy ; 
+       rr:objectMap [
+           rr:parentTriplesMap <#Departments>;
+           rr:joinCondition [
+               rr:child "department_id" ;
+               rr:parent "department_id" ;
+           ];
+       ];
+   ];
 .
 
 <#DeliveryVehicles>
@@ -272,17 +258,16 @@
         rr:objectMap [rr:column "vechicle_series_number"] ;
     ] ;
 
-    rr:predicateObjectMap [
-        rr:predicate xhulio:facilitate ; 
-        rr:objectMap [
-            rr:parentTriplesMap <#Departments>;
-            rr:joinCondition [
-                rr:child "department_id" ;
-                rr:parent "department_id" ;
-            ];
-        ];
-    ];
-
+   rr:predicateObjectMap [
+       rr:predicate xhulio:isFacilitatedBy ; 
+       rr:objectMap [
+           rr:parentTriplesMap <#Departments>;
+           rr:joinCondition [
+               rr:child "department_id" ;
+               rr:parent "department_id" ;
+           ];
+       ];
+   ];
 
     rr:predicateObjectMap [
         rr:predicate xhulio:use ; 
@@ -294,7 +279,6 @@
             ];
         ];
     ];
-
 .
 
 <#Courier>
@@ -336,7 +320,7 @@
     ] ;
 
     rr:predicateObjectMap [
-        rr:predicate xhulio:recruit ; 
+        rr:predicate xhulio:isRecruitedBy ; 
         rr:objectMap [
             rr:parentTriplesMap <#Departments>;
             rr:joinCondition [
@@ -347,7 +331,7 @@
     ];
 
     rr:predicateObjectMap [
-        rr:predicate xhulio:manage ; 
+        rr:predicate xhulio:isManagedBy ; 
         rr:objectMap [
             rr:parentTriplesMap <#Employee>;
             rr:joinCondition [
@@ -393,7 +377,7 @@
 
 
     rr:predicateObjectMap [
-        rr:predicate xhulio:register ; 
+        rr:predicate xhulio:isRegisteredBy ; 
         rr:objectMap [
             rr:parentTriplesMap <#Departments>;
             rr:joinCondition [
@@ -440,7 +424,7 @@
 
 
     rr:predicateObjectMap [
-        rr:predicate xhulio:record ; 
+        rr:predicate xhulio:isRecorded ; 
         rr:objectMap [
             rr:parentTriplesMap <#Departments>;
             rr:joinCondition [
@@ -473,7 +457,7 @@
     ];
 
     rr:predicateObjectMap [
-        rr:predicate xhulio:enables ; 
+        rr:predicate xhulio:isEnabled ; 
         rr:objectMap [
             rr:parentTriplesMap <#Courier>;
             rr:joinCondition [
@@ -533,7 +517,6 @@
     ] ;
 .
 
-
 <#CustomersCallCustomerService> 
     a rr:TriplesMap ;
 
@@ -543,7 +526,7 @@
     
     ] ;
     rr:predicateObjectMap [
-        rr:predicate xhulio:isDivided ;
+        rr:predicate xhulio:call ;
         rr:objectMap [ rr:template "http://www.example.com/xhulio#customer_service_{supporter_id}"] ;
     ] ;
 .
