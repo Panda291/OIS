@@ -1,0 +1,156 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix christophe: <http://www.example.com/christophe#> .
+
+
+<#PickupLocations>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.pickup_locations"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/christophe#pickupLocation_{address}" ; # should probably be a trimmed version of address
+        rr:class christophe:PickupLocation ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate christophe:pickupAddress ;
+        rr:objectMap [rr:column "address"] ;
+    ] ;
+.
+
+<#DeliveryMethods>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.delivery_methods"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/christophe#delivery_method_{id}" ;
+        rr:class christophe:DeliveryMethod ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate christophe:methodUUID ;
+        rr:objectMap [rr:column "id"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate christophe:priority ;
+        rr:objectMap [rr:column "priority"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate christophe:deliveryType ;
+        rr:objectMap [rr:column "delivery type"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate christophe:address ;
+        rr:objectMap [rr:column "address"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate christophe:has ;
+        rr:objectMap [
+            rr:parentTriplesMap <#PickupLocations> ;
+            rr:joinCondition [
+                rr:child "pickup_location" ;
+                rr:parent "address" ;
+            ] ;
+        ];
+    ];
+    rr:predicateObjectMap [
+        rr:predicate christophe:preferredBy ;
+        rr:objectMap [
+            rr:parentTriplesMap <#Customers> ;
+            rr:joinCondition [
+                rr:child "customer_id" ;
+                rr:parent "email" ;
+            ] ;
+        ] ;
+    ] ;
+.
+
+<#Purchases>
+    a rr:TriplesMap ;
+    
+    rr:logicalTable [rr:tableName "webshop.orders"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/christophe#purchase_{id}" ;
+        rr:class christophe:Purchase ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate christophe:purchaseUUID ;
+        rr:objectMap [rr:column "id"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate christophe:date ;
+        rr:objectMap [rr:column "date"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate christophe:totalPrice ;
+        rr:objectMap [rr:column "total price"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate christophe:used ;
+        rr:objectMap [
+            rr:parentTriplesMap <#DeliveryMethods> ;
+            rr:joinCondition [
+                rr:child "delivery_method_id" ;
+                rr:parent "id" ;
+            ] ;
+        ] ;
+    ] ;
+.
+
+<#Customers>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.customers"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/christophe#{email}" ;
+        rr:class christophe:Customer ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate christophe:phoneNumber ;
+        rr:objectMap [rr:column "phone number"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate christophe:fullName ;
+        rr:objectMap [rr:column "full name"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate christophe:email ;
+        rr:objectMap [rr:column "email"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate christophe:hasPreferred ;
+        rr:objectMap [
+            rr:parentTriplesMap <#DeliveryMethods> ;
+            rr:joinCondition [
+                rr:child "email" ;
+                rr:parent "customer_id" ;
+            ];
+        ];
+    ];
+.
+
+<#Products>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:sqlQuery """SELECT DISTINCT products as id from webshop.order_products"""] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/christophe#product_{id}" ;
+        rr:class christophe:Product ;
+    ] ;
+# Could not infer the type of id1
+#    rr:predicateObjectMap [
+#        rr:predicate christophe:productUUID ;
+#        rr:objectMap [rr:column "id"] ;
+#    ] ;
+.
+
+<#PurchasesContainProducts> 
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.order_products"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/christophe#purchase_{order}" ;
+#        rr:class christophe:Purchase ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate christophe:contains ;
+        rr:objectMap [ rr:template "http://www.example.com/christophe#product_{products}"] ;
+    ] ;
+.

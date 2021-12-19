@@ -1,0 +1,269 @@
+@prefix : <http://www.example.com#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+@prefix lars: <http://www.example.com/lars#> .
+@prefix nastya: <http://www.example.com/nastya#> .
+@prefix thomas: <http://www.example.com/thomas#> .
+@prefix xhulio: <http://www.example.com/xhulio#> .
+@prefix christophe: <http://www.example.com/christophe#> .
+
+@base <http://www.example.com> .
+
+<http://www.example.com> rdf:type owl:Ontology .
+
+
+##### Warehouses #####
+
+#1. Classes
+
+###  http://www.example.com/thomas#Product
+thomas:Product rdf:type owl:Class ;
+        rdfs:comment "The product class, individual products from different vendors"@en ;
+        rdfs:label "Product"@en ;
+        owl:hasKey thomas:productUUID  .
+
+###  http://www.example.com/thomas#Warehouse
+thomas:Warehouse rdf:type owl:Class ;
+        rdfs:comment "The warehouse class, warehouses are the storages for the products of our e-commerce."@en ;
+        rdfs:label "Warehouse"@en ;
+        owl:hasKey thomas:address .
+
+### http://www.example.com/thomas#Employee
+thomas:Employee rdf:type owl:Class ;
+        rdfs:comment "The employee class, employees work in a warehouse to process incoming and outgoing deliveries"@en ;
+        rdfs:label "Employee"@en ;
+        owl:hasKey thomas:fullName.
+
+### http://www.example.com/thomas#Delivery
+thomas:Delivery rdf:type owl:Class ;
+        rdfs:comment "The delivery class, outgoing orders from customers or incoming refillings of stock from the vendors, both must be processed by employees"@en ;
+        rdfs:label "Delivery"@en ;
+        owl:hasKey thomas:deliveryUUID.
+
+### http://www.example.com/thomas#Stock
+thomas:Stock rdf:type owl:Class;
+        rdfs:subClassOf rdf:Statement ;
+        rdf:predicate thomas:stores ;
+        rdfs:comment "Stock class, to indicate how much stock there is of a certain product in a certain warehouse"@en ;
+        rdfs:label "Stock"@en ;
+        .
+
+### http://www.example.com/thomas#DeliverySize
+thomas:DeliverySize rdf:type owl:Class ;
+        rdfs:subClassOf rdf:Statement ;
+        rdf:predicate thomas:delivers ;
+        rdfs:comment "Class that knows how many pieces of a product are being delivered"@en ;
+        rdfs:label "size of delivery"@en .
+
+### http://www.example.com/thomas#Schedule
+thomas:Schedule rdf:type owl:Class ;
+        rdfs:subClassOf rdf:Statement ;
+        rdf:predicate thomas:processedBy ;
+        rdfs:comment "Class that knows for every delivery processing how long an employee worked"@en ;
+        rdfs:label "Schedule"@en .
+
+#2. Object Properties
+
+### http://www.example.com/thomas#stores
+thomas:stores rdf:type owl:ObjectProperty ;
+        rdf:type owl:InverseFunctionalProperty ;
+        owl:inverseOf thomas:isStored ;
+        rdfs:domain thomas:Warehouse ;
+        rdfs:range thomas:Product ;
+        rdfs:comment "relation to a product that is stored in a warehouse"@en ;
+        rdfs:label "stores"@en .
+
+### http://www.example.com/thomas#isStored
+thomas:isStored rdf:type owl:ObjectProperty ;
+        rdf:type owl:FunctionalProperty ;
+        owl:inverseOf thomas:stores ;
+        rdfs:domain thomas:Product,
+                    [rdf:type owl:Restriction ;
+                        owl:onProperty thomas:isStored ;
+                        owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+                        owl:onClass thomas:Warehouse] ;
+        rdfs:range thomas:Warehouse ;
+        rdfs:comment "relation to a warehouse that stores a product"@en ;
+        rdfs:label "is stored in"@en .
+
+###  http://www.example.com/thomas#worksAt
+thomas:worksAt rdf:type owl:ObjectProperty ;
+        owl:inverseOf thomas:employs ;
+        rdf:type owl:FunctionalProperty ;
+        rdfs:domain thomas:Employee ,
+        [rdf:type owl:Restriction ;
+            owl:onProperty thomas:worksAt ;
+            owl:cardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass thomas:Warehouse] ;
+        rdfs:range thomas:Warehouse ;
+        rdfs:comment "relation to a warehouse where an employee works"@en ;
+        rdfs:label "works at"@en .
+
+###  http://www.example.com/thomas#employs
+thomas:employs rdf:type owl:ObjectProperty ;
+        owl:inverseOf thomas:worksAt ;
+        rdf:type owl:InverseFunctionalProperty ;
+        rdfs:domain thomas:Warehouse ,
+         [rdf:type owl:Restriction ;
+            owl:onProperty thomas:employs ;
+            owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass thomas:Employee] ;
+        rdfs:range thomas:Employee ;
+        rdfs:comment "relation to an employee working in the warehouse"@en ;
+        rdfs:label "employs"@en .
+
+### http://www.example.com/thomas#delivers
+thomas:delivers rdf:type owl:ObjectProperty ;
+        rdf:type owl:InverseFunctionalProperty ;
+        rdfs:domain thomas:Delivery,
+        [rdf:type owl:Restriction ;
+        owl:onProperty thomas:delivers ;
+        owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+        owl:onClass thomas:Product] ;
+        rdfs:range thomas:Product ;
+        rdfs:comment "relation to a product that is part of a delivery"@en ;
+        rdfs:label "delivers"@en .
+
+### http://www.example.com/thomas#processedBy
+thomas:processedBy rdf:type owl:ObjectProperty ;
+        rdfs:domain thomas:Delivery ,
+        [rdf:type owl:Restriction ;
+        owl:onProperty thomas:processedBy ;
+        owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+        owl:onClass thomas:Employee] ;
+        rdfs:range thomas:Employee ;
+        rdfs:comment "relation to an employee that processes a delivery"@en ;
+        rdfs:label "processed by"@en .
+
+#3. Data Properties
+
+### http://www.example.com/thomas#productUUID
+thomas:productUUID rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Product ;
+        rdfs:range xsd:int ;
+        rdfs:comment "Unique identifier of warehouse products"@en ;
+        rdfs:label "product UUID"@en .
+
+### http://www.example.com/thomas#price
+thomas:price rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Product ;
+        rdfs:range xsd:double ;
+        rdfs:comment "total selling price of a product"@en ;
+        rdfs:label "price"@en .
+
+### http://www.example.com/thomas#volume
+thomas:volume rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Product ;
+        rdfs:range xsd:double ;
+        rdfs:comment "volume in cubic meters"@en ;
+        rdfs:label "volume"@en .
+
+### http://www.example.com/thomas#commision
+thomas:commision rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Product ;
+        rdfs:range xsd:double ;
+        rdfs:comment "percentage of the profit that our e-commerce business takes from a sale"@en ;
+        rdfs:label "commision"@en .
+
+###  http://www.example.com/thomas#address
+thomas:address rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Warehouse ;
+        rdfs:range xsd:string ;
+        rdfs:comment "warehouse address"@en ;
+        rdfs:label "address"@en .
+
+###  http://www.example.com/thomas#spaceLimit
+thomas:spaceLimit rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Warehouse ;
+        rdfs:range xsd:double ;
+        rdfs:comment "storage capacity of a warehouse in cubic meters"@en ;
+        rdfs:label "space limit"@en .
+
+### http://www.example.com/thomas#fullName
+thomas:fullName rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Employee ;
+        rdfs:range xsd:string ;
+        rdfs:comment "first name and family name of an employee"@en ;
+        rdfs:label "full name"@en .
+
+### http://www.example.com/thomas#salary
+thomas:salary rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Employee ;
+        rdfs:range xsd:double ;
+        rdfs:comment "gaining of an employee for one hour of work"@en ;
+        rdfs:label "salary"@en .
+
+### http://www.example.com/thomas#deliveryUUID
+thomas:deliveryUUID rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Delivery ;
+        rdfs:range xsd:int ;
+        rdfs:comment "Unique identifier for a delivery"@en ;
+        rdfs:label "delivery UUID"@en .
+
+### http://www.example.com/thomas#deliveryService
+thomas:deliveryService rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Delivery ;
+        rdfs:range xsd:string ;
+        rdfs:comment "Company that is charged with the delivery"@en ;
+        rdfs:label "delivery company"@en .
+
+### http://www.example.com/thomas#isOrder
+thomas:isOrder rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Delivery ;
+        rdfs:range xsd:boolean ;
+        rdfs:comment "indicates if delivery is a customer order. Otherwise it is a stock refilling."@en ;
+        rdfs:label "delivery is order?"@en .
+
+### http://www.example.com/thomas#transportCosts
+thomas:transportCosts rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Delivery ;
+        rdfs:range xsd:double ;
+        rdfs:comment "compensation for the service of the delivery company"@en ;
+        rdfs:label "transport costs"@en .
+
+### http://www.example.com/thomas#destinationAddress
+thomas:destinationAddress rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Delivery ;
+        rdfs:range xsd:string ;
+        rdfs:comment "address where the delivery will be shipped to"@en ;
+        rdfs:label "destination address"@en .
+
+### http://www.example.com/thomas#arrivalTime
+thomas:arrivalTime rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Delivery ;
+        rdfs:range xsd:date ;
+        rdfs:comment "Time of arrival"@en ;
+        rdfs:label "arrival time"@en .
+
+### http://www.example.com/thomas#departureTime
+thomas:departureTime rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Delivery ;
+        rdfs:range xsd:date ;
+        rdfs:comment "Time of departure"@en ;
+        rdfs:label "departure time"@en .
+
+### http://www.example.com/thomas#productStock
+thomas:productStock rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Stock ;
+        rdfs:range xsd:int ;
+        rdfs:comment "The number of pieces of a product in stock in a warehouse"@en ;
+        rdfs:label "warehouse stock"@en .
+
+### http://www.example.com/thomas#productAmount
+thomas:productAmount rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:DeliverySize ;
+        rdfs:range xsd:int ;
+        rdfs:comment "total number of this product in this delivery"@en ;
+        rdfs:label "delivery size"@en .
+
+### http://www.example.com/thomas#hoursWorked
+thomas:hoursWorked rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Schedule ;
+        rdfs:range xsd:int ;
+        rdfs:comment "the total hours an employee needed to process this delivery"@en ;
+        rdfs:label "hourse worked"@en .
+

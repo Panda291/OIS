@@ -1,0 +1,293 @@
+# Vocabulary for creating R2RML 
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+# Vocabulary of ontology 
+@prefix lars: <http://www.example.com/lars#> .
+
+<#Supplier>
+    a rr:TriplesMap ; 
+
+    rr:logicalTable [ rr:tableName "webshop.Supplier" ] ; 
+
+    rr:subjectMap [
+        rr:template "http://www.example.com/lars#supplier_{supplier_id}" ; 
+        rr:class lars:Supplier ; 
+    ] ;
+
+    rr:predicateObjectMap [ 
+        rr:predicate lars:semail ;
+        rr:objectMap [ rr:column "email" ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:supplierID ;
+        rr:objectMap [ rr:column "supplier_id" ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:phone ; 
+        rr:objectMap [ rr:column "phone" ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:sname ; 
+        rr:objectMap [ rr:column "name" ] ; 
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:supplies ;
+        rr:objectMap [
+            rr:parentTriplesMap <#Product> ;
+            rr:joinCondition [
+                rr:child "supplier_id" ;
+                rr:parent "product_id" ;
+            ] ;
+        ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:provides ;
+        rr:objectMap [
+            rr:parentTriplesMap <#LoyaltyCard> ;
+            rr:joinCondition [
+                rr:child "supplier_id" ;
+                rr:parent "card_id" ;
+            ] ;
+        ] ;
+    ] ;
+.
+
+<#LoyaltyCard>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [ rr:tableName "webshop.\"Loyalty Card\"" ] ;
+
+    rr:subjectMap [
+        rr:template "http://www.example.com/lars#loyaltycard_{card_id}" ;
+        rr:class lars:LoyaltyCard ;
+    ] ;
+
+    rr:predicateObjectMap [ 
+        rr:predicate lars:loyaltyCardID ; 
+        rr:objectMap [ rr:column "card_id" ] ; 
+    ] ;
+
+    rr:predicateObjectMap [ 
+        rr:predicate lars:orderCount ; 
+        rr:objectMap [ rr:column "order_counter" ] ; 
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:belongsTo ;
+        rr:objectMap [
+            rr:parentTriplesMap <#User> ;
+            rr:joinCondition [
+                rr:child "card_id" ;
+                rr:parent "user_id" ;
+            ] ;
+        ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:isProvidedBy ;
+        rr:objectMap [
+            rr:parentTriplesMap <#Supplier> ;
+            rr:joinCondition [
+                rr:child "card_id" ;
+                rr:parent "supplier_id" ;
+            ] ;
+        ] ;
+    ] ;
+.
+
+<#Order>
+    a rr:TriplesMap ; 
+
+    rr:logicalTable [ rr:tableName "webshop.\"Order\"" ] ; 
+
+    rr:subjectMap [
+        rr:template "http://www.example.com/lars#order_{order_id}" ;
+        rr:class lars:Order ; 
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:orderID ;
+        rr:objectMap [ rr:column "order_id" ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:totalPrice ;
+        rr:objectMap [ rr:column "total_price" ] ; 
+    ] ; 
+
+    rr:predicateObjectMap [
+        rr:predicate lars:contains ;
+        rr:objectMap [
+            rr:parentTriplesMap <#Product> ;
+            rr:joinCondition [
+                rr:child "order_id" ;
+                rr:parent "product_id" ; 
+            ] ;
+        ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:isPlacedBy ;
+        rr:objectMap [
+            rr:parentTriplesMap <#User> ;
+            rr:joinCondition [
+                rr:child "order_id" ;
+                rr:parent "user_id" ;
+            ] ;
+        ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:isReturnedBy ;
+        rr:objectMap [
+            rr:parentTriplesMap <#User> ;
+            rr:joinCondition [
+                rr:child "order_id" ;
+                rr:parent "user_id" ;
+            ] ;
+        ] ;
+    ] ;
+.
+
+<#Product> 
+    a rr:TriplesMap ;
+
+    rr:logicalTable [ rr:tableName "webshop.lars_Product" ] ; 
+
+    rr:subjectMap [
+        rr:template "http://www.example.com/lars#product_{product_id}" ; 
+        rr:class lars:Product ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:productID ; 
+        rr:objectMap [ rr:column "product_id" ] ; 
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:productName ; 
+        rr:objectMap [ rr:column "name" ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:isAddedTo ;
+        rr:objectMap [
+            rr:parentTriplesMap <#Order> ;
+            rr:joinCondition [
+                rr:child "product_id" ;
+                rr:parent "order_id" ;
+            ] ;
+        ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:isSuppliedBy ;
+        rr:objectMap [
+            rr:parentTriplesMap <#Supplier> ;
+            rr:joinCondition [
+                rr:child "product_id" ;
+                rr:parent "supplier_id" ;
+            ] ;
+        ] ;
+    ] ;
+.
+
+<#Rating>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [ rr:tableName "webshop.Rating" ] ;
+
+    rr:subjectMap [
+        rr:template "http://www.example.com/lars#rating_{rating_id}" ;
+        rr:class lars:Rating ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:ratingID ;
+        rr:objectMap [ rr:column "rating_id" ] ; 
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:ratingText ;
+        rr:objectMap [ rr:column "text" ] ; 
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:stars ; 
+        rr:objectMap [ rr:column "rating" ] ;
+    ] ;
+.
+
+<#User>
+    a rr:TriplesMap ; 
+
+    rr:logicalTable [ rr:tableName "webshop.\"User\"" ] ; 
+
+    rr:subjectMap [
+        rr:template "http://www.example.com/lars#user_{user_id}" ;
+        rr:class lars:User ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:userID ; 
+        rr:objectMap [ rr:column "user_id" ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:userEmail ;
+        rr:objectMap [ rr:column "email" ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:userAddress ;
+        rr:objectMap [ rr:column "address" ] ;
+    ] ; 
+
+    rr:predicateObjectMap [
+        rr:predicate lars:owns ;
+        rr:objectMap [
+            rr:parentTriplesMap <#LoyaltyCard> ;
+            rr:joinCondition [
+                rr:child "user_id" ; 
+                rr:parent "card_id" ; 
+            ] ;
+        ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:places ;
+        rr:objectMap [
+            rr:parentTriplesMap <#Order> ;
+            rr:joinCondition [
+                rr:child "user_id" ;
+                rr:parent "order_id" ;
+            ] ;
+        ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:returns ;
+        rr:objectMap [
+            rr:parentTriplesMap <#Order> ;
+            rr:joinCondition [
+                rr:child "user_id" ;
+                rr:parent "order_id" ;
+            ] ;
+        ] ;
+    ] ;
+.
+
+<#Review>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [ rr:sqlQuery """SELECT DISTINCT rating_id FROM webshop.Rating r INNER JOIN webshop.Supplier s ON r.supplier_id_fkey = s.supplier_id INNER JOIN webshop.\"User\" u ON r.user_id_fkey = u.user_id """ ] ;
+
+    rr:subjectMap [
+        rr:template "http://www.example.com/lars#review_{rating_id}"; 
+        rr:class lars:Review ;
+    ] ;
+.

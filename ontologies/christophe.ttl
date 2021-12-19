@@ -1,0 +1,191 @@
+@prefix : <http://www.example.com#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+@prefix christophe: <http://www.example.com/christophe#> .
+
+@base <http://www.example.com> .
+
+##### Customers #####
+
+#1. Classes
+
+### http://www.example.com/christophe#Customer
+christophe:Customer rdf:type owl:Class ;
+        rdfs:comment "The customer class, customers are the people making purchases"@en ;
+        rdfs:label "Customer"@en ;
+        owl:hasKey christophe:email .
+
+### http://www.example.com/christophe#Purchase
+christophe:Purchase rdf:type owl:Class ;
+        rdfs:comment "The Purchase class, purchases are a history of products that have been bought by customers"@en ;
+        rdfs:label "Purchase"@en ;
+        owl:hasKey christophe:purchaseUUID .
+
+### http://www.example.com/christophe#DeliveryMethod
+christophe:DeliveryMethod rdf:type owl:Class ;
+        rdfs:comment "The DeliveryMethod class, delivery methods are the preferred way a customer wants to have their purchase delivered"@en ;
+        rdfs:label "DeliveryMethod"@en ;
+        owl:hasKey christophe:methodUUID .
+
+### http://www.example.com/christophe#Product
+christophe:Product rdf:type owl:Class ;
+        rdfs:comment "The Product class, products are the items purchased by customers"@en ;
+        rdfs:label "Product"@en ;
+        owl:hasKey christophe:productUUID .
+
+### http://www.example.com/christophe#PickupLocation
+christophe:PickupLocation rdf:type owl:Class ;
+        rdfs:comment "The PickupLocation class, describes the address of a physical location where a package could be delivered to"@en ;
+        rdfs:label "PickupLocation"@en ;
+        owl:hasKey christophe:address .
+
+#2. Object Properties
+
+### http://www.example.com/christophe#hasPreferred
+christophe:hasPreferred rdf:type owl:ObjectProperty ;
+        owl:inverseOf christophe:preferredBy ;
+        rdfs:domain christophe:Customer ,
+            [
+                rdf:type owl:Restriction ;
+                owl:onProperty christophe:hasPreferred ;
+                owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+                owl:onClass christophe:DeliveryMethod
+            ] ;
+        rdfs:range christophe:DeliveryMethod ;
+        rdfs:comment "a user can have one or more preferred delivery methods."@en ;
+        rdfs:label "hasPreferred"@en .
+
+### http://www.example.com/christophe#preferredBy
+christophe:preferredBy rdf:type owl:ObjectProperty ;
+        owl:inverseOf christophe:hasPreferred ;
+        rdfs:domain christophe:DeliveryMethod,
+            [
+                rdf:type owl:Restriction ;
+                owl:onProperty christophe:preferredBy ;
+                owl:cardinality "1"^^xsd:nonNegativeInteger ;
+                owl:onClass christophe:Customer
+            ] ;
+        rdfs:range christophe:Customer ;
+        rdfs:comment "a delivery method belongs to exactly one user"@en ;
+        rdfs:label "preferredBy"@en .
+
+### http://www.example.com/christophe#used
+christophe:used rdf:type owl:ObjectProperty ;
+    rdfs:domain christophe:Purchase,
+        [
+            rdf:type owl:Restriction ;
+            owl:cardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass christophe:DeliveryMethod
+        ] ;
+    rdfs:range christophe:DeliveryMethod ;
+    rdfs:comment "any purchase used exactly one delivery method to know where to deliver the products"@en ;
+    rdfs:label "used"@en .
+
+### http://www.example.com/christophe#has
+christophe:has rdf:type owl:ObjectProperty ;
+    rdfs:domain christophe:DeliveryMethod,
+        [
+            rdf:type owl:Restriction ;
+            owl:maxCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass christophe:PickupLocation
+        ] ;
+    rdfs:range christophe:PickupLocation ;
+    rdfs:comment "a delivery method can have at most one pickup location"@en ;
+    rdfs:label "has"@en .
+
+### http://www.example.com/christophe#contains
+christophe:has rdf:type owl:ObjectProperty ;
+    rdfs:domain christophe:Purchase,
+        [
+            rdf:type owl:Restriction ;
+            owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass christophe:Product
+        ] ;
+    rdfs:range christophe:Product ;
+    rdfs:comment "a purchase contains at least one product"@en ;
+    rdfs:label "contains"@en .
+
+
+#3. Data Properties
+
+### http://www.example.com/christophe#email
+christophe:email rdf:type owl:DatatypeProperty ;
+    rdfs:domain christophe:Customer ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Unique e-mail address of a customer"@en ;
+    rdfs:label "email"@en .
+
+### http://www.example.com/christophe#phoneNumber
+christophe:phoneNumber rdf:type owl:DatatypeProperty ;
+    rdfs:domain christophe:Customer ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Phone number of a customer"@en ;
+    rdfs:label "phone number"@en .
+
+### http://www.example.com/christophe#fullName
+christophe:fullName rdf:type owl:DatatypeProperty ;
+    rdfs:domain christophe:Customer ;
+    rdfs:range xsd:string ;
+    rdfs:comment "full name of a customer"@en ;
+    rdfs:label "full name"@en .
+
+### http://www.example.com/christophe#purchaseUUID
+christophe:purchaseUUID rdf:type owl:DatatypeProperty ;
+    rdfs:domain christophe:Purchase ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "unique identifier of a purchase"@en ;
+    rdfs:label "purchase UUID"@en .
+
+### http://www.example.com/christophe#date
+christophe:date rdf:type owl:DatatypeProperty ;
+    rdfs:domain christophe:Purchase ;
+    rdfs:range xsd:date ;
+    rdfs:comment "date a purchase was made"@en ;
+    rdfs:label "date"@en .
+
+### http://www.example.com/christophe#totalPrice
+christophe:totalPrice rdf:type owl:DatatypeProperty ;
+    rdfs:domain christophe:Purchase ;
+    rdfs:range xsd:double ;
+    rdfs:comment "total price of a purchase"@en ;
+    rdfs:label "total price"@en .
+
+### http://www.example.com/christophe#priority
+christophe:priority rdf:type owl:DatatypeProperty ;
+    rdfs:domain christophe:DeliveryMethod ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "priority of a delivery method (lower is higher priority)"@en ;
+    rdfs:label "priority"@en .
+
+### http://www.example.com/christophe#methodUUID
+christophe:methodUUID rdf:type owl:DatatypeProperty ;
+    rdfs:domain christophe:DeliveryMethod ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "unique identifier of delivery method"@en ;
+    rdfs:label "method UUID"@en .
+
+### http://www.example.com/christophe#deliveryType
+christophe:deliveryType rdf:type owl:DatatypeProperty ;
+    rdfs:domain christophe:DeliveryMethod ;
+    rdfs:range xsd:string ;
+    rdfs:comment "type of delivery method, either for home delivery or pickup at location"@en ;
+    rdfs:label "delivery type"@en .
+
+### http://www.example.com/christophe#address
+christophe:address rdf:type owl:DatatypeProperty ;
+    rdfs:domain christophe:DeliveryMethod ;
+    rdfs:range xsd:string ;
+    rdfs:comment "address for a home delivery, at most one of these exists"@en ;
+    rdfs:label "address"@en .
+
+### http://www.example.com/christophe#productUUID
+christophe:productUUID rdf:type owl:DatatypeProperty ;
+    rdfs:domain christophe:Product ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "unique identifier of a product"@en ;
+    rdfs:label "product UUID"@en .

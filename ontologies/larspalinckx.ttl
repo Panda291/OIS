@@ -1,0 +1,409 @@
+@prefix : <http://www.example.com#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+@prefix lars: <http://www.example.com/lars#> .
+
+@base <http://www.example.com> .
+
+<http://www.example.com> rdf:type owl:Ontology .
+
+# =======================
+# -----------------------
+#    Supplier ontology
+# -----------------------
+# =======================
+
+# ============
+#  1. Classes
+# ============
+
+### http://www.example.com/lars#Supplier
+lars:Supplier rdf:type owl:Class ;
+    owl:hasKey lars:supplierID ;
+    rdfs:comment "Supplier class, Supplier provides products for the ecommerce platform"@en ;
+    rdfs:label "Supplier"@en .
+
+### http://www.example.com/lars#LoyaltyCard
+lars:LoyaltyCard rdf:type owl:Class ; 
+    owl:hasKey lars:loyaltyCardID ;
+    rdfs:comment "Loyalty card class, users can get a loyalty card for a certain supplier. After a specific amount of purchases, the user gets a discount"@en ;
+    rdfs:label "Loyalty Card"@en .
+
+### http://www.example.com/lars#Rating
+lars:Rating rdf:type owl:Class ; 
+    owl:hasKey lars:ratingID ;
+    rdfs:comment "Rating class, users can rate each supplier based on their experience with them. This would give future customers an idea about the reliability of the supplier"@en ; 
+    rdfs:label "Rating"@en .
+
+### http://www.example.com/lars#User
+lars:User rdf:type owl:Class ; 
+    #owl:equivalentClass xhulio:Customer ; 
+    #owl:equivalentClass christophe:Customer ; 
+    owl:hasKey lars:userID ;
+    rdfs:comment "User class, users can own a loyalty card or write a review for a supplier"@en ;
+    rdfs:label "User"@en .
+
+### http://www.example.com/lars#Product
+lars:Product rdf:type owl:Class ; 
+        #owl:equivalentClass nastya:Product ; 
+        #owl:equivalentClass thomas:Product ; 
+        #owl:equivalentClass christophe:Product ; 
+    owl:hasKey lars:productID ;
+    rdfs:comment "Product class. Users can add products to their orders. Suppliers can supply products"@en ;
+    rdfs:label "Product"@en .
+
+### http://www.example.com/lars#Order
+lars:Order rdf:type owl:Class ;
+    #owl:equivalentClass xhulio:DeliveryOrder ; 
+    #owl:equivalentClass christophe:Purchase ,
+    #[rdf:type thomas:Delivery, owl:NegativePropertyAssertion ;
+	#owl:assertionProperty thomas:isOrder ;
+	#owl:targetValue '1'] ;
+
+    owl:hasKey lars:orderID ;
+    rdfs:comment "Order class. Users can place orders that consists of products. Users can also return orders."@en ;
+    rdfs:label "Order"@en .
+
+### http://www.example.com/lars#Review
+lars:Review rdf:type owl:Class ;
+    rdfs:subClassOf
+        [
+            rdf:type owl:Restriction ;
+            owl:allValuesFrom lars:Rating ;
+            owl:onProperty lars:reviewHasRating
+        ] ;
+    rdfs:subClassOf
+        [
+            rdf:type owl:Restriction ;
+            owl:allValuesFrom lars:Supplier ; 
+            owl:onProperty lars:reviewHasSupplier
+        ] ;
+    rdfs:comment "Review class. This class is an abstraction of the ternary relation between User, Rating and Supplier."@en ;
+    ## Source: https://www.w3.org/TR/swbp-n-aryRelations/
+    rdfs:label "Review"@en .
+
+# ======================
+#  2. Object properties
+# ======================
+
+## Supplier <--- provides/isProvidedBy ---> Loyalty Card
+
+### https://www.example.com/lars#provides
+lars:provides rdf:type owl:ObjectProperty ; 
+    rdf:type owl:InverseFunctionalProperty ;
+    owl:inverseOf lars:isProvidedBy ; 
+    rdfs:domain lars:Supplier ;
+    rdfs:range lars:LoyaltyCard ;
+    rdfs:comment "Relation to a Loyalty Card, that a Supplier provides"@en ;
+    rdfs:label "provides "@en .
+
+### https://www.example.com/lars#isProvidedBy
+lars:isProvidedBy rdf:type owl:ObjectProperty ;
+    rdf:type owl:FunctionalProperty ; 
+    owl:inverseOf lars:provides ; 
+    rdfs:domain lars:LoyaltyCard ,
+        [
+            rdf:type owl:Restriction ;
+            owl:onProperty lars:isProvidedBy ;
+            owl:cardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass lars:Supplier ;
+        ] ;
+    rdfs:range lars:Supplier ;
+    rdfs:comment "Relation to a Supplier, that provides a Loyalty Card"@en ; 
+    rdfs:label "is provided by"@en .
+
+
+## Supplier <--- supplies/isSuppliedBy ---> Product 
+
+### https://www.example.com/lars#supplies
+lars:supplies rdf:type owl:ObjectProperty ;
+    rdf:type owl:FunctionalProperty ; 
+    owl:inverseOf lars:isSuppliedBy ; 
+    rdfs:domain lars:Supplier ,
+        [
+            rdf:type owl:Restriction ;
+            owl:onProperty lars:supplies ;
+            owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass lars:Product ;
+        ] ;
+    rdfs:range lars:Product ;
+    rdfs:comment "Relation to a Product, that is supplied by a Supplier"@en ; 
+    rdfs:label "supplies"@en .
+
+### https://www.example.com/lars#isSuppliedBy
+lars:isSuppliedBy rdf:type owl:ObjectProperty ;
+    rdf:type owl:FunctionalProperty ; 
+    owl:inverseOf lars:supplies ; 
+    rdfs:domain lars:Product ,
+        [
+            rdf:type owl:Restriction ;
+            owl:onProperty lars:isSuppliedBy ;
+            owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass lars:Supplier ;
+        ] ;
+    rdfs:range lars:Supplier ;
+    rdfs:comment "Relation to a Supplier, that supplies the products"@en ; 
+    rdfs:label "is supplied by"@en .
+
+
+## User <--- owns/belongsTo ---> Loyalty Card
+
+### https://www.example.com/lars#owns
+lars:owns rdf:type owl:ObjectProperty ;
+    rdf:type owl:FunctionalProperty ;
+    owl:inverseOf lars:belongsTo ;
+    rdfs:domain lars:User ;
+    rdfs:range lars:LoyaltyCard ;
+    rdfs:comment "Relation to a Loyalty Card, that belongs to a user."@en ;
+    rdfs:label "owns"@en .
+
+### https://www.example.com/lars#belongsTo
+lars:belongsTo rdf:type owl:ObjectProperty ;
+    rdf:type owl:InverseFunctionalProperty ;
+    owl:inverseOf lars:owns ;
+    rdfs:domain lars:LoyaltyCard ,
+        [
+            rdf:type owl:Restriction ;
+            owl:onProperty lars:belongsTo ;
+            owl:cardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass lars:User ;
+        ] ;
+    rdfs:range lars:User ;
+    rdfs:comment "Relation to a User, that owns a loyaty card"@en ;
+    rdfs:label "belongs to"@en .
+
+
+## User <--- places/isPlacedBy ---> Order 
+
+### https://www.example.com/lars#places
+lars:places rdf:type owl:ObjectProperty ;
+    rdf:type owl:InverseFunctionalProperty ; 
+    owl:inverseOf lars:isPlacedBy ;
+    rdfs:domain lars:User ;
+    rdfs:range lars:Order ;
+    rdfs:comment "Relation to a order, that is placed by a User"@en ;
+    rdfs:label "places"@en .
+
+### https://www.example.com/lars#isPlacedBy
+lars:isPlacedBy rdf:type owl:ObjectProperty ;
+    rdf:type owl:FunctionalProperty ; 
+    owl:inverseOf lars:places ;
+    rdfs:domain lars:Order ,
+        [
+            rdf:type owl:Restriction ;
+            owl:onProperty lars:isPlacedBy ;
+            owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass lars:User ;
+        ] ;
+    rdfs:range lars:User ;
+    rdfs:comment "Relation to a user, who can place an order"@en ;
+    rdfs:label "is placed by"@en .
+
+
+## User <--- returns/isReturnedBy ---> Order
+
+### https://www.example.com/lars#returns
+lars:returns rdf:type owl:ObjectProperty ;
+    rdf:type owl:FunctionalProperty ; 
+    owl:inverseOf lars:isReturnedBy ;
+    rdfs:domain lars:User ;
+    rdfs:range lars:Order ;
+    rdfs:comment "Relation to an Order, that can be returned by a user"@en ;
+    rdfs:label "returns"@en .
+
+### https://www.example.com/lars#isReturnedBy
+lars:isReturnedBy rdf:type owl:ObjectProperty ;
+    rdf:type owl:FunctionalProperty ; 
+    owl:inverseOf lars:returns ;
+    rdfs:domain lars:Order ,
+        [
+            rdf:type owl:Restriction ;
+            owl:onProperty lars:isReturnedBy ;
+            owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass lars:User ;
+        ] ;
+    rdfs:range lars:User ;
+    rdfs:comment "Relation to a User, that can return the order"@en ;
+    rdfs:label "is returned by"@en .
+
+
+## Product <--- isAddedTo/contains ---> Order
+
+### https://www.example.com/lars#isAddedTo
+lars:isAddedTo rdf:type owl:ObjectProperty ; 
+    owl:inverseOf lars:contains ;
+    rdfs:domain lars:Product ;
+    rdfs:range lars:Order ;
+    rdfs:comment "Relation to an Order, that consists of products."@en ;
+    rdfs:label "is added to"@en .
+
+### https://www.example.com/lars#contains
+lars:contains rdf:type owl:ObjectProperty ; 
+    owl:inverseOf lars:isAddedTo ;
+    rdfs:domain lars:Order ,
+        [
+            rdf:type owl:Restriction ;
+            owl:onProperty lars:contains ;
+            owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass lars:Product ;
+        ] ;
+    rdfs:range lars:Product ;
+    rdfs:comment "Relation to a Product, an order contains one or more products."@en ;
+    rdfs:label "contains"@en .
+
+
+## Review <--- reviewHasSupplier --- Supplier
+### https://www.example.com/lars#reviewHasSupplier
+lars:reviewHasSupplier rdf:type owl:ObjectProperty ;
+    rdfs:domain lars:Review ;
+    rdfs:range lars:Supplier ;
+    rdfs:comment "Indicates the supplier of the review"@en ;
+    rdfs:label "review has supplier"@en .
+
+## Review <--- reviewHasRating --- Rating
+### https://www.example.com/lars#reviewHasRating
+lars:reviewHasRating rdf:type owl:ObjectProperty ;
+    rdfs:domain lars:Review ;
+    rdfs:range lars:Rating ;
+    rdfs:comment "Relation between a Review and the Rating. Rating contains the information about the review."@en ; 
+    rdfs:label "review has rating"@en .
+
+## User --- writes ---> Review
+### https://www.example.com/lars@writes
+lars:writes rdf:type owl:ObjectProperty ;
+    rdfs:domain lars:User ;
+    rdfs:range lars:Review ;
+    rdfs:comment "Relation to a review, that can be written by a User"@en ; 
+    rdfs:label "writes"@en .
+
+
+# ====================
+#  3. Data properties
+# ====================
+
+## Supplier data properties
+### http://www.example.com/lars#supplierID
+lars:supplierID rdf:type owl:DatatypeProperty ;
+    rdfs:domain lars:Supplier ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "Unique id for suppliers"@en ;
+    rdfs:label "Supplier ID"@en .
+
+### http://www.example.com/lars#phone
+lars:phone rdf:type owl:DatatypeProperty ;
+    rdfs:domain lars:Supplier ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Phone number of the supplier"@en ;
+    rdfs:label "Supplier phone number"@en .
+
+### http://www.example.com/lars#semail
+lars:semail rdf:type owl:DatatypeProperty ;
+    rdfs:domain lars:Supplier ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Email address of the supplier"@en ;
+    rdfs:label "Supplier email"@en . 
+
+### http://www.example.com/lars#sname
+lars:sname rdf:type owl:DatatypeProperty ;
+    rdfs:domain lars:Supplier ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Name of the supplier"@en ;
+    rdfs:label "Supplier name"@en .
+
+
+## Rating data properties
+### http://www.example.com/lars#ratingID
+lars:ratingID rdf:type owl:DatatypeProperty ;
+    rdfs:domain lars:Rating ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "Unique id for ratings"@en ;
+    rdfs:label "Rating ID"@en .
+
+### http://www.example.com/lars#ratingText
+lars:ratingText rdf:type owl:DatatypeProperty ;
+    rdfs:domain lars:Rating ;
+    rdfs:range xsd:string ;
+    rdfs:comment "The text in the review of the user."@en ;
+    rdfs:label "Rating text"@en .
+
+### http://www.example.com/lars#stars
+lars:stars rdf:type owl:DatatypeProperty ;
+    rdfs:domain lars:Rating ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "Amount of stars the user the supplier gives in the Review"@en ;
+    rdfs:label "Stars"@en .    
+
+
+## Loyalty Card data properties
+### http://www.example.com/lars#loyaltyCardID
+lars:loyaltyCardID rdf:type owl:DatatypeProperty ;
+    rdfs:domain lars:LoyaltyCard ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "Unique id for loyalty cards"@en ;
+    rdfs:label "Loyalty Card ID"@en .
+
+### http://www.example.com/lars#orderCount
+lars:orderCount rdf:type owl:DatatypeProperty ; 
+    rdfs:domain lars:LoyaltyCard ; 
+    rdfs:range xsd:integer ; 
+    rdfs:comment "Amount of orders a certain loyalty card has"@en ;
+    rdfs:label "Order count"@en .
+
+
+## User data properties
+### http://www.example.com/lars#userID
+lars:userID rdf:type owl:DatatypeProperty ;
+    rdfs:domain lars:User ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "Unique id for users"@en ;
+    rdfs:label "User ID"@en .
+
+### http://www.example.com/lars#userEmail
+lars:userEmail rdf:type owl:DatatypeProperty ; 
+    rdfs:domain lars:User ; 
+    rdfs:range xsd:string ; 
+    rdfs:comment "Email of the user on the platform"@en ;
+    rdfs:label "User email"@en .
+
+### http://www.example.com/lars#userAddress
+lars:userAddress rdf:type owl:DatatypeProperty ; 
+    rdfs:domain lars:User ; 
+    rdfs:range xsd:string ; 
+    rdfs:comment "Address of the user on the platform. This is where orders are shipped to."@en ;
+    rdfs:label "User address"@en .
+
+
+## Product data properties
+### http://www.example.com/lars#productID
+lars:productID rdf:type owl:DatatypeProperty ; 
+    rdfs:domain lars:Product ; 
+    rdfs:range xsd:integer ; 
+    rdfs:comment "Unique id for products"@en ;
+    rdfs:label "Product ID"@en .
+
+### http://www.example.com/lars#productName
+lars:productName rdf:type owl:DatatypeProperty ; 
+    rdfs:domain lars:Product ;
+    rdfs:range xsd:string ; 
+    rdfs:comment "Name of the product"@en ;
+    rdfs:label "Product name"@en .
+
+
+## Order data properties
+### https://www.example.com/lars#orderID
+lars:orderID rdf:type owl:DatatypeProperty ;
+    rdfs:domain lars:Order ; 
+    rdfs:range xsd:integer ;
+    rdfs:comment "Unique id for an Order"@en ;
+    rdfs:label "Order ID"@en .
+
+### https://www.example.com/lars#totalPrice
+lars:totalPrice rdf:type owl:DatatypeProperty ;
+    rdfs:domain lars:Order ;
+    rdfs:range xsd:double ;
+    rdfs:comment "Total price of an Order"@en ; 
+    rdfs:label "Order Price"@en .

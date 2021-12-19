@@ -1,0 +1,210 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix thomas: <http://www.example.com/thomas#> .
+
+thomas:ProductTripleMap
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "Product"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/thomas#product_{ProductUUID}";
+        rr:class thomas:Product
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:productUUID ;
+        rr:objectMap [rr:column "ProductUUID"]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:price ;
+        rr:objectMap [rr:column "Price"]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:volume
+        rr:objectMap [rr:column "Volume"]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:commission
+        rr:objectMap [rr:column "Commission"]
+    ].
+
+    thomas:WarehouseTripleMap
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:sqlQuery """select replace("Address", ' ', '') as "ID", "Address", "SpaceLimit" 
+                                    from "Warehouse""""] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/thomas#warehouse_{ID}";
+        rr:class thomas:Product
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:address ;
+        rr:objectMap [rr:column "Address"]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:spaceLimit ;
+        rr:objectMap [rr:column "SpaceLimit"]
+    ] .
+
+    thomas:DeliveryTripleMap
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "Delivery"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/thomas#delivery_{DeliveryUUID}";
+        rr:class thomas:Product
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:deliveryUUID ;
+        rr:objectMap [rr:column "DeliveryUUID"]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:isOrder ;
+        rr:objectMap [rr:column "IsOrder"]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:destinationAddress
+        rr:objectMap [rr:column "DestinationAddress"]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:deliveryService
+        rr:objectMap [rr:column "DeliveryService"]
+    ];
+    rr:predicateObjectMap [
+        rr:predicate thomas:transportCosts ;
+        rr:objectMap [rr:column "TransportCosts"]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:departureTime
+        rr:objectMap [rr:column "DepartureTime"]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:arrivalTime
+        rr:objectMap [rr:column "ArrivalTime"]
+    ].
+
+    thomas:EmployeeTripleMap
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:sqlQuery """select replace("FullName", ' ', '') as "ID", * 
+                                    from "Employee""""] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/thomas#employee_{ID}";
+        rr:class thomas:Product
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:fullName ;
+        rr:objectMap [rr:column "FullName"]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:salary ;
+        rr:objectMap [rr:column "HourlyRate"]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:worksAt
+        rr:objectMap [
+            rr:ParentTriplesMap thomas:WarehouseTripleMap;
+            rr:joinCondition [
+                rr:child "Address" ;
+                rr:parent "Address"
+            ]
+        ]
+    ].
+
+    thomas:stockTripleMap
+    a rr:TriplesMap;
+
+    rr:logicalTable [rr:sqlQuery """select replace("Address", ' ', '') as "ConcatAddress", * 
+                                    from "Product_Warehouse""""];
+    rr:subjectMap [
+        rr:template "http://www.example.com/thomas#stock_{ProductUUID}_{ConcatAddress}";
+        rr:class thomas:Stock
+    ];
+    rr:predicateObjectMap [
+        rr:predicate thomas:productStock;
+        rr:objectMap [rr:column "ProductStock"]
+    ]
+    rr:predicateObjectMap [
+        rr:predicate thomas:stockOfProduct;
+        rr:ParentTriplesMap thomas:ProductTripleMap;
+        rr:joinCondtion [
+            rr:child "ProductUUID";
+            rr:parent "ProductUUID"
+        ]
+    ];
+    rr:predicateObjectMap [
+        rr:predicate thomas:stockOfWarehouse;
+        rr:ObjectMap [
+            rr:ParentTriplesMap thomas:WarehouseTripleMap;
+            rr:joinCondtion [
+                rr:child "Address";
+                rr:parent "Address"
+            ]
+        ]
+    ].
+
+    thomas:DeliverySizeTripleMap
+    a rr:TriplesMap;
+
+    rr:logicalTable [rr:tableName "Product_Delivery"];
+
+    rr:subjectMap [
+        rr:template "http://www.example.com/thomas#deliverySize_{ProductUUID}_{DeliveryUUID}";
+        rr:class thomas:DeliverySize
+    ];
+    rr:predicateObjectMap [
+        rr:predicate thomas:productAmount;
+        rr:objectMap [rr:column "ProductAmount"]
+    ]
+    rr:predicateObjectMap [
+        rr:predicate thomas:deliverySizeOfProduct;
+        rr:objectMap [
+            rr:ParentTriplesMap thomas:ProductTripleMap;
+            rr:joinCondtion [
+                rr:child "ProductUUID";
+                rr:parent "ProductUUID"
+            ]
+        ]
+    ];
+    rr:predicateObjectMap [
+        rr:predicate thomas:deliverySizeOfDelivery;
+        rr:objectMap [
+            rr:ParentTriplesMap thomas:DeliveryTripleMap;
+            rr:joinCondtion [
+                rr:child "DeliveryUUID";
+                rr:parent "DeliveryUUID"
+            ]
+        ]
+    ].
+
+    thomas:ScheduleTripleMap
+    a rr:TriplesMap;
+
+    rr:logicalTable [rr:sqlQuery """select replace("FullName", ' ', '') as "ConcatName", * 
+                                    from "Delivery_Employee""""];
+    rr:subjectMap [
+        rr:template "http://www.example.com/thomas#schedule_{DeliveryUUID}_{ConcatName}";
+        rr:class thomas:Schedule
+    ];
+    rr:predicateObjectMap [
+        rr:predicate thomas:hoursWorked;
+        rr:objectMap [rr:column "HoursWorked"]
+    ]
+    rr:predicateObjectMap [
+        rr:predicate thomas:scheduleOfEmployee;
+        rr:objectMap [
+            rr:ParentTriplesMap thomas:EmployeeTripleMap;
+            rr:joinCondtion [
+                rr:child "FullName";
+                rr:parent "FullName"
+            ]
+        ]
+    ];
+    rr:predicateObjectMap [
+        rr:predicate thomas:scheduleOfDelivery;
+        rr:objectMap [
+            rr:ParentTriplesMap thomas:DeliveryTripleMap;
+            rr:joinCondtion [
+                rr:child "DeliveryUUID";
+                rr:parent "DeliveryUUID"
+            ]
+        ]
+    ].

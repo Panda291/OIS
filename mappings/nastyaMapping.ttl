@@ -1,0 +1,162 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix nastya: <http://www.example.com/nastya#> .
+
+
+<#Products>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "products"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/nastya#product_{prod_id}" ;
+        rr:class nastya:Product ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate nastya:prod_id ;
+        rr:objectMap [rr:column "prod_id"]
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate nastya:name ;
+        rr:objectMap [rr:column "name"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicateObjectMap nastya:description ;
+        rr:objectMap [rr:column "description"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicateObjectMap nastya:price ;
+        rr:objectMap [rr:column "price"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicateObjectMap nastya:brand ;
+        rr:objectMap [rr:column "brand"] ;
+    ] ;
+
+    #Foreign key
+    rr:predicateObjectMap [
+        a rr:TriplesMap; 
+        rr:predicate nastya:belongsTo ;
+        rr:objectMap [
+            rr:ParentTriplesMap <#SubCategories>;
+
+            rr:joinCondition [
+                rr:child "fk_subcategory" ;
+                rr:parent "subcat_name" ;
+            ];
+        ];
+    ];
+.
+
+<#Reviews>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "reviews"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/nastya#review_{review_id}" ;
+        rr:class nastya:Review ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate nastya:review_id ;
+        rr:objectMap [rr:column "review_id"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate nastya:deleted ;
+        rr:objectMap [rr:column "deleted"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate nastya:location ;
+        rr:objectMap [rr:column "location"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate nastya:date ;
+        rr:objectMap [rr:column "date"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate nastya:title ;
+        rr:objectMap [rr:column "title"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate nastya:text ;
+        rr:objectMap [rr:column "text"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate nastya:num_stars ;
+        rr:objectMap [rr:column "num_stars"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate nastya:username ;
+        rr:objectMap [rr:column "username"] ;
+    ] ;
+
+
+    #Foreign key
+    rr:predicateObjectMap [
+        a rr:TriplesMap ;
+        
+        rr:predicate nastya:on ;
+        rr:objectMap [
+            rr:ParentTriplesMap  <#Products>;
+            
+            rr:joinCondition [
+                rr:child "fk_product" ;
+                rr:parent "prod_id" ;
+            ];
+        ];
+    ];
+.
+
+
+<#Subcategories>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "subcategories"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/nastya#subcategory_{subcat_name}" ;
+        rr:class nastya:SubCategory ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate nastya:subcat_name ;
+        rr:objectMap [rr:column "subcat_name"] ;
+    ] ;
+
+    #Foreign key
+    rr:predicateObjectMap [
+        a rr:TriplesMap ;
+
+        rr:predicate nastya:on ;
+        rr:objectMap [
+            rr:ParentTriplesMap <#Categories>;
+   
+            rr:joinCondition [
+                rr:child "fk_category" ;
+                rr:parent "cat_name" ;
+            ];
+        ];
+    ];
+.
+
+
+<#Categories>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "categories"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/nastya#category_{cat_name}" ;
+        rr:class nastya:Category ;
+    ] ;
+
+        rr:predicateObjectMap [
+        rr:predicate nastya:cat_name ;
+        rr:objectMap [rr:column "cat_name"] ;
+    ] ;
+.
