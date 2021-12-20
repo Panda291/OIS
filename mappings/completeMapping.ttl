@@ -219,7 +219,7 @@
     ] ;
 
     rr:predicateObjectMap [
-        rr:predicate nastya:ProductUUID ;
+        rr:predicate nastya:productUUID ;
         rr:objectMap [rr:column "prod_id"]
     ] ;
 

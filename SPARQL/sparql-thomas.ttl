@@ -1,0 +1,30 @@
+#Prefix declarations
+PREFIX thomas: <http://www.example.com/thomas#>
+PREFIX lars: <http://www.example.com/lars#>
+
+#Result clause
+SELECT ?address ?sup_cnt
+#Dataset definition
+FROM <endpoint_url>
+#query pattern
+WHERE {
+    {
+        SELECT * (AVG(?sup_cnt) AS ?avg_cnt)
+        WHERE {
+            {
+                SELECT DISTINCT ?address (COUNT(DISTINCT ?supplier) AS ?sup_cnt)
+                WHERE {
+                    ?warehouse thomas:address ?address;
+                    a thomas:Warehouse;
+                    thomas:stores ?product.
+                    ?product a thomas:Product.
+                    ?supplier a lars:Supplier;
+                    lars:supplies ?product.
+                } GROUP BY ?address
+            }
+        }
+    }
+    FILTER (?sup_cnt > ?avg_cnt)
+}
+#query modifiers
+ORDER BY ?address

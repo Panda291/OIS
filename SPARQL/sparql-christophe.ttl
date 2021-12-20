@@ -1,0 +1,22 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX christophe: <http://www.example.com/christophe#>
+PREFIX thomas: <http://www.example.com/thomas#>
+PREFIX lars: <http://www.example.com/lars#>
+PREFIX nastya: <http://www.example.com/nastya#>
+
+select distinct ?name where {
+    ?review a nastya:Review .
+  	?review nastya:username ?name .
+  
+  FILTER NOT EXISTS {
+  	?review nastya:on ?product .
+  	?product nastya:ProductUUID ?pid .
+  
+  	?customer christophe:fullName ?name .  	
+  	?customer christophe:hasPreferred ?deliveryMethod .
+  	?purchase christophe:used ?deliveryMethod .
+  	?purchase christophe:contains ?custproduct .
+  	?custproduct christophe:productUUID ?pid .
+  }
+}
