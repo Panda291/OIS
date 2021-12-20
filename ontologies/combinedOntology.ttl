@@ -109,7 +109,7 @@ christophe:has rdf:type owl:ObjectProperty ;
     rdfs:label "has"@en .
 
 ### http://www.example.com/christophe#contains
-christophe:has rdf:type owl:ObjectProperty ;
+christophe:contains rdf:type owl:ObjectProperty ;
     rdfs:domain christophe:Purchase,
         [
             rdf:type owl:Restriction ;
@@ -196,7 +196,7 @@ christophe:address rdf:type owl:DatatypeProperty ;
 ### http://www.example.com/christophe#productUUID
 christophe:productUUID rdf:type owl:DatatypeProperty ;
     rdfs:domain christophe:Product ;
-    rdfs:range xsd:integer ;
+    rdfs:range xsd:string ;
     rdfs:comment "unique identifier of a product"@en ;
     rdfs:label "product UUID"@en .
 
@@ -328,7 +328,7 @@ nastya:isCategoryOf rdf:type owl:ObjectProperty;
 ### http://www.example.com/nastya#productUUID
 nastya:productUUID rdf:type owl:DatatypeProperty ;
         rdfs:domain nastya:Product ;
-        rdfs:range xsd:integer ;
+        rdfs:range xsd:string ;
 
         rdfs:comment "Unique identifier of warehouse products"@en ;
         rdfs:label "product UUID"@en .

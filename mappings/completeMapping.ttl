@@ -140,11 +140,12 @@
         rr:template "http://www.example.com/christophe#product_{id}" ;
         rr:class christophe:Product ;
     ] ;
-# Could not infer the type of id1
-#    rr:predicateObjectMap [
-#        rr:predicate christophe:productUUID ;
-#        rr:objectMap [rr:column "id"] ;
-#    ] ;
+    # ontop.inferDefaultDatatype=true
+    # i genuinely have no clue why it fails to infer varchar(36) to xsd:string
+    rr:predicateObjectMap [
+        rr:predicate christophe:productUUID ;
+        rr:objectMap [rr:column "id"] ;
+    ] ;
 .
 
 <#PurchasesContainProducts> 
@@ -218,7 +219,7 @@
     ] ;
 
     rr:predicateObjectMap [
-        rr:predicate nastya:prod_id ;
+        rr:predicate nastya:ProductUUID ;
         rr:objectMap [rr:column "prod_id"]
     ] ;
 
