@@ -354,7 +354,7 @@ thomas:WarehouseTripleMap
                                     from webshop.Warehouse"""] ;
     rr:subjectMap [
         rr:template "http://www.example.com/thomas#warehouse_{ID}";
-        rr:class thomas:Product ;
+        rr:class thomas:Warehouse ;
     ] ;
     rr:predicateObjectMap [
         rr:predicate thomas:address ;
@@ -371,7 +371,7 @@ thomas:DeliveryTripleMap
     rr:logicalTable [rr:tableName "webshop.Delivery"] ;
     rr:subjectMap [
         rr:template "http://www.example.com/thomas#delivery_{DeliveryUUID}";
-        rr:class thomas:Product
+        rr:class thomas:Delivery
     ] ;
     rr:predicateObjectMap [
         rr:predicate thomas:deliveryUUID ;
@@ -409,7 +409,7 @@ thomas:EmployeeTripleMap
                                     from webshop.Employee"""] ;
     rr:subjectMap [
         rr:template "http://www.example.com/thomas#employee_{ID}";
-        rr:class thomas:Product ;
+        rr:class thomas:Employee ;
     ] ;
     rr:predicateObjectMap [
         rr:predicate thomas:fullName ;
@@ -534,6 +534,44 @@ thomas:ScheduleTripleMap
         ] ;
     ].
 
+thomas:WarehouseProductTripleMap
+    a rr:TriplesMap;
+
+    rr:logicalTable [rr:sqlQuery """select replace(Address, ' ', '') as ID, ProductUUID from webshop.Product_Warehouse"""];
+    rr:subjectMap [
+        rr:template "http://www.example.com/thomas#warehouse_{ID}" ;
+        rr:class thomas:Warehouse ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:stores ;
+        rr:objectMap [rr:template "http://www.example.com/thomas#product_{ProductUUID}"]
+    ] .
+
+thomas:ProductDeliveryTriplesMap
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.Product_Delivery"];
+    rr:subjectMap [
+        rr:template "http://www.example.com/thomas#delivery_{DeliveryUUID}" ;
+        rr:class thomas:Delivery ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:delivers ;
+        rr:objectMap [rr:template "http://www.example.com/thomas#product_{ProductUUID}"]
+    ] .
+
+thomas:DeliveryEmployeeTripleMap
+    a rr:TriplesMap;
+
+    rr:logicalTable [rr:sqlQuery """select replace(FullName, ' ', '') as ID, DeliveryUUID from webshop.Delivery_Employee"""];
+    rr:subjectMap [
+        rr:template "http://www.example.com/thomas#delivery_{DeliveryUUID}";
+        rr:class thomas:Delivery ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:processedBy ;
+        rr:objectMap [rr:template "http://www.example.com/thomas#employee_{id}"];
+    ].
 
 ### lars mapping
 
