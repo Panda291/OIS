@@ -154,7 +154,7 @@
     rr:logicalTable [rr:tableName "webshop.order_products"] ;
     rr:subjectMap [
         rr:template "http://www.example.com/christophe#purchase_{order}" ;
-#        rr:class christophe:Purchase ;
+        rr:class christophe:Purchase ;
     ] ;
     rr:predicateObjectMap [
         rr:predicate christophe:contains ;
@@ -606,17 +606,6 @@ thomas:DeliveryEmployeeTripleMap
     ] ;
 
     rr:predicateObjectMap [
-        rr:predicate lars:supplies ;
-        rr:objectMap [
-            rr:parentTriplesMap <#Product> ;
-            rr:joinCondition [
-                rr:child "supplier_id" ;
-                rr:parent "product_id" ;
-            ] ;
-        ] ;
-    ] ;
-
-    rr:predicateObjectMap [
         rr:predicate lars:provides ;
         rr:objectMap [
             rr:parentTriplesMap <#LoyaltyCard> ;
@@ -755,17 +744,6 @@ thomas:DeliveryEmployeeTripleMap
             ] ;
         ] ;
     ] ;
-
-    rr:predicateObjectMap [
-        rr:predicate lars:isSuppliedBy ;
-        rr:objectMap [
-            rr:parentTriplesMap <#Supplier> ;
-            rr:joinCondition [
-                rr:child "product_id" ;
-                rr:parent "supplier_id" ;
-            ] ;
-        ] ;
-    ] ;
 .
 
 <#Rating>
@@ -863,6 +841,36 @@ thomas:DeliveryEmployeeTripleMap
         rr:class lars:Review ;
     ] ;
 .
+
+<#ProductSupplier>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [ rr:tableName "webshop.supplies" ] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/lars#product_{product_id_fkey}" ;
+        rr:class lars:Product ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate lars:isSuppliedBy ;
+        rr:objectMap [ rr:template "http://www.example.com/lars#supplier_{supplier_id_fkey}"] ;
+    ] ;
+.
+
+<#SupplierProduct>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [ rr:tableName "webshop.supplies" ] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/lars#supplier_{supplier_id_fkey}" ;
+        rr:class lars:Supplier ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate lars:supplies ;
+        rr:objectMap [ rr:template "http://www.example.com/lars#product_{product_id_fkey}"] ;
+    ] ;
+.
+
+### xhulio mapping
 
 <#DeliveryCompanies>
     a rr:TriplesMap ;

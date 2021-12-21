@@ -23,20 +23,17 @@ christophe:Customer rdf:type owl:Class ;
         owl:equivalentClass lars:User ;
         owl:equivalentClass xhulio:Customer ;
         rdfs:comment "The customer class, customers are the people making purchases"@en ;
-        rdfs:label "Customer"@en ;
-        owl:hasKey christophe:email .
+        rdfs:label "Customer"@en .
 
 ### http://www.example.com/christophe#Purchase
 christophe:Purchase rdf:type owl:Class ;
         rdfs:comment "The Purchase class, purchases are a history of products that have been bought by customers"@en ;
-        rdfs:label "Purchase"@en ;
-        owl:hasKey christophe:purchaseUUID .
+        rdfs:label "Purchase"@en .
 
 ### http://www.example.com/christophe#DeliveryMethod
 christophe:DeliveryMethod rdf:type owl:Class ;
         rdfs:comment "The DeliveryMethod class, delivery methods are the preferred way a customer wants to have their purchase delivered"@en ;
-        rdfs:label "DeliveryMethod"@en ;
-        owl:hasKey christophe:methodUUID .
+        rdfs:label "DeliveryMethod"@en .
 
 ### http://www.example.com/christophe#Product
 christophe:Product rdf:type owl:Class ;
@@ -44,15 +41,13 @@ christophe:Product rdf:type owl:Class ;
         owl:equivalentClass thomas:Product ;
         owl:equivalentClass lars:Product ;
         rdfs:comment "The Product class, products are the items purchased by customers"@en ;
-        rdfs:label "Product"@en ;
-        owl:hasKey christophe:productUUID .
+        rdfs:label "Product"@en .
 
 ### http://www.example.com/christophe#PickupLocation
 christophe:PickupLocation rdf:type owl:Class ;
         owl:equivalentClass xhulio:PhysicalDeliveryPointsLocation ;
         rdfs:comment "The PickupLocation class, describes the address of a physical location where a package could be delivered to"@en ;
-        rdfs:label "PickupLocation"@en ;
-        owl:hasKey christophe:address .
+        rdfs:label "PickupLocation"@en .
 
 #2. Object Properties
 
@@ -213,30 +208,26 @@ nastya:Product rdf:type owl:Class ;
         owl:equivalentClass thomas:Product ; 
         owl:equivalentClass christophe:Product ; 
         rdfs:comment "The product class, individual products from different vendors"@en ;
-        rdfs:label "Product"@en ; 
-        owl:hasKey nastya:productUUID .              
+        rdfs:label "Product"@en .            
 
 
 ###  http://www.example.com/Review
 nastya:Review rdf:type owl:Class ;
         rdfs:comment "The review class, all reviews for each product"@en ;
-        rdfs:label "Review"@en ;
-        owl:hasKey nastya:review_id .
+        rdfs:label "Review"@en .
 
 
 ###  http://www.example.com/nastya#Subcategory
 nastya:SubCategory rdf:type owl:Class ;
         rdfs:subClassOf nastya:Category; 
         rdfs:comment "The subcategory class, subcategories to which the products belong"@en ;
-        rdfs:label "Subcategory"@en ;
-        owl:hasKey nastya:subcat_name .
+        rdfs:label "Subcategory"@en .
 
 
 ###  http://www.example.com/nastya#Category
 nastya:Category rdf:type owl:Class ;
         rdfs:comment "The category class, categories to which subcategories belong"@en ;
-        rdfs:label "Category"@en ;
-        owl:hasKey nastya:cat_name .
+        rdfs:label "Category"@en .
 
 
 
@@ -246,6 +237,7 @@ nastya:Category rdf:type owl:Class ;
 ### http://www.example.com/nastya#has
 nastya:has rdf:type owl:ObjectProperty;
         rdf:type owl:InverseFunctionalProperty ;
+        rdf:type owl:AsymmetricObjectProperty;
         owl:inverseOf nastya:on ;
         rdfs:domain nastya:Product;
         rdfs:range nastya:Review ;
@@ -256,11 +248,7 @@ nastya:has rdf:type owl:ObjectProperty;
 nastya:on rdf:type owl:ObjectProperty;
         rdf:type owl:FunctionalProperty ;
         owl:inverseOf nastya:has ;
-        rdfs:domain nastya:Review,
-        [rdf:type owl:Restriction ;
-                owl:onProperty nastya:has ;
-                owl:cardinality "1"^^xsd:nonNegativeInteger ;
-                owl:onClass nastya:Product] ;
+        rdfs:domain nastya:Review;
         rdfs:range nastya:Product ;
         rdfs:comment "indicates on which product the review is a review on"@en ;
         rdfs:label "on"@en .
@@ -269,11 +257,7 @@ nastya:on rdf:type owl:ObjectProperty;
 nastya:belongsTo rdf:type owl:ObjectProperty;
         rdf:type owl:FunctionalProperty ;
         owl:inverseOf nastya:contains ;
-        rdfs:domain nastya:Product,
-        [rdf:type owl:Restriction ;
-                owl:onProperty nastya:belongsTo ;
-                owl:cardinality "1"^^xsd:nonNegativeInteger ;
-                owl:onClass nastya:SubCategory] ;
+        rdfs:domain nastya:Product;
         rdfs:range nastya:SubCategory ;
         rdfs:comment "indicates to which subcategory an object belongs"@en ;
         rdfs:label "belongsTo"@en .
@@ -449,20 +433,17 @@ thomas:Product rdf:type owl:Class ;
         owl:equivalentClass nastya:Product ; 
         owl:equivalentClass christophe:Product ; 
         rdfs:comment "The product class, individual products from different vendors"@en ;
-        rdfs:label "Product"@en ;
-        owl:hasKey thomas:productUUID  .
+        rdfs:label "Product"@en .
 
 ###  http://www.example.com/thomas#Warehouse
 thomas:Warehouse rdf:type owl:Class ;
         rdfs:comment "The warehouse class, warehouses are the storages for the products of our e-commerce."@en ;
-        rdfs:label "Warehouse"@en ;
-        owl:hasKey thomas:address .
+        rdfs:label "Warehouse"@en .
 
 ### http://www.example.com/thomas#Employee
 thomas:Employee rdf:type owl:Class ;
         rdfs:comment "The employee class, employees work in a warehouse to process incoming and outgoing deliveries"@en ;
-        rdfs:label "Employee"@en ;
-        owl:hasKey thomas:fullName.
+        rdfs:label "Employee"@en .
 
 ### http://www.example.com/thomas#Delivery
 thomas:Delivery rdf:type owl:Class ;
@@ -470,14 +451,12 @@ thomas:Delivery rdf:type owl:Class ;
     owl:equivalentClass xhulio:DeliveryOrder ; 
     owl:equivalentClass christophe:Purchase ;
     rdfs:comment "The delivery class, outgoing orders from customers or incoming refillings of stock from the vendors, both must be processed by employees"@en ;
-    rdfs:label "Delivery"@en ;
-    owl:hasKey thomas:deliveryUUID.
+    rdfs:label "Delivery"@en .
 
 ### http://www.example.com/thomas#Stock
 thomas:Stock rdf:type owl:Class;
         rdfs:comment "Stock class, to indicate how much stock there is of a certain product in a certain warehouse"@en ;
-        rdfs:label "Stock"@en ;
-        .
+        rdfs:label "Stock"@en .
 
 ### http://www.example.com/thomas#DeliverySize
 thomas:DeliverySize rdf:type owl:Class ;
@@ -745,19 +724,16 @@ thomas:hoursWorked rdf:type owl:DatatypeProperty ;
 
 ### http://www.example.com/lars#Supplier
 lars:Supplier rdf:type owl:Class ;
-    owl:hasKey lars:supplierID ;
     rdfs:comment "Supplier class, Supplier provides products for the ecommerce platform"@en ;
     rdfs:label "Supplier"@en .
 
 ### http://www.example.com/lars#LoyaltyCard
 lars:LoyaltyCard rdf:type owl:Class ; 
-    owl:hasKey lars:loyaltyCardID ;
     rdfs:comment "Loyalty card class, users can get a loyalty card for a certain supplier. After a specific amount of purchases, the user gets a discount"@en ;
     rdfs:label "Loyalty Card"@en .
 
 ### http://www.example.com/lars#Rating
 lars:Rating rdf:type owl:Class ; 
-    owl:hasKey lars:ratingID ;
     rdfs:comment "Rating class, users can rate each supplier based on their experience with them. This would give future customers an idea about the reliability of the supplier"@en ; 
     rdfs:label "Rating"@en .
 
@@ -765,7 +741,6 @@ lars:Rating rdf:type owl:Class ;
 lars:User rdf:type owl:Class ; 
     owl:equivalentClass xhulio:Customer ; 
     owl:equivalentClass christophe:Customer ; 
-    owl:hasKey lars:userID ;
     rdfs:comment "User class, users can own a loyalty card or write a review for a supplier"@en ;
     rdfs:label "User"@en .
 
@@ -774,7 +749,6 @@ lars:Product rdf:type owl:Class ;
         owl:equivalentClass nastya:Product ; 
         owl:equivalentClass thomas:Product ; 
         owl:equivalentClass christophe:Product ; 
-    owl:hasKey lars:productID ;
     rdfs:comment "Product class. Users can add products to their orders. Suppliers can supply products"@en ;
     rdfs:label "Product"@en .
 
@@ -786,7 +760,6 @@ lars:Order rdf:type owl:Class ;
 	#owl:assertionProperty thomas:isOrder ;
 	#owl:targetValue '1'] ;
 
-    owl:hasKey lars:orderID ;
     rdfs:comment "Order class. Users can place orders that consists of products. Users can also return orders."@en ;
     rdfs:label "Order"@en .
 
@@ -858,7 +831,7 @@ lars:supplies rdf:type owl:ObjectProperty ;
 
 ### https://www.example.com/lars#isSuppliedBy
 lars:isSuppliedBy rdf:type owl:ObjectProperty ;
-    rdf:type owl:FunctionalProperty ; 
+    rdf:type owl:InverseFunctionalProperty ; 
     owl:inverseOf lars:supplies ; 
     rdfs:domain lars:Product ,
         [
@@ -1135,72 +1108,56 @@ lars:totalPrice rdf:type owl:DatatypeProperty ;
 
 #Classes 
 xhulio:DeliveryCompanies rdf:type owl:Class;
-    owl:hasKey xhulio:Name;
     rdfs:comment "The names of the delivery companies"@en ;
     rdfs:label "DeliveryCompanies"@en.
 
 xhulio:PhysicalDeliveryPointsLocation rdf:type owl:Class;
-    owl:hasKey xhulio:deliveryPointId;
     owl:equivalentClass christophe:PickupLocation ;
     rdfs:comment "The physical locations of Delivery Companies"@en ;
     rdfs:label "PhysicalDeliveryPointsLocation"@en.
 
 xhulio:Address rdf:type owl:Class;
-    owl:hasKey xhulio:addressId;
     rdfs:comment "The class that holds all the addreses such as delivery points, or the address where the product should arrive"@en ;
     rdfs:label "Address"@en.
 
 xhulio:DeliveryOrder rdf:type owl:Class;
-    owl:hasKey xhulio:deliveryID;
     owl:equivalentClass thomas:Delivery ;
     rdfs:comment "The class that indicates what is a delivery order"@en ;
     rdfs:label "DeliveryOrder"@en.
 
 xhulio:CallCustomerService rdf:type owl:Class;
-    owl:hasKey xhulio:supporterId;
     rdfs:comment "An employee that replies customer question about delivery"@en ;
     rdfs:label "CallCustomerService"@en.
 
 xhulio:Departments rdf:type owl:Class;
-    owl:hasKey xhulio:departmentId;
     rdfs:comment "The class that hires some employees"@en ;
     rdfs:label "Departments"@en.
 
 xhulio:Employee rdf:type owl:Class;
-    owl:hasKey xhulio:employeeId;
     rdfs:comment "An Employee is a someone who has job in the company with a position history"@en ;
     rdfs:label "Employee"@en.
 
 xhulio:PositionHistory rdf:type owl:Class;
-    owl:hasKey xhulio:positionName;
     rdfs:comment "Is a class that indicates all the position histories of the employees"@en ;
     rdfs:label "PositionHistory"@en.
 
 xhulio:Courier rdf:type owl:Class;
-    owl:hasKey xhulio:courierId;
     rdfs:comment "A courier is a person that works in the company and deliver orders"@en ;
     rdfs:label "Courier"@en.
 
 xhulio:DeliveryVehicles rdf:type owl:Class;
-    owl:hasKey xhulio:vehicleSeriesNumber;
     rdfs:comment "The vehicle that the courier will use to deliver a order"@en ;
     rdfs:label "DeliveryVehicles"@en.
 
 xhulio:Customer rdf:type owl:Class;
-    owl:hasKey xhulio:customerId;
     owl:equivalentClass christophe:Customer ;
     owl:equivalentClass lars:User ;
     rdfs:comment "The customer that purchase a delivery service from the compnay"@en ;
     rdfs:label "Customer"@en.
 
-[] rdf:type owl:AllDisjointClasses;
-    owl:members ( :Employee :Courier).
 
 
 #                                       Object Properties
-
-
-
 # delivery comany has location
 xhulio:have rdf:type owl:ObjectProperty;
     rdf:type owl:FunctionalProperty;

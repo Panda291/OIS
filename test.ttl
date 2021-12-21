@@ -31,25 +31,25 @@
 <http://www.example.com/xhulio#courier_1> <http://www.example.com/xhulio#dateOfBirth> "1999-03-14"^^<http://www.w3.org/2001/XMLSchema#date> .
 <http://www.example.com/lars#product_4> a <http://www.example.com/christophe#Product> .
 <http://www.example.com/lars#product_10> a <http://www.example.com/christophe#Product> .
-<http://www.example.com/lars#product_9> a <http://www.example.com/christophe#Product> .
-<http://www.example.com/lars#product_7> a <http://www.example.com/christophe#Product> .
-<http://www.example.com/lars#product_15> a <http://www.example.com/christophe#Product> .
 <http://www.example.com/lars#product_6> a <http://www.example.com/christophe#Product> .
-<http://www.example.com/lars#product_12> a <http://www.example.com/christophe#Product> .
-<http://www.example.com/lars#product_19> a <http://www.example.com/christophe#Product> .
-<http://www.example.com/lars#product_21> a <http://www.example.com/christophe#Product> .
 <http://www.example.com/lars#product_14> a <http://www.example.com/christophe#Product> .
-<http://www.example.com/lars#product_3> a <http://www.example.com/christophe#Product> .
-<http://www.example.com/lars#product_17> a <http://www.example.com/christophe#Product> .
 <http://www.example.com/lars#product_22> a <http://www.example.com/christophe#Product> .
-<http://www.example.com/lars#product_20> a <http://www.example.com/christophe#Product> .
 <http://www.example.com/lars#product_13> a <http://www.example.com/christophe#Product> .
-<http://www.example.com/lars#product_1> a <http://www.example.com/christophe#Product> .
-<http://www.example.com/lars#product_5> a <http://www.example.com/christophe#Product> .
-<http://www.example.com/lars#product_18> a <http://www.example.com/christophe#Product> .
 <http://www.example.com/lars#product_2> a <http://www.example.com/christophe#Product> .
 <http://www.example.com/lars#product_16> a <http://www.example.com/christophe#Product> .
 <http://www.example.com/lars#product_11> a <http://www.example.com/christophe#Product> .
+<http://www.example.com/lars#product_9> a <http://www.example.com/christophe#Product> .
+<http://www.example.com/lars#product_7> a <http://www.example.com/christophe#Product> .
+<http://www.example.com/lars#product_15> a <http://www.example.com/christophe#Product> .
+<http://www.example.com/lars#product_12> a <http://www.example.com/christophe#Product> .
+<http://www.example.com/lars#product_19> a <http://www.example.com/christophe#Product> .
+<http://www.example.com/lars#product_21> a <http://www.example.com/christophe#Product> .
+<http://www.example.com/lars#product_3> a <http://www.example.com/christophe#Product> .
+<http://www.example.com/lars#product_17> a <http://www.example.com/christophe#Product> .
+<http://www.example.com/lars#product_20> a <http://www.example.com/christophe#Product> .
+<http://www.example.com/lars#product_1> a <http://www.example.com/christophe#Product> .
+<http://www.example.com/lars#product_5> a <http://www.example.com/christophe#Product> .
+<http://www.example.com/lars#product_18> a <http://www.example.com/christophe#Product> .
 <http://www.example.com/lars#product_8> a <http://www.example.com/christophe#Product> .
 <http://www.example.com/thomas#product_184> a <http://www.example.com/christophe#Product> .
 <http://www.example.com/thomas#product_116> a <http://www.example.com/christophe#Product> .
@@ -181,25 +181,25 @@
 <http://www.example.com/thomas#delivery_1> <http://www.example.com/thomas#destinationAddress> "Avenue de la Couronne 27A, Bruxelles, Belgique" .
 <http://www.example.com/lars#product_4> a <http://www.example.com/lars#Product> .
 <http://www.example.com/lars#product_10> a <http://www.example.com/lars#Product> .
-<http://www.example.com/lars#product_9> a <http://www.example.com/lars#Product> .
-<http://www.example.com/lars#product_7> a <http://www.example.com/lars#Product> .
-<http://www.example.com/lars#product_15> a <http://www.example.com/lars#Product> .
 <http://www.example.com/lars#product_6> a <http://www.example.com/lars#Product> .
-<http://www.example.com/lars#product_12> a <http://www.example.com/lars#Product> .
-<http://www.example.com/lars#product_19> a <http://www.example.com/lars#Product> .
-<http://www.example.com/lars#product_21> a <http://www.example.com/lars#Product> .
 <http://www.example.com/lars#product_14> a <http://www.example.com/lars#Product> .
-<http://www.example.com/lars#product_3> a <http://www.example.com/lars#Product> .
-<http://www.example.com/lars#product_17> a <http://www.example.com/lars#Product> .
 <http://www.example.com/lars#product_22> a <http://www.example.com/lars#Product> .
-<http://www.example.com/lars#product_20> a <http://www.example.com/lars#Product> .
 <http://www.example.com/lars#product_13> a <http://www.example.com/lars#Product> .
-<http://www.example.com/lars#product_1> a <http://www.example.com/lars#Product> .
-<http://www.example.com/lars#product_5> a <http://www.example.com/lars#Product> .
-<http://www.example.com/lars#product_18> a <http://www.example.com/lars#Product> .
 <http://www.example.com/lars#product_2> a <http://www.example.com/lars#Product> .
 <http://www.example.com/lars#product_16> a <http://www.example.com/lars#Product> .
 <http://www.example.com/lars#product_11> a <http://www.example.com/lars#Product> .
+<http://www.example.com/lars#product_9> a <http://www.example.com/lars#Product> .
+<http://www.example.com/lars#product_7> a <http://www.example.com/lars#Product> .
+<http://www.example.com/lars#product_15> a <http://www.example.com/lars#Product> .
+<http://www.example.com/lars#product_12> a <http://www.example.com/lars#Product> .
+<http://www.example.com/lars#product_19> a <http://www.example.com/lars#Product> .
+<http://www.example.com/lars#product_21> a <http://www.example.com/lars#Product> .
+<http://www.example.com/lars#product_3> a <http://www.example.com/lars#Product> .
+<http://www.example.com/lars#product_17> a <http://www.example.com/lars#Product> .
+<http://www.example.com/lars#product_20> a <http://www.example.com/lars#Product> .
+<http://www.example.com/lars#product_1> a <http://www.example.com/lars#Product> .
+<http://www.example.com/lars#product_5> a <http://www.example.com/lars#Product> .
+<http://www.example.com/lars#product_18> a <http://www.example.com/lars#Product> .
 <http://www.example.com/lars#product_8> a <http://www.example.com/lars#Product> .
 <http://www.example.com/thomas#product_184> a <http://www.example.com/lars#Product> .
 <http://www.example.com/thomas#product_116> a <http://www.example.com/lars#Product> .
@@ -890,8 +890,8 @@
 <http://www.example.com/nastya#description> <http://www.w3.org/2000/01/rdf-schema#label> "product name"@en .
 <http://www.example.com/lars#places> <http://www.w3.org/2000/01/rdf-schema#label> "places"@en .
 <http://www.example.com/xhulio#type> <http://www.w3.org/2000/01/rdf-schema#label> "type"@en .
-<http://www.example.com/xhulio#customerPhoneNumber> <http://www.w3.org/2000/01/rdf-schema#label> "customer phone number"@en .
 <http://www.example.com/xhulio#packageWeight> <http://www.w3.org/2000/01/rdf-schema#label> "package weight"@en .
+<http://www.example.com/xhulio#customerPhoneNumber> <http://www.w3.org/2000/01/rdf-schema#label> "customer phone number"@en .
 <http://www.example.com/xhulio#customerId> <http://www.w3.org/2000/01/rdf-schema#label> "customer id"@en .
 <http://www.example.com/xhulio#plateNumber> <http://www.w3.org/2000/01/rdf-schema#label> "plate number"@en .
 <http://www.example.com/thomas#deliveryUUID> <http://www.w3.org/2000/01/rdf-schema#label> "delivery UUID"@en .
@@ -911,8 +911,8 @@
 <http://www.example.com/thomas#stockOfProduct> <http://www.w3.org/2000/01/rdf-schema#label> "stock of"@en .
 <http://www.example.com/christophe#Customer> <http://www.w3.org/2000/01/rdf-schema#label> "Customer"@en .
 <http://www.example.com/nastya#review_id> <http://www.w3.org/2000/01/rdf-schema#label> "review id"@en .
-<http://www.example.com/christophe#email> <http://www.w3.org/2000/01/rdf-schema#label> "email"@en .
 <http://www.example.com/xhulio#dateOfBirth> <http://www.w3.org/2000/01/rdf-schema#label> "date of birth"@en .
+<http://www.example.com/christophe#email> <http://www.w3.org/2000/01/rdf-schema#label> "email"@en .
 <http://www.example.com/nastya#date> <http://www.w3.org/2000/01/rdf-schema#label> "review date"@en .
 <http://www.example.com/xhulio#facilitate> <http://www.w3.org/2000/01/rdf-schema#label> "have"@en .
 <http://www.example.com/nastya#isPartOf> <http://www.w3.org/2000/01/rdf-schema#label> "isPartOf"@en .
@@ -1035,8 +1035,8 @@
 <http://www.example.com/xhulio#isHeadedBy> <http://www.w3.org/2000/01/rdf-schema#label> "have"@en .
 <http://www.example.com/nastya#text> <http://www.w3.org/2000/01/rdf-schema#label> "review title"@en .
 <http://www.example.com/lars#sname> <http://www.w3.org/2000/01/rdf-schema#label> "Supplier name"@en .
-<http://www.example.com/christophe#totalPrice> <http://www.w3.org/2000/01/rdf-schema#label> "total price"@en .
 <http://www.example.com/xhulio#shippingType> <http://www.w3.org/2000/01/rdf-schema#label> "shipping type"@en .
+<http://www.example.com/christophe#totalPrice> <http://www.w3.org/2000/01/rdf-schema#label> "total price"@en .
 <http://www.example.com/xhulio#comments> <http://www.w3.org/2000/01/rdf-schema#label> "comments"@en .
 <http://www.example.com/xhulio#positionDescribtion> <http://www.w3.org/2000/01/rdf-schema#label> "position describtion"@en .
 <http://www.example.com/lars#productID> <http://www.w3.org/2000/01/rdf-schema#label> "Product ID"@en .
@@ -1460,8 +1460,8 @@
 <http://www.example.com/thomas#isStored> <http://www.w3.org/2000/01/rdf-schema#comment> "relation to a warehouse that stores a product"@en .
 <http://www.example.com/nastya#subcat_name> <http://www.w3.org/2000/01/rdf-schema#comment> "Name of subcategories is also primary key"@en .
 <http://www.example.com/christophe#PickupLocation> <http://www.w3.org/2000/01/rdf-schema#comment> "The PickupLocation class, describes the address of a physical location where a package could be delivered to"@en .
-<http://www.example.com/lars#userID> <http://www.w3.org/2000/01/rdf-schema#comment> "Unique id for users"@en .
 <http://www.example.com/lars#userEmail> <http://www.w3.org/2000/01/rdf-schema#comment> "Email of the user on the platform"@en .
+<http://www.example.com/lars#userID> <http://www.w3.org/2000/01/rdf-schema#comment> "Unique id for users"@en .
 <http://www.example.com/lars#totalPrice> <http://www.w3.org/2000/01/rdf-schema#comment> "Total price of an Order"@en .
 <http://www.example.com/thomas#hoursWorked> <http://www.w3.org/2000/01/rdf-schema#comment> "the total hours an employee needed to process this delivery"@en .
 <http://www.example.com/xhulio#review> <http://www.w3.org/2000/01/rdf-schema#comment> "Reviews that a customer service employee gets from a customer"@en .
@@ -1584,8 +1584,8 @@
 <http://www.example.com/xhulio#supporterFirstName> <http://www.w3.org/2000/01/rdf-schema#comment> "First name of customer service employee"@en .
 <http://www.example.com/xhulio#courierFirstName> <http://www.w3.org/2000/01/rdf-schema#comment> "First Name of the courier"@en .
 <http://www.example.com/thomas#employs> <http://www.w3.org/2000/01/rdf-schema#comment> "relation to an employee working in the warehouse"@en .
-<http://www.example.com/christophe#preferredBy> <http://www.w3.org/2000/01/rdf-schema#comment> "a delivery method belongs to exactly one user"@en .
 <http://www.example.com/thomas#commision> <http://www.w3.org/2000/01/rdf-schema#comment> "percentage of the profit that our e-commerce business takes from a sale"@en .
+<http://www.example.com/christophe#preferredBy> <http://www.w3.org/2000/01/rdf-schema#comment> "a delivery method belongs to exactly one user"@en .
 <http://www.example.com/xhulio#isIncluded> <http://www.w3.org/2000/01/rdf-schema#comment> "One address can define one delivry/pick up location of the company "@en .
 <http://www.example.com/xhulio#startDate> <http://www.w3.org/2000/01/rdf-schema#comment> "Date that an employee started a specifc job in the past"@en .
 <http://www.example.com/christophe#totalPrice> <http://www.w3.org/2000/01/rdf-schema#comment> "total price of a purchase"@en .
@@ -1825,6 +1825,7 @@ a <http://www.example.com/xhulio#Addres> .
 <http://www.example.com/thomas#product_143> <http://www.example.com/thomas#volume> "6.33"^^<http://www.w3.org/2001/XMLSchema#double> .
 <http://www.example.com/thomas#product_203> <http://www.example.com/thomas#volume> "9.53"^^<http://www.w3.org/2001/XMLSchema#double> .
 <http://www.example.com/thomas#product_151> <http://www.example.com/thomas#volume> "0.37"^^<http://www.w3.org/2001/XMLSchema#double> .
+<http://www.example.com/nastya#has> a <http://www.w3.org/2002/07/owl#AsymmetricObjectProperty> .
 <http://www.example.com/xhulio#courier_1> <http://www.example.com/xhulio#isUsedBy> <http://www.example.com/xhulio#vehicle_3661890> .
 <http://www.example.com/xhulio#courier_0> <http://www.example.com/xhulio#isUsedBy> <http://www.example.com/xhulio#vehicle_1771871> .
 <http://www.example.com/xhulio#courier_3> <http://www.example.com/xhulio#isUsedBy> <http://www.example.com/xhulio#vehicle_3653876> .
@@ -2203,25 +2204,25 @@ a <http://www.example.com/xhulio#Addres> .
 <http://www.example.com/xhulio#vehicle_1771981> <http://www.example.com/xhulio#isFacilitatedBy> <http://www.example.com/xhulio#department_3> .
 <http://www.example.com/lars#product_4> a <http://www.example.com/thomas#Product> .
 <http://www.example.com/lars#product_10> a <http://www.example.com/thomas#Product> .
-<http://www.example.com/lars#product_9> a <http://www.example.com/thomas#Product> .
-<http://www.example.com/lars#product_7> a <http://www.example.com/thomas#Product> .
-<http://www.example.com/lars#product_15> a <http://www.example.com/thomas#Product> .
 <http://www.example.com/lars#product_6> a <http://www.example.com/thomas#Product> .
-<http://www.example.com/lars#product_12> a <http://www.example.com/thomas#Product> .
-<http://www.example.com/lars#product_19> a <http://www.example.com/thomas#Product> .
-<http://www.example.com/lars#product_21> a <http://www.example.com/thomas#Product> .
 <http://www.example.com/lars#product_14> a <http://www.example.com/thomas#Product> .
-<http://www.example.com/lars#product_3> a <http://www.example.com/thomas#Product> .
-<http://www.example.com/lars#product_17> a <http://www.example.com/thomas#Product> .
 <http://www.example.com/lars#product_22> a <http://www.example.com/thomas#Product> .
-<http://www.example.com/lars#product_20> a <http://www.example.com/thomas#Product> .
 <http://www.example.com/lars#product_13> a <http://www.example.com/thomas#Product> .
-<http://www.example.com/lars#product_1> a <http://www.example.com/thomas#Product> .
-<http://www.example.com/lars#product_5> a <http://www.example.com/thomas#Product> .
-<http://www.example.com/lars#product_18> a <http://www.example.com/thomas#Product> .
 <http://www.example.com/lars#product_2> a <http://www.example.com/thomas#Product> .
 <http://www.example.com/lars#product_16> a <http://www.example.com/thomas#Product> .
 <http://www.example.com/lars#product_11> a <http://www.example.com/thomas#Product> .
+<http://www.example.com/lars#product_9> a <http://www.example.com/thomas#Product> .
+<http://www.example.com/lars#product_7> a <http://www.example.com/thomas#Product> .
+<http://www.example.com/lars#product_15> a <http://www.example.com/thomas#Product> .
+<http://www.example.com/lars#product_12> a <http://www.example.com/thomas#Product> .
+<http://www.example.com/lars#product_19> a <http://www.example.com/thomas#Product> .
+<http://www.example.com/lars#product_21> a <http://www.example.com/thomas#Product> .
+<http://www.example.com/lars#product_3> a <http://www.example.com/thomas#Product> .
+<http://www.example.com/lars#product_17> a <http://www.example.com/thomas#Product> .
+<http://www.example.com/lars#product_20> a <http://www.example.com/thomas#Product> .
+<http://www.example.com/lars#product_1> a <http://www.example.com/thomas#Product> .
+<http://www.example.com/lars#product_5> a <http://www.example.com/thomas#Product> .
+<http://www.example.com/lars#product_18> a <http://www.example.com/thomas#Product> .
 <http://www.example.com/lars#product_8> a <http://www.example.com/thomas#Product> .
 <http://www.example.com/thomas#product_184> a <http://www.example.com/thomas#Product> .
 <http://www.example.com/thomas#product_116> a <http://www.example.com/thomas#Product> .
@@ -2599,25 +2600,25 @@ a <http://www.example.com/xhulio#Addres> .
 <http://www.example.com/lars#rating_1> <http://www.example.com/lars#ratingID> "1"^^<http://www.w3.org/2001/XMLSchema#integer> .
 <http://www.example.com/lars#product_4> a <http://www.example.com/nastya#Product> .
 <http://www.example.com/lars#product_10> a <http://www.example.com/nastya#Product> .
-<http://www.example.com/lars#product_9> a <http://www.example.com/nastya#Product> .
-<http://www.example.com/lars#product_7> a <http://www.example.com/nastya#Product> .
-<http://www.example.com/lars#product_15> a <http://www.example.com/nastya#Product> .
 <http://www.example.com/lars#product_6> a <http://www.example.com/nastya#Product> .
-<http://www.example.com/lars#product_12> a <http://www.example.com/nastya#Product> .
-<http://www.example.com/lars#product_19> a <http://www.example.com/nastya#Product> .
-<http://www.example.com/lars#product_21> a <http://www.example.com/nastya#Product> .
 <http://www.example.com/lars#product_14> a <http://www.example.com/nastya#Product> .
-<http://www.example.com/lars#product_3> a <http://www.example.com/nastya#Product> .
-<http://www.example.com/lars#product_17> a <http://www.example.com/nastya#Product> .
 <http://www.example.com/lars#product_22> a <http://www.example.com/nastya#Product> .
-<http://www.example.com/lars#product_20> a <http://www.example.com/nastya#Product> .
 <http://www.example.com/lars#product_13> a <http://www.example.com/nastya#Product> .
-<http://www.example.com/lars#product_1> a <http://www.example.com/nastya#Product> .
-<http://www.example.com/lars#product_5> a <http://www.example.com/nastya#Product> .
-<http://www.example.com/lars#product_18> a <http://www.example.com/nastya#Product> .
 <http://www.example.com/lars#product_2> a <http://www.example.com/nastya#Product> .
 <http://www.example.com/lars#product_16> a <http://www.example.com/nastya#Product> .
 <http://www.example.com/lars#product_11> a <http://www.example.com/nastya#Product> .
+<http://www.example.com/lars#product_9> a <http://www.example.com/nastya#Product> .
+<http://www.example.com/lars#product_7> a <http://www.example.com/nastya#Product> .
+<http://www.example.com/lars#product_15> a <http://www.example.com/nastya#Product> .
+<http://www.example.com/lars#product_12> a <http://www.example.com/nastya#Product> .
+<http://www.example.com/lars#product_19> a <http://www.example.com/nastya#Product> .
+<http://www.example.com/lars#product_21> a <http://www.example.com/nastya#Product> .
+<http://www.example.com/lars#product_3> a <http://www.example.com/nastya#Product> .
+<http://www.example.com/lars#product_17> a <http://www.example.com/nastya#Product> .
+<http://www.example.com/lars#product_20> a <http://www.example.com/nastya#Product> .
+<http://www.example.com/lars#product_1> a <http://www.example.com/nastya#Product> .
+<http://www.example.com/lars#product_5> a <http://www.example.com/nastya#Product> .
+<http://www.example.com/lars#product_18> a <http://www.example.com/nastya#Product> .
 <http://www.example.com/lars#product_8> a <http://www.example.com/nastya#Product> .
 <http://www.example.com/thomas#product_184> a <http://www.example.com/nastya#Product> .
 <http://www.example.com/thomas#product_116> a <http://www.example.com/nastya#Product> .
@@ -2754,16 +2755,26 @@ a <http://www.example.com/xhulio#Addres> .
 <http://www.example.com/lars#rating_3> <http://www.example.com/lars#ratingText> "lorem integer tincidunt ante vel ipsum praesent blandit lacinia erat vestibulum sed magna at nunc commodo placerat praesent blandit nam nulla integer pede justo lacinia eget tincidunt eget tempus vel pede morbi porttitor lorem id ligula suspendisse ornare consequat lectus in est risus auctor sed tristique in tempus sit amet sem fusce consequat nulla nisl nunc nisl duis bibendum felis sed interdum venenatis turpis enim blandit mi" .
 <http://www.example.com/lars#rating_2> <http://www.example.com/lars#ratingText> "gravida sem praesent id massa id nisl venenatis lacinia aenean sit amet justo morbi ut odio cras mi pede malesuada in imperdiet et commodo vulputate justo in blandit ultrices enim lorem ipsum dolor sit amet consectetuer adipiscing elit proin" .
 <http://www.example.com/lars#rating_4> <http://www.example.com/lars#ratingText> "nulla suspendisse potenti cras in purus eu magna vulputate luctus cum sociis natoque penatibus et magnis dis parturient montes nascetur ridiculus mus vivamus vestibulum sagittis sapien cum sociis natoque penatibus et magnis dis parturient montes nascetur ridiculus mus etiam vel augue vestibulum rutrum rutrum neque" .
-<http://www.example.com/lars#product_8> <http://www.example.com/lars#isSuppliedBy> <http://www.example.com/lars#supplier_8> .
-<http://www.example.com/lars#product_10> <http://www.example.com/lars#isSuppliedBy> <http://www.example.com/lars#supplier_10> .
-<http://www.example.com/lars#product_9> <http://www.example.com/lars#isSuppliedBy> <http://www.example.com/lars#supplier_9> .
-<http://www.example.com/lars#product_7> <http://www.example.com/lars#isSuppliedBy> <http://www.example.com/lars#supplier_7> .
-<http://www.example.com/lars#product_1> <http://www.example.com/lars#isSuppliedBy> <http://www.example.com/lars#supplier_1> .
-<http://www.example.com/lars#product_5> <http://www.example.com/lars#isSuppliedBy> <http://www.example.com/lars#supplier_5> .
-<http://www.example.com/lars#product_4> <http://www.example.com/lars#isSuppliedBy> <http://www.example.com/lars#supplier_4> .
-<http://www.example.com/lars#product_2> <http://www.example.com/lars#isSuppliedBy> <http://www.example.com/lars#supplier_2> .
-<http://www.example.com/lars#product_6> <http://www.example.com/lars#isSuppliedBy> <http://www.example.com/lars#supplier_6> .
-<http://www.example.com/lars#product_3> <http://www.example.com/lars#isSuppliedBy> <http://www.example.com/lars#supplier_3> .
+<http://www.example.com/lars#product_4> <http://www.example.com/lars#isSuppliedBy> <http://www.example.com/lars#supplier_3> .
+<http://www.example.com/lars#product_17> <http://www.example.com/lars#isSuppliedBy> <http://www.example.com/lars#supplier_3> .
+<http://www.example.com/lars#product_19> <http://www.example.com/lars#isSuppliedBy> <http://www.example.com/lars#supplier_6> .
+<http://www.example.com/lars#product_13> <http://www.example.com/lars#isSuppliedBy> <http://www.example.com/lars#supplier_5> .
+<http://www.example.com/lars#product_3> <http://www.example.com/lars#isSuppliedBy> <http://www.example.com/lars#supplier_5> .
+<http://www.example.com/lars#product_20> <http://www.example.com/lars#isSuppliedBy> <http://www.example.com/lars#supplier_3> .
+<http://www.example.com/lars#product_16> <http://www.example.com/lars#isSuppliedBy> <http://www.example.com/lars#supplier_9> .
+<http://www.example.com/lars#product_14> <http://www.example.com/lars#isSuppliedBy> <http://www.example.com/lars#supplier_2> .
+<http://www.example.com/lars#product_3> <http://www.example.com/lars#isSuppliedBy> <http://www.example.com/lars#supplier_9> .
+<http://www.example.com/lars#product_10> <http://www.example.com/lars#isSuppliedBy> <http://www.example.com/lars#supplier_8> .
+<http://www.example.com/lars#product_13> <http://www.example.com/lars#isSuppliedBy> <http://www.example.com/lars#supplier_10> .
+<http://www.example.com/lars#product_18> <http://www.example.com/lars#isSuppliedBy> <http://www.example.com/lars#supplier_2> .
+<http://www.example.com/lars#product_11> <http://www.example.com/lars#isSuppliedBy> <http://www.example.com/lars#supplier_2> .
+<http://www.example.com/lars#product_16> <http://www.example.com/lars#isSuppliedBy> <http://www.example.com/lars#supplier_2> .
+<http://www.example.com/lars#product_17> <http://www.example.com/lars#isSuppliedBy> <http://www.example.com/lars#supplier_8> .
+<http://www.example.com/lars#product_7> <http://www.example.com/lars#isSuppliedBy> <http://www.example.com/lars#supplier_5> .
+<http://www.example.com/lars#product_11> <http://www.example.com/lars#isSuppliedBy> <http://www.example.com/lars#supplier_10> .
+<http://www.example.com/lars#product_1> <http://www.example.com/lars#isSuppliedBy> <http://www.example.com/lars#supplier_9> .
+<http://www.example.com/lars#product_10> <http://www.example.com/lars#isSuppliedBy> <http://www.example.com/lars#supplier_1> .
+<http://www.example.com/lars#product_6> <http://www.example.com/lars#isSuppliedBy> <http://www.example.com/lars#supplier_5> .
 <http://www.example.com/christophe#purchase_10002> <http://www.example.com/christophe#purchaseUUID> "10002"^^<http://www.w3.org/2001/XMLSchema#integer> .
 <http://www.example.com/christophe#purchase_10003> <http://www.example.com/christophe#purchaseUUID> "10003"^^<http://www.w3.org/2001/XMLSchema#integer> .
 <http://www.example.com/xhulio#company_FedEx> a <http://www.example.com/xhulio#DeliveryCompanies> .
@@ -3344,16 +3355,22 @@ a <http://www.example.com/xhulio#Addres> .
 <http://www.example.com/thomas#employee_AlexandreDeCrow> <http://www.example.com/thomas#fullName> "Alexandre DeCrow" .
 <http://www.example.com/thomas#employee_MickiMouze> <http://www.example.com/thomas#fullName> "Micki Mouze" .
 <http://www.example.com/thomas#employee_BillCakes> <http://www.example.com/thomas#fullName> "Bill Cakes" .
-<http://www.example.com/lars#supplier_8> <http://www.example.com/lars#supplies> <http://www.example.com/lars#product_8> .
-<http://www.example.com/lars#supplier_10> <http://www.example.com/lars#supplies> <http://www.example.com/lars#product_10> .
-<http://www.example.com/lars#supplier_9> <http://www.example.com/lars#supplies> <http://www.example.com/lars#product_9> .
-<http://www.example.com/lars#supplier_7> <http://www.example.com/lars#supplies> <http://www.example.com/lars#product_7> .
-<http://www.example.com/lars#supplier_1> <http://www.example.com/lars#supplies> <http://www.example.com/lars#product_1> .
-<http://www.example.com/lars#supplier_5> <http://www.example.com/lars#supplies> <http://www.example.com/lars#product_5> .
-<http://www.example.com/lars#supplier_4> <http://www.example.com/lars#supplies> <http://www.example.com/lars#product_4> .
-<http://www.example.com/lars#supplier_2> <http://www.example.com/lars#supplies> <http://www.example.com/lars#product_2> .
-<http://www.example.com/lars#supplier_6> <http://www.example.com/lars#supplies> <http://www.example.com/lars#product_6> .
-<http://www.example.com/lars#supplier_3> <http://www.example.com/lars#supplies> <http://www.example.com/lars#product_3> .
+<http://www.example.com/lars#supplier_3> <http://www.example.com/lars#supplies> <http://www.example.com/lars#product_4>,<http://www.example.com/lars#product_17> .
+<http://www.example.com/lars#supplier_6> <http://www.example.com/lars#supplies> <http://www.example.com/lars#product_19> .
+<http://www.example.com/lars#supplier_5> <http://www.example.com/lars#supplies> <http://www.example.com/lars#product_13>,<http://www.example.com/lars#product_3> .
+<http://www.example.com/lars#supplier_3> <http://www.example.com/lars#supplies> <http://www.example.com/lars#product_20> .
+<http://www.example.com/lars#supplier_9> <http://www.example.com/lars#supplies> <http://www.example.com/lars#product_16> .
+<http://www.example.com/lars#supplier_2> <http://www.example.com/lars#supplies> <http://www.example.com/lars#product_14> .
+<http://www.example.com/lars#supplier_9> <http://www.example.com/lars#supplies> <http://www.example.com/lars#product_3> .
+<http://www.example.com/lars#supplier_8> <http://www.example.com/lars#supplies> <http://www.example.com/lars#product_10> .
+<http://www.example.com/lars#supplier_10> <http://www.example.com/lars#supplies> <http://www.example.com/lars#product_13> .
+<http://www.example.com/lars#supplier_2> <http://www.example.com/lars#supplies> <http://www.example.com/lars#product_18>,<http://www.example.com/lars#product_11>,<http://www.example.com/lars#product_16> .
+<http://www.example.com/lars#supplier_8> <http://www.example.com/lars#supplies> <http://www.example.com/lars#product_17> .
+<http://www.example.com/lars#supplier_5> <http://www.example.com/lars#supplies> <http://www.example.com/lars#product_7> .
+<http://www.example.com/lars#supplier_10> <http://www.example.com/lars#supplies> <http://www.example.com/lars#product_11> .
+<http://www.example.com/lars#supplier_9> <http://www.example.com/lars#supplies> <http://www.example.com/lars#product_1> .
+<http://www.example.com/lars#supplier_1> <http://www.example.com/lars#supplies> <http://www.example.com/lars#product_10> .
+<http://www.example.com/lars#supplier_5> <http://www.example.com/lars#supplies> <http://www.example.com/lars#product_6> .
 <http://www.example.com/thomas#product_184> <http://www.example.com/thomas#price> "134.79"^^<http://www.w3.org/2001/XMLSchema#double> .
 <http://www.example.com/thomas#product_116> <http://www.example.com/thomas#price> "21.61"^^<http://www.w3.org/2001/XMLSchema#double> .
 <http://www.example.com/thomas#product_179> <http://www.example.com/thomas#price> "113.37"^^<http://www.w3.org/2001/XMLSchema#double> .
