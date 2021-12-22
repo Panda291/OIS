@@ -154,7 +154,7 @@
     rr:logicalTable [rr:tableName "webshop.order_products"] ;
     rr:subjectMap [
         rr:template "http://www.example.com/christophe#purchase_{order}" ;
-        rr:class christophe:Purchase ;
+#        rr:class christophe:Purchase ;
     ] ;
     rr:predicateObjectMap [
         rr:predicate christophe:contains ;
@@ -854,6 +854,10 @@ thomas:DeliveryEmployeeTripleMap
         rr:predicate lars:isSuppliedBy ;
         rr:objectMap [ rr:template "http://www.example.com/lars#supplier_{supplier_id_fkey}"] ;
     ] ;
+    rr:predicateObjectMap [
+        rr:predicate lars:productPrice ;
+        rr:objectMap [ rr:column "price" ] ;
+    ] ;
 .
 
 <#SupplierProduct>
@@ -868,9 +872,99 @@ thomas:DeliveryEmployeeTripleMap
         rr:predicate lars:supplies ;
         rr:objectMap [ rr:template "http://www.example.com/lars#product_{product_id_fkey}"] ;
     ] ;
+    rr:predicateObjectMap [
+        rr:predicate lars:productPrice ;
+        rr:objectMap [ rr:column "price" ] ;
+    ] ;
 .
 
-### xhulio mapping
+<#OrderProduct>
+    a rr:TriplesMap ;
+    
+    rr:logicalTable [ rr:tableName "webshop.ordercontainsproduct" ] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/lars#order_{order_id_fkey}" ; 
+        rr:class lars:Order ; 
+    ] ; 
+    rr:predicateObjectMap [
+        rr:predicate lars:contains ; 
+        rr:objectMap [ rr:template "http://www.example.com/lars#product_{product_id_fkey}" ] ;
+    ] ;
+.
+
+<#ProductOrder>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [ rr:tableName "webshop.ordercontainsproduct" ] ; 
+    rr:subjectMap [
+        rr:template "http://www.example.com/lars#product_{product_id_fkey}" ;
+        rr:class lars:Product ; 
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate lars:isAddedTo ;
+        rr:objectMap [ rr:template "http://www.example.com/lars#order_{order_id_fkey}" ] ;
+    ] ;
+.
+
+<#UserPlacesOrder>
+    a rr:TriplesMap ; 
+    rr:logicalTable [ rr:tableName "webshop.userPlacesOrder" ] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/lars#user_{user_id_fkey}" ; 
+        rr:class lars:User ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate lars:places ;
+        rr:objectMap [ rr:template "http://www.example.com/lars#order_{order_id_fkey}" ] ;
+    ] ;
+.
+
+<#OrderPlacedByUser>
+    a rr:TriplesMap ; 
+    rr:logicalTable [ rr:tableName "webshop.userPlacesOrder" ] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/lars#order_{order_id_fkey}" ; 
+        rr:class lars:Order ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate lars:isPlacedBy ;
+        rr:objectMap [ rr:template "http://www.example.com/lars#user_{user_id_fkey}" ] ;
+    ] ;
+.
+
+<#UserReturnsOrder>
+    a rr:TriplesMap ; 
+    rr:logicalTable [ rr:tableName "webshop.userReturnsOrder" ] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/lars#user_{user_id_fkey}" ; 
+        rr:class lars:User ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate lars:returns ;
+        rr:objectMap [ rr:template "http://www.example.com/lars#order_{order_id_fkey}" ] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate lars:returnReason ; 
+        rr:objectMap [ rr:column "reason" ] ; 
+    ] ;
+.
+
+<#OrderReturnedByUser>
+    a rr:TriplesMap ; 
+    rr:logicalTable [ rr:tableName "webshop.userReturnsOrder" ] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/lars#order_{order_id_fkey}" ; 
+        rr:class lars:Order ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate lars:isReturnedBy ;
+        rr:objectMap [ rr:template "http://www.example.com/lars#user_{user_id_fkey}" ] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate lars:returnReason ; 
+        rr:objectMap [ rr:column "reason" ] ; 
+    ] ;
+.
 
 <#DeliveryCompanies>
     a rr:TriplesMap ;

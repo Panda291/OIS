@@ -976,6 +976,17 @@ lars:writes rdf:type owl:ObjectProperty ;
     rdfs:label "writes"@en .
 
 
+### http://www.example.com/lars#SuppliedPrice
+lars:SuppliedPrice rdf:type owl:Class ; 
+    rdfs:comment "Class that keeps track of the price of a supplied product."@en ; 
+    rdfs:label "Supplied price"@en .
+
+### http://www.example.com/lars#Return
+lars:Return rdf:type owl:Class ; 
+    rdfs:comment "Class that keeps track of the returned orders"@en ;
+    rdfs:label "Returned orders"@en .
+
+
 # ====================
 #  3. Data properties
 # ====================
@@ -1103,6 +1114,19 @@ lars:totalPrice rdf:type owl:DatatypeProperty ;
     rdfs:comment "Total price of an Order"@en ; 
     rdfs:label "Order Price"@en .
 
+### http://www.example.com/lars#productPrice
+lars:productPrice rdf:type owl:DatatypeProperty ; 
+    rdfs:domain lars:SuppliedPrice ;
+    rdfs:range xsd:double ;
+    rdfs:comment "Price of the product"@en ;
+    rdfs:label "Product price"@en .
+
+### http://www.example.com/lars#returnReason
+lars:returnReason rdf:type owl:DatatypeProperty ; 
+    rdfs:domain lars:Return ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Reason of the return"@en ;
+    rdfs:label "Return reason"@en .
 
 #                           Delivery Services
 
