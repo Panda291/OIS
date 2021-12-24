@@ -829,16 +829,37 @@ thomas:DeliveryEmployeeTripleMap
             ] ;
         ] ;
     ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:writes ;
+        rr:objectMap [
+            rr:parentTriplesMap <#Review> ;
+            rr:joinCondition [
+                rr:child "user_id" ;
+                rr:parent "rating_id" ;
+            ] ;
+        ] ;
+    ] ;
 .
 
 <#Review>
     a rr:TriplesMap ;
 
-    rr:logicalTable [ rr:sqlQuery """SELECT DISTINCT rating_id FROM webshop.Rating r INNER JOIN webshop.Supplier s ON r.supplier_id_fkey = s.supplier_id INNER JOIN webshop.\"User\" u ON r.user_id_fkey = u.user_id """ ] ;
+    rr:logicalTable [ rr:sqlQuery """SELECT DISTINCT rating_id, r.supplier_id_fkey FROM webshop.Rating r INNER JOIN webshop.Supplier s ON r.supplier_id_fkey = s.supplier_id INNER JOIN webshop.\"User\" u ON r.user_id_fkey = u.user_id """ ] ;
 
     rr:subjectMap [
         rr:template "http://www.example.com/lars#review_{rating_id}"; 
         rr:class lars:Review ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:reviewHasRating ;
+        rr:objectMap [ rr:template "http://www.example.com/lars#rating_{rating_id}" ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:reviewHasSupplier ;
+        rr:objectMap [ rr:template "http://www.example.com/lars#supplier_{supplier_id_fkey}" ] ;
     ] ;
 .
 
