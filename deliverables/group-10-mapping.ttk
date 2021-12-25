@@ -1,0 +1,1518 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix christophe: <http://www.example.com/christophe#> .
+@prefix nastya: <http://www.example.com/nastya#> .
+@prefix thomas: <http://www.example.com/thomas#> .
+@prefix lars: <http://www.example.com/lars#> .
+@prefix xhulio: <http://www.example.com/xhulio#> .
+
+
+### christophe mapping
+
+<#PickupLocations>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.pickup_locations"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/christophe#pickupLocation_{address}" ; # should probably be a trimmed version of address
+        rr:class christophe:PickupLocation ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate christophe:pickupAddress ;
+        rr:objectMap [rr:column "address"] ;
+    ] ;
+.
+
+<#DeliveryMethods>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.delivery_methods"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/christophe#delivery_method_{id}" ;
+        rr:class christophe:DeliveryMethod ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate christophe:methodUUID ;
+        rr:objectMap [rr:column "id"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate christophe:priority ;
+        rr:objectMap [rr:column "priority"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate christophe:deliveryType ;
+        rr:objectMap [rr:column "delivery type"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate christophe:address ;
+        rr:objectMap [rr:column "address"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate christophe:has ;
+        rr:objectMap [
+            rr:parentTriplesMap <#PickupLocations> ;
+            rr:joinCondition [
+                rr:child "pickup_location" ;
+                rr:parent "address" ;
+            ] ;
+        ];
+    ];
+    rr:predicateObjectMap [
+        rr:predicate christophe:preferredBy ;
+        rr:objectMap [
+            rr:parentTriplesMap <#Customers> ;
+            rr:joinCondition [
+                rr:child "customer_id" ;
+                rr:parent "email" ;
+            ] ;
+        ] ;
+    ] ;
+.
+
+<#Purchases>
+    a rr:TriplesMap ;
+    
+    rr:logicalTable [rr:tableName "webshop.orders"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/christophe#purchase_{id}" ;
+        rr:class christophe:Purchase ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate christophe:purchaseUUID ;
+        rr:objectMap [rr:column "id"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate christophe:date ;
+        rr:objectMap [rr:column "date"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate christophe:totalPrice ;
+        rr:objectMap [rr:column "total price"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate christophe:used ;
+        rr:objectMap [
+            rr:parentTriplesMap <#DeliveryMethods> ;
+            rr:joinCondition [
+                rr:child "delivery_method_id" ;
+                rr:parent "id" ;
+            ] ;
+        ] ;
+    ] ;
+.
+
+<#Customers>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.customers"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/christophe#{email}" ;
+        rr:class christophe:Customer ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate christophe:phoneNumber ;
+        rr:objectMap [rr:column "phone number"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate christophe:fullName ;
+        rr:objectMap [rr:column "full name"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate christophe:email ;
+        rr:objectMap [rr:column "email"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate christophe:hasPreferred ;
+        rr:objectMap [
+            rr:parentTriplesMap <#DeliveryMethods> ;
+            rr:joinCondition [
+                rr:child "email" ;
+                rr:parent "customer_id" ;
+            ];
+        ];
+    ];
+.
+
+<#CustProducts>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:sqlQuery """SELECT DISTINCT products as id from webshop.order_products"""] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/christophe#product_{id}" ;
+        rr:class christophe:Product ;
+    ] ;
+    # ontop.inferDefaultDatatype=true
+    # i genuinely have no clue why it fails to infer varchar(36) to xsd:string
+    rr:predicateObjectMap [
+        rr:predicate christophe:productUUID ;
+        rr:objectMap [rr:column "id"] ;
+    ] ;
+.
+
+<#PurchasesContainProducts> 
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.order_products"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/christophe#purchase_{order}" ;
+#        rr:class christophe:Purchase ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate christophe:contains ;
+        rr:objectMap [ rr:template "http://www.example.com/christophe#product_{products}"] ;
+    ] ;
+.
+
+
+
+### nastya mapping
+
+<#Categories>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.categories"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/nastya#category_{cat_name}" ;
+        rr:class nastya:Category ;
+    ] ;
+
+        rr:predicateObjectMap [
+        rr:predicate nastya:cat_name ;
+        rr:objectMap [rr:column "cat_name"] ;
+    ] ;
+.
+
+<#SubCategories>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.subcategories"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/nastya#subcategory_{subcat_name}" ;
+        rr:class nastya:SubCategory ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate nastya:subcat_name ;
+        rr:objectMap [rr:column "subcat_name"] ;
+    ] ;
+
+    #Foreign key
+    rr:predicateObjectMap [
+        rr:predicate nastya:on ;
+        rr:objectMap [
+            rr:parentTriplesMap <#Categories>;
+   
+            rr:joinCondition [
+                rr:child "fk_category" ;
+                rr:parent "cat_name" ;
+            ];
+        ];
+    ];
+.
+
+<#Products>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.products"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/nastya#product_{prod_id}" ;
+        rr:class nastya:Product ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate nastya:productUUID ;
+        rr:objectMap [rr:column "prod_id"]
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate nastya:name ;
+        rr:objectMap [rr:column "prod_name"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate nastya:description ;
+        rr:objectMap [rr:column "description"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate nastya:price ;
+        rr:objectMap [rr:column "price"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate nastya:brand ;
+        rr:objectMap [rr:column "brand"] ;
+    ] ;
+
+    #Foreign key
+    rr:predicateObjectMap [
+        rr:predicate nastya:belongsTo ;
+        rr:objectMap [
+            rr:parentTriplesMap <#SubCategories>;
+
+            rr:joinCondition [
+                rr:child "fk_subcategory" ;
+                rr:parent "subcat_name" ;
+            ];
+        ];
+    ];
+.
+
+<#Reviews>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.reviews"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/nastya#review_{review_id}" ;
+        rr:class nastya:Review ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate nastya:review_id ;
+        rr:objectMap [rr:column "review_id"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate nastya:deleted ;
+        rr:objectMap [rr:column "deleted"] ;
+    ] ;
+
+#    rr:predicateObjectMap [
+#        rr:predicate nastya:location ;
+#        rr:objectMap [rr:column "location"] ;
+#    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate nastya:date ;
+        rr:objectMap [rr:column "timestamp"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate nastya:title ;
+        rr:objectMap [rr:column "title"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate nastya:text ;
+        rr:objectMap [rr:column "text"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate nastya:num_stars ;
+        rr:objectMap [rr:column "num_stars"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate nastya:username ;
+        rr:objectMap [rr:column "username"] ;
+    ] ;
+
+
+    #Foreign key
+    rr:predicateObjectMap [
+        rr:predicate nastya:on ;
+        rr:objectMap [
+            rr:parentTriplesMap  <#Products>;
+            
+            rr:joinCondition [
+                rr:child "fk_product" ;
+                rr:parent "prod_id" ;
+            ];
+        ];
+    ];
+.
+
+
+
+### thomas mapping
+
+thomas:ProductTripleMap
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.thomas_Product"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/thomas#product_{ProductUUID}";
+        rr:class thomas:Product
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:productUUID ;
+        rr:objectMap [rr:column "ProductUUID"]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:price ;
+        rr:objectMap [rr:column "Price"]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:volume ;
+        rr:objectMap [rr:column "Volume"]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:commision ;
+        rr:objectMap [rr:column "Commision"]
+    ].
+
+thomas:WarehouseTripleMap
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:sqlQuery """select replace(Address, ' ', '') as ID, Address, SpaceLimit 
+                                    from webshop.Warehouse"""] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/thomas#warehouse_{ID}";
+        rr:class thomas:Warehouse ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:address ;
+        rr:objectMap [rr:column "Address"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:spaceLimit ;
+        rr:objectMap [rr:column "SpaceLimit"] ;
+    ] .
+
+thomas:DeliveryTripleMap
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.Delivery"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/thomas#delivery_{DeliveryUUID}";
+        rr:class thomas:Delivery
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:deliveryUUID ;
+        rr:objectMap [rr:column "DeliveryUUID"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:isOrder ;
+        rr:objectMap [rr:column "IsOrder"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:destinationAddress ;
+        rr:objectMap [rr:column "DestinationAddress"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:deliveryService ;
+        rr:objectMap [rr:column "DeliveryService"] ;
+    ];
+    rr:predicateObjectMap [
+        rr:predicate thomas:transportCosts ;
+        rr:objectMap [rr:column "TransportCosts"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:departureTime ;
+        rr:objectMap [rr:column "DepartureTime"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:arrivalTime ;
+        rr:objectMap [rr:column "ArrivalTime"] ;
+    ].
+
+thomas:EmployeeTripleMap
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:sqlQuery """select replace(FullName, ' ', '') as ID, * 
+                                    from webshop.Employee"""] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/thomas#employee_{ID}";
+        rr:class thomas:Employee ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:fullName ;
+        rr:objectMap [rr:column "FullName"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:salary ;
+        rr:objectMap [rr:column "HourlyRate"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:worksAt ;
+        rr:objectMap [
+            rr:parentTriplesMap thomas:WarehouseTripleMap;
+            rr:joinCondition [
+                rr:child "Address" ;
+                rr:parent "Address" ;
+            ] ;
+        ] ;
+    ].
+
+thomas:stockTripleMap
+    a rr:TriplesMap;
+
+    rr:logicalTable [rr:sqlQuery """select replace(Address, ' ', '') as ConcatAddress, * 
+                                    from webshop.Product_Warehouse"""];
+    rr:subjectMap [
+        rr:template "http://www.example.com/thomas#stock_{ProductUUID}_{ConcatAddress}";
+        rr:class thomas:Stock
+    ];
+    rr:predicateObjectMap [
+        rr:predicate thomas:productStock;
+        rr:objectMap [rr:column "ProductStock"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:stockOfProduct ;
+        rr:objectMap [
+            rr:parentTriplesMap thomas:ProductTripleMap;
+            rr:joinCondition [
+                rr:child "ProductUUID" ;
+                rr:parent "ProductUUID" ;
+            ];
+        ];
+    ];
+    rr:predicateObjectMap [
+        rr:predicate thomas:stockOfWarehouse ;
+        rr:objectMap [
+            rr:parentTriplesMap thomas:WarehouseTripleMap;
+            rr:joinCondition [
+                rr:child "Address" ;
+                rr:parent "Address" ;
+            ];
+        ];
+    ].
+
+
+thomas:DeliverySizeTripleMap
+    a rr:TriplesMap;
+
+    rr:logicalTable [rr:tableName "webshop.Product_Delivery"];
+
+    rr:subjectMap [
+        rr:template "http://www.example.com/thomas#deliverySize_{ProductUUID}_{DeliveryUUID}";
+        rr:class thomas:DeliverySize
+    ];
+    rr:predicateObjectMap [
+        rr:predicate thomas:productAmount;
+        rr:objectMap [rr:column "ProductAmount"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:deliverySizeOfProduct ;
+        rr:objectMap [
+            rr:parentTriplesMap thomas:ProductTripleMap;
+            rr:joinCondition [
+                rr:child "ProductUUID" ;
+                rr:parent "ProductUUID" ;
+            ];
+        ];
+    ];
+    rr:predicateObjectMap [
+        rr:predicate thomas:deliverySizeOfDelivery ;
+        rr:objectMap [
+            rr:parentTriplesMap thomas:DeliveryTripleMap;
+            rr:joinCondition [
+                rr:child "DeliveryUUID" ;
+                rr:parent "DeliveryUUID" ;
+            ];
+        ];
+    ].
+
+
+thomas:ScheduleTripleMap
+    a rr:TriplesMap;
+
+    rr:logicalTable [rr:sqlQuery """select replace(FullName, ' ', '') as ConcatName, * 
+                                    from webshop.Delivery_Employee"""];
+    rr:subjectMap [
+        rr:template "http://www.example.com/thomas#schedule_{DeliveryUUID}_{ConcatName}";
+        rr:class thomas:Schedule ;
+    ];
+    rr:predicateObjectMap [
+        rr:predicate thomas:hoursWorked;
+        rr:objectMap [rr:column "HoursWorked"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:scheduleOfEmployee;
+        rr:objectMap [
+            rr:parentTriplesMap thomas:EmployeeTripleMap;
+            rr:joinCondition [
+                rr:child "FullName";
+                rr:parent "FullName" ;
+            ] ;
+        ] ;
+    ];
+    rr:predicateObjectMap [
+        rr:predicate thomas:scheduleOfDelivery;
+        rr:objectMap [
+            rr:parentTriplesMap thomas:DeliveryTripleMap;
+            rr:joinCondition [
+                rr:child "DeliveryUUID";
+                rr:parent "DeliveryUUID" ;
+            ] ;
+        ] ;
+    ].
+
+thomas:WarehouseProductTripleMap
+    a rr:TriplesMap;
+
+    rr:logicalTable [rr:sqlQuery """select replace(Address, ' ', '') as ID, ProductUUID from webshop.Product_Warehouse"""];
+    rr:subjectMap [
+        rr:template "http://www.example.com/thomas#warehouse_{ID}" ;
+        rr:class thomas:Warehouse ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:stores ;
+        rr:objectMap [rr:template "http://www.example.com/thomas#product_{ProductUUID}"]
+    ] .
+
+thomas:ProductDeliveryTriplesMap
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.Product_Delivery"];
+    rr:subjectMap [
+        rr:template "http://www.example.com/thomas#delivery_{DeliveryUUID}" ;
+        rr:class thomas:Delivery ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:delivers ;
+        rr:objectMap [rr:template "http://www.example.com/thomas#product_{ProductUUID}"]
+    ] .
+
+thomas:DeliveryEmployeeTripleMap
+    a rr:TriplesMap;
+
+    rr:logicalTable [rr:sqlQuery """select replace(FullName, ' ', '') as ID, DeliveryUUID from webshop.Delivery_Employee"""];
+    rr:subjectMap [
+        rr:template "http://www.example.com/thomas#delivery_{DeliveryUUID}";
+        rr:class thomas:Delivery ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate thomas:processedBy ;
+        rr:objectMap [rr:template "http://www.example.com/thomas#employee_{id}"];
+    ].
+
+### lars mapping
+
+<#Supplier>
+    a rr:TriplesMap ; 
+
+    rr:logicalTable [ rr:tableName "webshop.Supplier" ] ; 
+
+    rr:subjectMap [
+        rr:template "http://www.example.com/lars#supplier_{supplier_id}" ; 
+        rr:class lars:Supplier ; 
+    ] ;
+
+    rr:predicateObjectMap [ 
+        rr:predicate lars:semail ;
+        rr:objectMap [ rr:column "email" ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:supplierID ;
+        rr:objectMap [ rr:column "supplier_id" ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:phone ; 
+        rr:objectMap [ rr:column "phone" ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:sname ; 
+        rr:objectMap [ rr:column "name" ] ; 
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:provides ;
+        rr:objectMap [
+            rr:parentTriplesMap <#LoyaltyCard> ;
+            rr:joinCondition [
+                rr:child "supplier_id" ;
+                rr:parent "card_id" ;
+            ] ;
+        ] ;
+    ] ;
+.
+
+<#LoyaltyCard>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [ rr:tableName "webshop.\"Loyalty Card\"" ] ;
+
+    rr:subjectMap [
+        rr:template "http://www.example.com/lars#loyaltycard_{card_id}" ;
+        rr:class lars:LoyaltyCard ;
+    ] ;
+
+    rr:predicateObjectMap [ 
+        rr:predicate lars:loyaltyCardID ; 
+        rr:objectMap [ rr:column "card_id" ] ; 
+    ] ;
+
+    rr:predicateObjectMap [ 
+        rr:predicate lars:orderCount ; 
+        rr:objectMap [ rr:column "order_counter" ] ; 
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:belongsTo ;
+        rr:objectMap [
+            rr:parentTriplesMap <#User> ;
+            rr:joinCondition [
+                rr:child "card_id" ;
+                rr:parent "user_id" ;
+            ] ;
+        ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:isProvidedBy ;
+        rr:objectMap [
+            rr:parentTriplesMap <#Supplier> ;
+            rr:joinCondition [
+                rr:child "card_id" ;
+                rr:parent "supplier_id" ;
+            ] ;
+        ] ;
+    ] ;
+.
+
+<#Order>
+    a rr:TriplesMap ; 
+
+    rr:logicalTable [ rr:tableName "webshop.\"Order\"" ] ; 
+
+    rr:subjectMap [
+        rr:template "http://www.example.com/lars#order_{order_id}" ;
+        rr:class lars:Order ; 
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:orderID ;
+        rr:objectMap [ rr:column "order_id" ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:totalPrice ;
+        rr:objectMap [ rr:column "total_price" ] ; 
+    ] ; 
+
+    rr:predicateObjectMap [
+        rr:predicate lars:contains ;
+        rr:objectMap [
+            rr:parentTriplesMap <#Product> ;
+            rr:joinCondition [
+                rr:child "order_id" ;
+                rr:parent "product_id" ; 
+            ] ;
+        ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:isPlacedBy ;
+        rr:objectMap [
+            rr:parentTriplesMap <#User> ;
+            rr:joinCondition [
+                rr:child "order_id" ;
+                rr:parent "user_id" ;
+            ] ;
+        ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:isReturnedBy ;
+        rr:objectMap [
+            rr:parentTriplesMap <#User> ;
+            rr:joinCondition [
+                rr:child "order_id" ;
+                rr:parent "user_id" ;
+            ] ;
+        ] ;
+    ] ;
+.
+
+<#Product> 
+    a rr:TriplesMap ;
+
+    rr:logicalTable [ rr:tableName "webshop.lars_Product" ] ; 
+
+    rr:subjectMap [
+        rr:template "http://www.example.com/lars#product_{product_id}" ; 
+        rr:class lars:Product ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:productID ; 
+        rr:objectMap [ rr:column "product_id" ] ; 
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:productName ; 
+        rr:objectMap [ rr:column "name" ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:isAddedTo ;
+        rr:objectMap [
+            rr:parentTriplesMap <#Order> ;
+            rr:joinCondition [
+                rr:child "product_id" ;
+                rr:parent "order_id" ;
+            ] ;
+        ] ;
+    ] ;
+.
+
+<#Rating>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [ rr:tableName "webshop.Rating" ] ;
+
+    rr:subjectMap [
+        rr:template "http://www.example.com/lars#rating_{rating_id}" ;
+        rr:class lars:Rating ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:ratingID ;
+        rr:objectMap [ rr:column "rating_id" ] ; 
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:ratingText ;
+        rr:objectMap [ rr:column "text" ] ; 
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:stars ; 
+        rr:objectMap [ rr:column "rating" ] ;
+    ] ;
+.
+
+<#User>
+    a rr:TriplesMap ; 
+
+    rr:logicalTable [ rr:tableName "webshop.\"User\"" ] ; 
+
+    rr:subjectMap [
+        rr:template "http://www.example.com/lars#user_{user_id}" ;
+        rr:class lars:User ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:userID ; 
+        rr:objectMap [ rr:column "user_id" ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:userEmail ;
+        rr:objectMap [ rr:column "email" ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:userAddress ;
+        rr:objectMap [ rr:column "address" ] ;
+    ] ; 
+
+    rr:predicateObjectMap [
+        rr:predicate lars:owns ;
+        rr:objectMap [
+            rr:parentTriplesMap <#LoyaltyCard> ;
+            rr:joinCondition [
+                rr:child "user_id" ; 
+                rr:parent "card_id" ; 
+            ] ;
+        ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:places ;
+        rr:objectMap [
+            rr:parentTriplesMap <#Order> ;
+            rr:joinCondition [
+                rr:child "user_id" ;
+                rr:parent "order_id" ;
+            ] ;
+        ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:returns ;
+        rr:objectMap [
+            rr:parentTriplesMap <#Order> ;
+            rr:joinCondition [
+                rr:child "user_id" ;
+                rr:parent "order_id" ;
+            ] ;
+        ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:writes ;
+        rr:objectMap [
+            rr:parentTriplesMap <#Review> ;
+            rr:joinCondition [
+                rr:child "user_id" ;
+                rr:parent "rating_id" ;
+            ] ;
+        ] ;
+    ] ;
+.
+
+<#Review>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [ rr:sqlQuery """SELECT DISTINCT rating_id, r.supplier_id_fkey FROM webshop.Rating r INNER JOIN webshop.Supplier s ON r.supplier_id_fkey = s.supplier_id INNER JOIN webshop.\"User\" u ON r.user_id_fkey = u.user_id """ ] ;
+
+    rr:subjectMap [
+        rr:template "http://www.example.com/lars#review_{rating_id}"; 
+        rr:class lars:Review ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:reviewHasRating ;
+        rr:objectMap [ rr:template "http://www.example.com/lars#rating_{rating_id}" ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate lars:reviewHasSupplier ;
+        rr:objectMap [ rr:template "http://www.example.com/lars#supplier_{supplier_id_fkey}" ] ;
+    ] ;
+.
+
+<#ProductSupplier>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [ rr:tableName "webshop.supplies" ] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/lars#product_{product_id_fkey}" ;
+        rr:class lars:Product ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate lars:isSuppliedBy ;
+        rr:objectMap [ rr:template "http://www.example.com/lars#supplier_{supplier_id_fkey}"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate lars:productPrice ;
+        rr:objectMap [ rr:column "price" ] ;
+    ] ;
+.
+
+<#SupplierProduct>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [ rr:tableName "webshop.supplies" ] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/lars#supplier_{supplier_id_fkey}" ;
+        rr:class lars:Supplier ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate lars:supplies ;
+        rr:objectMap [ rr:template "http://www.example.com/lars#product_{product_id_fkey}"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate lars:productPrice ;
+        rr:objectMap [ rr:column "price" ] ;
+    ] ;
+.
+
+<#OrderProduct>
+    a rr:TriplesMap ;
+    
+    rr:logicalTable [ rr:tableName "webshop.ordercontainsproduct" ] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/lars#order_{order_id_fkey}" ; 
+        rr:class lars:Order ; 
+    ] ; 
+    rr:predicateObjectMap [
+        rr:predicate lars:contains ; 
+        rr:objectMap [ rr:template "http://www.example.com/lars#product_{product_id_fkey}" ] ;
+    ] ;
+.
+
+<#ProductOrder>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [ rr:tableName "webshop.ordercontainsproduct" ] ; 
+    rr:subjectMap [
+        rr:template "http://www.example.com/lars#product_{product_id_fkey}" ;
+        rr:class lars:Product ; 
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate lars:isAddedTo ;
+        rr:objectMap [ rr:template "http://www.example.com/lars#order_{order_id_fkey}" ] ;
+    ] ;
+.
+
+<#UserPlacesOrder>
+    a rr:TriplesMap ; 
+    rr:logicalTable [ rr:tableName "webshop.userPlacesOrder" ] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/lars#user_{user_id_fkey}" ; 
+        rr:class lars:User ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate lars:places ;
+        rr:objectMap [ rr:template "http://www.example.com/lars#order_{order_id_fkey}" ] ;
+    ] ;
+.
+
+<#OrderPlacedByUser>
+    a rr:TriplesMap ; 
+    rr:logicalTable [ rr:tableName "webshop.userPlacesOrder" ] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/lars#order_{order_id_fkey}" ; 
+        rr:class lars:Order ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate lars:isPlacedBy ;
+        rr:objectMap [ rr:template "http://www.example.com/lars#user_{user_id_fkey}" ] ;
+    ] ;
+.
+
+<#UserReturnsOrder>
+    a rr:TriplesMap ; 
+    rr:logicalTable [ rr:tableName "webshop.userReturnsOrder" ] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/lars#user_{user_id_fkey}" ; 
+        rr:class lars:User ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate lars:returns ;
+        rr:objectMap [ rr:template "http://www.example.com/lars#order_{order_id_fkey}" ] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate lars:returnReason ; 
+        rr:objectMap [ rr:column "reason" ] ; 
+    ] ;
+.
+
+<#OrderReturnedByUser>
+    a rr:TriplesMap ; 
+    rr:logicalTable [ rr:tableName "webshop.userReturnsOrder" ] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/lars#order_{order_id_fkey}" ; 
+        rr:class lars:Order ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate lars:isReturnedBy ;
+        rr:objectMap [ rr:template "http://www.example.com/lars#user_{user_id_fkey}" ] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate lars:returnReason ; 
+        rr:objectMap [ rr:column "reason" ] ; 
+    ] ;
+.
+
+<#DeliveryCompanies>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.delivery_companies"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/xhulio#company_{name}" ;
+        rr:class xhulio:DeliveryCompanies;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate xhulio:companyName ;
+        rr:objectMap [rr:column "name"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate xhulio:branch_id ; # need to create this one.
+        rr:objectMap [rr:column "branch_id"] ;
+    ] ;
+.
+
+<#Address>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.address"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/xhulio#address_{address_id}" ;
+        rr:class xhulio:Addres;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate xhulio:streetName ;
+        rr:objectMap [rr:column "street_name"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:postalCode ;
+        rr:objectMap [rr:column "postal_code"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:city ;
+        rr:objectMap [rr:column "city_"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:region ;
+        rr:objectMap [rr:column "region"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:addressId ;
+        rr:objectMap [rr:column "address_id"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:buildingNumber ;
+        rr:objectMap [rr:column "building_number"] ;
+    ] ;
+.
+
+<#PhysicalDeliveryPointsLocation>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.physical_delivery_points_locations"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/xhulio#location_{delivery_point_id}" ;
+        rr:class xhulio:PhysicalDeliveryPointsLocation;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate xhulio:deliveryPointId ;
+        rr:objectMap [rr:column "delivery_point_id"] ;
+    ] ;
+
+     rr:predicateObjectMap [
+        rr:predicate xhulio:have ;
+        rr:objectMap [
+            rr:parentTriplesMap <#DeliveryCompanies>;
+            rr:joinCondition [
+                rr:child "name" ;
+                rr:parent "name" ;
+            ];
+        ];
+    ];
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:include ;
+        rr:objectMap [
+            rr:parentTriplesMap <#Address>;
+            rr:joinCondition [
+                rr:child "address_id" ;
+                rr:parent "address_id" ;
+            ];
+        ];
+    ];
+    
+.
+
+<#Departments>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.departments"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/xhulio#department_{department_id}" ;
+        rr:class xhulio:Departments;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate xhulio:departmentId ;
+        rr:objectMap [rr:column "department_id"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:departmentName ;
+        rr:objectMap [rr:column "department_name"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:numberOfEmployees ;
+        rr:objectMap [rr:column "number_of_employees"] ;
+    ] ;    
+.
+
+<#Employee>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.deliverycompanyemploye"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/xhulio#employee_{emp_id}" ;
+        rr:class xhulio:Employee;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate xhulio:employeeId ;
+        rr:objectMap [rr:column "emp_id"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:employeeFirstName ;
+        rr:objectMap [rr:column "first_name"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:employeeLastName ;
+        rr:objectMap [rr:column "last_name"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:employeeEmail ;
+        rr:objectMap [rr:column "email"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:employeeContactNumber ;
+        rr:objectMap [rr:column "contact_number"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:EmployeeSalary ;
+        rr:objectMap [rr:column "salary"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:hires ; 
+        rr:objectMap [
+            rr:parentTriplesMap <#Departments>;
+            rr:joinCondition [
+                rr:child "department_id" ;
+                rr:parent "department_id" ;
+            ];
+        ];
+    ];
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:supervize ; 
+        rr:objectMap [
+            rr:parentTriplesMap <#Employee>;
+            rr:joinCondition [
+                rr:child "supervize_emp_id" ;
+                rr:parent "emp_id" ;
+            ];
+        ];
+    ];
+.
+
+<#CallCustomerService>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.call_customer_service"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/xhulio#customer_service_{supporter_id}" ;
+        rr:class xhulio:CallCustomerService;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate xhulio:phoneNumber ;
+        rr:objectMap [rr:column "phone_number"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:supporterId ;
+        rr:objectMap [rr:column "supporter_id"] ;
+    ] ;
+
+     rr:predicateObjectMap [
+        rr:predicate xhulio:supporterFirstName ;
+        rr:objectMap [rr:column "supporter_first_name"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:supporterLastName ;
+        rr:objectMap [rr:column "supporter_last_name"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:review ;
+        rr:objectMap [rr:column "review"] ;
+    ] ;
+
+   rr:predicateObjectMap [
+       rr:predicate xhulio:isOfferedBy ; 
+       rr:objectMap [
+           rr:parentTriplesMap <#Departments>;
+           rr:joinCondition [
+               rr:child "department_id" ;
+               rr:parent "department_id" ;
+           ];
+       ];
+   ];
+.
+
+<#DeliveryVehicles>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.delivery_vehicles"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/xhulio#vehicle_{vechicle_series_number}" ;
+        rr:class xhulio:DeliveryVehicles;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate xhulio:plateNumber ;
+        rr:objectMap [rr:column "plate_number"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:type ;
+        rr:objectMap [rr:column "type"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:brandName ;
+        rr:objectMap [rr:column "brand_name"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:consumption ;
+        rr:objectMap [rr:column "consumption"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:vehicleSeriesNumber ;
+        rr:objectMap [rr:column "vechicle_series_number"] ;
+    ] ;
+
+   rr:predicateObjectMap [
+       rr:predicate xhulio:isFacilitatedBy ; 
+       rr:objectMap [
+           rr:parentTriplesMap <#Departments>;
+           rr:joinCondition [
+               rr:child "department_id" ;
+               rr:parent "department_id" ;
+           ];
+       ];
+   ];
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:use ; 
+        rr:objectMap [
+            rr:parentTriplesMap <#Courier>;
+            rr:joinCondition [
+                rr:child "courier_id" ;
+                rr:parent "courier_id" ;
+            ];
+        ];
+    ];
+.
+
+<#Courier>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.courier"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/xhulio#courier_{courier_id}" ;
+        rr:class xhulio:Courier;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate xhulio:courierId ;
+        rr:objectMap [rr:column "courier_id"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:courierLastName ;
+        rr:objectMap [rr:column "last_name"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:courierFirstName ;
+        rr:objectMap [rr:column "first_name"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:gender ;
+        rr:objectMap [rr:column "gender"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:dateOfBirth ;
+        rr:objectMap [rr:column "date_of_birth"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:courierSalary ;
+        rr:objectMap [rr:column "salary"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:isRecruitedBy ; 
+        rr:objectMap [
+            rr:parentTriplesMap <#Departments>;
+            rr:joinCondition [
+                rr:child "department_id" ;
+                rr:parent "department_id" ;
+            ];
+        ];
+    ];
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:isManagedBy ; 
+        rr:objectMap [
+            rr:parentTriplesMap <#Employee>;
+            rr:joinCondition [
+                rr:child "emp_id" ;
+                rr:parent "emp_id" ;
+            ];
+        ];
+    ];
+.
+
+<#Customer>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.custemer"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/xhulio#customer_{customer_id}" ;
+        rr:class xhulio:Customer;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate xhulio:customerId ;
+        rr:objectMap [rr:column "customer_id"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:customerName ;
+        rr:objectMap [rr:column "name"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:customerSurname ;
+        rr:objectMap [rr:column "surname"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:customerEmail ;
+        rr:objectMap [rr:column "email"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:customerPhoneNumber ;
+        rr:objectMap [rr:column "phone_number"] ;
+    ] ;
+
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:isRegisteredBy ; 
+        rr:objectMap [
+            rr:parentTriplesMap <#Departments>;
+            rr:joinCondition [
+                rr:child "department_id" ;
+                rr:parent "department_id" ;
+            ];
+        ];
+    ];
+    
+.
+
+<#DeliveryOrder>
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.delivery_order"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/xhulio#delivery_order_{deliver_id}" ;
+        rr:class xhulio:DeliveryOrder;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate xhulio:deliveryID ;
+        rr:objectMap [rr:column "deliver_id"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:packageWeight ;
+        rr:objectMap [rr:column "package_weight"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:stage ;
+        rr:objectMap [rr:column "stage"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:shippingType ;
+        rr:objectMap [rr:column "shipping_type"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:comments ;
+        rr:objectMap [rr:column "comments"] ;
+    ] ;
+
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:isRecorded ; 
+        rr:objectMap [
+            rr:parentTriplesMap <#Departments>;
+            rr:joinCondition [
+                rr:child "department_id" ;
+                rr:parent "department_id" ;
+            ];
+        ];
+    ];
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:owns ; 
+        rr:objectMap [
+            rr:parentTriplesMap <#Address>;
+            rr:joinCondition [
+                rr:child "address_id" ;
+                rr:parent "address_id" ;
+            ];
+        ];
+    ];
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:purchase ; 
+        rr:objectMap [
+            rr:parentTriplesMap <#Customer>;
+            rr:joinCondition [
+                rr:child "customer_id" ;
+                rr:parent "customer_id" ;
+            ];
+        ];
+    ];
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:isEnabled ; 
+        rr:objectMap [
+            rr:parentTriplesMap <#Courier>;
+            rr:joinCondition [
+                rr:child "courier_id" ;
+                rr:parent "courier_id" ;
+            ];
+        ];
+    ];
+.
+
+<#PositionHistory>
+    a rr:TriplesMap ;
+
+    #rr:logicalTable [rr:sqlQuery """SELECT * FROM webshop.position_history ph FULL OUTER JOIN webshop.deliverycompanyemploye dce on emp_id=emp_id"""] ;
+    rr:logicalTable [rr:tableName "webshop.position_history"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/xhulio#{emp_id}_{position_name}" ;
+        rr:class xhulio:PositionHistory;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate xhulio:startDate ;
+        rr:objectMap [rr:column "start_date"] ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate xhulio:endDate ;
+        rr:objectMap [rr:column "end_date"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:positionName ;
+        rr:objectMap [rr:column "position_name"] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate xhulio:involve ; 
+        rr:objectMap [
+            rr:parentTriplesMap <#Employee>;
+            rr:joinCondition [
+                rr:child "emp_id" ;
+                rr:parent "emp_id" ;
+            ];
+        ];
+    ];
+.
+
+<#CompaniesDividedIntoDepartment> 
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.is_divided"] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/xhulio#company_{name}" ;
+
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate xhulio:isDivided ;
+        rr:objectMap [ rr:template "http://www.example.com/xhulio#department_{department_id}"] ;
+    ] ;
+.
+
+<#CustomersCallCustomerService> 
+    a rr:TriplesMap ;
+
+    rr:logicalTable [rr:tableName "webshop.\"call\""] ;
+    rr:subjectMap [
+        rr:template "http://www.example.com/xhulio#customer_{customer_id}" ;
+    
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate xhulio:call ;
+        rr:objectMap [ rr:template "http://www.example.com/xhulio#customer_service_{supporter_id}"] ;
+    ] ;
+.

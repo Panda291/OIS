@@ -1,0 +1,1873 @@
+@prefix : <http://www.example.com#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+@prefix christophe: <http://www.example.com/christophe#> .
+@prefix nastya: <http://www.example.com/nastya#> .
+@prefix thomas: <http://www.example.com/thomas#> .
+@prefix lars: <http://www.example.com/lars#> .
+@prefix xhulio: <http://www.example.com/xhulio#> .
+
+@base <http://www.example.com> .
+
+##### Customers #####
+
+#1. Classes
+
+### http://www.example.com/christophe#Customer
+christophe:Customer rdf:type owl:Class ;
+        owl:equivalentClass lars:User ;
+        owl:equivalentClass xhulio:Customer ;
+        rdfs:comment "The customer class, customers are the people making purchases"@en ;
+        rdfs:label "Customer"@en .
+
+### http://www.example.com/christophe#Purchase
+christophe:Purchase rdf:type owl:Class ;
+        rdfs:comment "The Purchase class, purchases are a history of products that have been bought by customers"@en ;
+        rdfs:label "Purchase"@en .
+
+### http://www.example.com/christophe#DeliveryMethod
+christophe:DeliveryMethod rdf:type owl:Class ;
+        rdfs:comment "The DeliveryMethod class, delivery methods are the preferred way a customer wants to have their purchase delivered"@en ;
+        rdfs:label "DeliveryMethod"@en .
+
+### http://www.example.com/christophe#Product
+christophe:Product rdf:type owl:Class ;
+        owl:equivalentClass nastya:Product ; 
+        owl:equivalentClass thomas:Product ;
+        owl:equivalentClass lars:Product ;
+        rdfs:comment "The Product class, products are the items purchased by customers"@en ;
+        rdfs:label "Product"@en .
+
+### http://www.example.com/christophe#PickupLocation
+christophe:PickupLocation rdf:type owl:Class ;
+        owl:equivalentClass xhulio:PhysicalDeliveryPointsLocation ;
+        rdfs:comment "The PickupLocation class, describes the address of a physical location where a package could be delivered to"@en ;
+        rdfs:label "PickupLocation"@en .
+
+#2. Object Properties
+
+### http://www.example.com/christophe#hasPreferred
+christophe:hasPreferred rdf:type owl:ObjectProperty ;
+        owl:inverseOf christophe:preferredBy ;
+        rdfs:domain christophe:Customer ,
+            [
+                rdf:type owl:Restriction ;
+                owl:onProperty christophe:hasPreferred ;
+                owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+                owl:onClass christophe:DeliveryMethod
+            ] ;
+        rdfs:range christophe:DeliveryMethod ;
+        rdfs:comment "a user can have one or more preferred delivery methods."@en ;
+        rdfs:label "hasPreferred"@en .
+
+### http://www.example.com/christophe#preferredBy
+christophe:preferredBy rdf:type owl:ObjectProperty ;
+        owl:inverseOf christophe:hasPreferred ;
+        rdfs:domain christophe:DeliveryMethod,
+            [
+                rdf:type owl:Restriction ;
+                owl:onProperty christophe:preferredBy ;
+                owl:cardinality "1"^^xsd:nonNegativeInteger ;
+                owl:onClass christophe:Customer
+            ] ;
+        rdfs:range christophe:Customer ;
+        rdfs:comment "a delivery method belongs to exactly one user"@en ;
+        rdfs:label "preferredBy"@en .
+
+### http://www.example.com/christophe#used
+christophe:used rdf:type owl:ObjectProperty ;
+    rdfs:domain christophe:Purchase,
+        [
+            rdf:type owl:Restriction ;
+            owl:cardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass christophe:DeliveryMethod
+        ] ;
+    rdfs:range christophe:DeliveryMethod ;
+    rdfs:comment "any purchase used exactly one delivery method to know where to deliver the products"@en ;
+    rdfs:label "used"@en .
+
+### http://www.example.com/christophe#has
+christophe:has rdf:type owl:ObjectProperty ;
+    rdfs:domain christophe:DeliveryMethod,
+        [
+            rdf:type owl:Restriction ;
+            owl:maxCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass christophe:PickupLocation
+        ] ;
+    rdfs:range christophe:PickupLocation ;
+    rdfs:comment "a delivery method can have at most one pickup location"@en ;
+    rdfs:label "has"@en .
+
+### http://www.example.com/christophe#contains
+christophe:contains rdf:type owl:ObjectProperty ;
+    rdfs:domain christophe:Purchase,
+        [
+            rdf:type owl:Restriction ;
+            owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass christophe:Product
+        ] ;
+    rdfs:range christophe:Product ;
+    rdfs:comment "a purchase contains at least one product"@en ;
+    rdfs:label "contains"@en .
+
+
+#3. Data Properties
+
+### http://www.example.com/christophe#email
+christophe:email rdf:type owl:DatatypeProperty ;
+    rdfs:domain christophe:Customer ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Unique e-mail address of a customer"@en ;
+    rdfs:label "email"@en .
+
+### http://www.example.com/christophe#phoneNumber
+christophe:phoneNumber rdf:type owl:DatatypeProperty ;
+    rdfs:domain christophe:Customer ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Phone number of a customer"@en ;
+    rdfs:label "phone number"@en .
+
+### http://www.example.com/christophe#fullName
+christophe:fullName rdf:type owl:DatatypeProperty ;
+    rdfs:domain christophe:Customer ;
+    rdfs:range xsd:string ;
+    rdfs:comment "full name of a customer"@en ;
+    rdfs:label "full name"@en .
+
+### http://www.example.com/christophe#purchaseUUID
+christophe:purchaseUUID rdf:type owl:DatatypeProperty ;
+    rdfs:domain christophe:Purchase ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "unique identifier of a purchase"@en ;
+    rdfs:label "purchase UUID"@en .
+
+### http://www.example.com/christophe#date
+christophe:date rdf:type owl:DatatypeProperty ;
+    rdfs:domain christophe:Purchase ;
+    rdfs:range xsd:date ;
+    rdfs:comment "date a purchase was made"@en ;
+    rdfs:label "date"@en .
+
+### http://www.example.com/christophe#totalPrice
+christophe:totalPrice rdf:type owl:DatatypeProperty ;
+    rdfs:domain christophe:Purchase ;
+    rdfs:range xsd:double ;
+    rdfs:comment "total price of a purchase"@en ;
+    rdfs:label "total price"@en .
+
+### http://www.example.com/christophe#priority
+christophe:priority rdf:type owl:DatatypeProperty ;
+    rdfs:domain christophe:DeliveryMethod ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "priority of a delivery method (lower is higher priority)"@en ;
+    rdfs:label "priority"@en .
+
+### http://www.example.com/christophe#methodUUID
+christophe:methodUUID rdf:type owl:DatatypeProperty ;
+    rdfs:domain christophe:DeliveryMethod ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "unique identifier of delivery method"@en ;
+    rdfs:label "method UUID"@en .
+
+### http://www.example.com/christophe#deliveryType
+christophe:deliveryType rdf:type owl:DatatypeProperty ;
+    rdfs:domain christophe:DeliveryMethod ;
+    rdfs:range xsd:string ;
+    rdfs:comment "type of delivery method, either for home delivery or pickup at location"@en ;
+    rdfs:label "delivery type"@en .
+
+### http://www.example.com/christophe#address
+christophe:address rdf:type owl:DatatypeProperty ;
+    rdfs:domain christophe:DeliveryMethod ;
+    rdfs:range xsd:string ;
+    rdfs:comment "address for a home delivery, at most one of these exists"@en ;
+    rdfs:label "address"@en .
+
+### http://www.example.com/christophe#productUUID
+christophe:productUUID rdf:type owl:DatatypeProperty ;
+    rdfs:domain christophe:Product ;
+    rdfs:range xsd:string ;
+    rdfs:comment "unique identifier of a product"@en ;
+    rdfs:label "product UUID"@en .
+
+
+
+
+##### Products
+
+#1. Classes
+
+###  http://www.example.com/nastya#Product
+nastya:Product rdf:type owl:Class ;
+        owl:equivalentClass lars:Product ; 
+        owl:equivalentClass thomas:Product ; 
+        owl:equivalentClass christophe:Product ; 
+        rdfs:comment "The product class, individual products from different vendors"@en ;
+        rdfs:label "Product"@en .            
+
+
+###  http://www.example.com/Review
+nastya:Review rdf:type owl:Class ;
+        rdfs:comment "The review class, all reviews for each product"@en ;
+        rdfs:label "Review"@en .
+
+
+###  http://www.example.com/nastya#Subcategory
+nastya:SubCategory rdf:type owl:Class ;
+        rdfs:subClassOf nastya:Category; 
+        rdfs:comment "The subcategory class, subcategories to which the products belong"@en ;
+        rdfs:label "Subcategory"@en .
+
+
+###  http://www.example.com/nastya#Category
+nastya:Category rdf:type owl:Class ;
+        rdfs:comment "The category class, categories to which subcategories belong"@en ;
+        rdfs:label "Category"@en .
+
+
+
+
+#2. Object Properties
+
+### http://www.example.com/nastya#has
+nastya:has rdf:type owl:ObjectProperty;
+        rdf:type owl:InverseFunctionalProperty ;
+        rdf:type owl:AsymmetricObjectProperty;
+        owl:inverseOf nastya:on ;
+        rdfs:domain nastya:Product;
+        rdfs:range nastya:Review ;
+        rdfs:comment "indicates which reviews a product has"@en ;
+        rdfs:label "has"@en .
+
+### http://www.example.com/nastya#on
+nastya:on rdf:type owl:ObjectProperty;
+        rdf:type owl:FunctionalProperty ;
+        owl:inverseOf nastya:has ;
+        rdfs:domain nastya:Review;
+        rdfs:range nastya:Product ;
+        rdfs:comment "indicates on which product the review is a review on"@en ;
+        rdfs:label "on"@en .
+
+### http://www.example.com/nastya#belongsTo
+nastya:belongsTo rdf:type owl:ObjectProperty;
+        rdf:type owl:FunctionalProperty ;
+        owl:inverseOf nastya:contains ;
+        rdfs:domain nastya:Product;
+        rdfs:range nastya:SubCategory ;
+        rdfs:comment "indicates to which subcategory an object belongs"@en ;
+        rdfs:label "belongsTo"@en .
+
+### http://www.example.com/nastya#contains
+nastya:contains rdf:type owl:ObjectProperty;
+        rdf:type owl:InverseFunctionalProperty ;
+        owl:inverseOf nastya:belongsTo ;
+        rdfs:domain nastya:SubCategory,
+        [rdf:type owl:Restriction ;
+                owl:onProperty nastya:contains ;
+                owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+                owl:onClass nastya:Product] ;
+        rdfs:range nastya:Product ;
+        rdfs:comment "indicates which products a subcategory contains"@en ;
+        rdfs:label "containts"@en .       
+
+
+### http://www.example.com/nastya#isPartOf
+nastya:isPartOf rdf:type owl:ObjectProperty;
+        rdf:type owl:FunctionalProperty ;
+        owl:inverseOf nastya:isCategoryOf;
+        rdfs:domain nastya:SubCategory,
+        [rdf:type owl:Restriction ;
+                owl:onProperty nastya:isPartOf ;
+                owl:cardinality "1"^^xsd:nonNegativeInteger ;
+                owl:onClass nastya:Category] ;
+        rdfs:range nastya:Category ;
+        rdfs:comment "indicates to which Category the subcategory belongs"@en ;
+        rdfs:label "isPartOf"@en .
+
+
+### http://www.example.com/nastya#isCategoryOf
+nastya:isCategoryOf rdf:type owl:ObjectProperty;
+        rdf:type owl:InverseFunctionalProperty ;
+        owl:inverseOf nastya:belongsTo ;
+        rdfs:domain nastya:Category,
+        [rdf:type owl:Restriction ;
+                owl:onProperty nastya:isCategoryOf ;
+                owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+                owl:onClass nastya:SubCategory] ;
+        rdfs:range nastya:SubCategory ;
+        rdfs:comment "indicates which subcategories the category contains"@en ;
+        rdfs:label "isCategoryOf"@en .     
+
+
+#3. Data Properties
+
+# product
+
+## PRIMARY KEY OF PRODUCTS
+### http://www.example.com/nastya#productUUID
+nastya:productUUID rdf:type owl:DatatypeProperty ;
+        rdfs:domain nastya:Product ;
+        rdfs:range xsd:string ;
+
+        rdfs:comment "Unique identifier of warehouse products"@en ;
+        rdfs:label "product UUID"@en .
+
+### http://www.example.com/nastya#price
+nastya:price rdf:type owl:DatatypeProperty ;
+        rdfs:domain nastya:Product ;
+        rdfs:range xsd:float ;
+        rdfs:comment "Price of warehouse products"@en ;
+        rdfs:label "product price"@en .
+
+### http://www.example.com/nastya#brand
+nastya:brand rdf:type owl:DatatypeProperty ;
+        rdfs:domain nastya:Product ;
+        rdfs:range xsd:string ;
+        rdfs:comment "brand of warehouse products"@en ;
+        rdfs:label "product brand"@en .  
+
+### http://www.example.com/nastya#name
+nastya:name rdf:type owl:DatatypeProperty ;
+        rdfs:domain nastya:Product ;
+        rdfs:range xsd:string ;
+        rdfs:comment "Name of warehouse products"@en ;
+        rdfs:label "product name"@en .
+
+### http://www.example.com/nastya#description
+nastya:description rdf:type owl:DatatypeProperty ;
+        rdfs:domain nastya:Product ;
+        rdfs:range xsd:string ;
+        rdfs:comment "Name of warehouse products"@en ;
+        rdfs:label "product name"@en .        
+
+
+# review
+## PRIMARY KEY OF reviews
+### http://www.example.com/nastya#review_id
+nastya:review_id rdf:type owl:DatatypeProperty ;
+        rdfs:domain nastya:Review ;
+        rdfs:range xsd:string ;
+        rdfs:comment "Unique identifier of reviews on products"@en ;
+        rdfs:label "review id"@en .   
+
+### http://www.example.com/nastya#delete
+nastya:deleted rdf:type owl:DatatypeProperty ;
+        rdfs:domain nastya:Review ;
+        rdfs:range xsd:boolean ;
+        rdfs:comment "If boolean is true, the review is not shown to the user"@en ;
+        rdfs:label "review deleted"@en .     
+
+
+### http://www.example.com/nastya#title
+nastya:title rdf:type owl:DatatypeProperty ;
+        rdfs:domain nastya:Review ;
+        rdfs:range xsd:string ;
+        rdfs:comment "Title that users gives while writing a review"@en ;
+        rdfs:label "review title"@en .             
+
+### http://www.example.com/nastya#text
+nastya:text rdf:type owl:DatatypeProperty ;
+        rdfs:domain nastya:Review ;
+        rdfs:range xsd:string ;
+        rdfs:comment "Title that users gives while writing a review"@en ;
+        rdfs:label "review title"@en .   
+
+### http://www.example.com/nastya#num_stars
+nastya:num_stars rdf:type owl:DatatypeProperty ;
+        rdfs:domain nastya:Review ;
+        rdfs:range xsd:double ;
+        rdfs:comment "number of stars a user gives on a product"@en ;
+        rdfs:label "review number of stars"@en .   
+  
+
+### http://www.example.com/nastya#username
+nastya:username rdf:type owl:DatatypeProperty ;
+        rdfs:domain nastya:Review ;
+        rdfs:range xsd:string ;
+        rdfs:comment "Username connected to customer"@en ;
+        rdfs:label "review title"@en .           
+
+nastya:location rdf:type owl:DatatypeProperty ;
+        rdfs:domain nastya:Review ;
+        rdfs:range xsd:string ;
+        rdfs:comment "Current location of user (country)"@en ;
+        rdfs:label "review location"@en .    
+
+nastya:date rdf:type owl:DatatypeProperty ;
+        rdfs:domain nastya:Review ;
+        rdfs:range xsd:dateTime ;
+        rdfs:comment "day that review was posted"@en ;
+        rdfs:label "review date"@en .            
+
+# subcategory
+### http://www.example.com/nastya#subcat_name
+nastya:subcat_name rdf:type owl:DatatypeProperty ;
+        rdfs:domain nastya:Subcategory ;
+        rdfs:range xsd:string ;
+        rdfs:comment "Name of subcategories is also primary key"@en ;
+        rdfs:label "subcategory name"@en .     
+
+
+# category
+### http://www.example.com/nastya#cat_name
+nastya:cat_name rdf:type owl:DatatypeProperty ;
+        rdfs:domain nastya:Category ;
+        rdfs:range xsd:string ;
+        rdfs:comment "Name of categories is also primary key"@en ;
+        rdfs:label "category name"@en .   
+
+
+
+##### Warehouses #####
+
+#1. Classes
+
+###  http://www.example.com/thomas#Product
+thomas:Product rdf:type owl:Class ;
+        owl:equivalentClass lars:Product ; 
+        owl:equivalentClass nastya:Product ; 
+        owl:equivalentClass christophe:Product ; 
+        rdfs:comment "The product class, individual products from different vendors"@en ;
+        rdfs:label "Product"@en .
+
+###  http://www.example.com/thomas#Warehouse
+thomas:Warehouse rdf:type owl:Class ;
+        rdfs:comment "The warehouse class, warehouses are the storages for the products of our e-commerce."@en ;
+        rdfs:label "Warehouse"@en .
+
+### http://www.example.com/thomas#Employee
+thomas:Employee rdf:type owl:Class ;
+        rdfs:comment "The employee class, employees work in a warehouse to process incoming and outgoing deliveries"@en ;
+        rdfs:label "Employee"@en .
+
+### http://www.example.com/thomas#Delivery
+thomas:Delivery rdf:type owl:Class ;
+    owl:equivalentClass lars:Order ; 
+    owl:equivalentClass xhulio:DeliveryOrder ; 
+    owl:equivalentClass christophe:Purchase ;
+    rdfs:comment "The delivery class, outgoing orders from customers or incoming refillings of stock from the vendors, both must be processed by employees"@en ;
+    rdfs:label "Delivery"@en .
+
+### http://www.example.com/thomas#Stock
+thomas:Stock rdf:type owl:Class;
+        rdfs:comment "Stock class, to indicate how much stock there is of a certain product in a certain warehouse"@en ;
+        rdfs:label "Stock"@en .
+
+### http://www.example.com/thomas#DeliverySize
+thomas:DeliverySize rdf:type owl:Class ;
+        rdfs:comment "Class that knows how many pieces of a product are being delivered"@en ;
+        rdfs:label "size of delivery"@en .
+
+### http://www.example.com/thomas#Schedule
+thomas:Schedule rdf:type owl:Class ;
+        rdfs:comment "Class that knows for every delivery processing how long an employee worked"@en ;
+        rdfs:label "Schedule"@en .
+
+#2. Object Properties
+
+### http://www.example.com/thomas#stores
+thomas:stores rdf:type owl:ObjectProperty ;
+        rdf:type owl:InverseFunctionalProperty ;
+        owl:inverseOf thomas:isStored ;
+        rdfs:domain thomas:Warehouse ;
+        rdfs:range thomas:Product ;
+        rdfs:comment "relation to a product that is stored in a warehouse"@en ;
+        rdfs:label "stores"@en .
+
+### http://www.example.com/thomas#isStored
+thomas:isStored rdf:type owl:ObjectProperty ;
+        rdf:type owl:FunctionalProperty ;
+        owl:inverseOf thomas:stores ;
+        rdfs:domain thomas:Product,
+                    [rdf:type owl:Restriction ;
+                        owl:onProperty thomas:isStored ;
+                        owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+                        owl:onClass thomas:Warehouse] ;
+        rdfs:range thomas:Warehouse ;
+        rdfs:comment "relation to a warehouse that stores a product"@en ;
+        rdfs:label "is stored in"@en .
+
+###  http://www.example.com/thomas#worksAt
+thomas:worksAt rdf:type owl:ObjectProperty ;
+        owl:inverseOf thomas:employs ;
+        rdf:type owl:FunctionalProperty ;
+        rdfs:domain thomas:Employee ,
+        [rdf:type owl:Restriction ;
+            owl:onProperty thomas:worksAt ;
+            owl:cardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass thomas:Warehouse] ;
+        rdfs:range thomas:Warehouse ;
+        rdfs:comment "relation to a warehouse where an employee works"@en ;
+        rdfs:label "works at"@en .
+
+###  http://www.example.com/thomas#employs
+thomas:employs rdf:type owl:ObjectProperty ;
+        owl:inverseOf thomas:worksAt ;
+        rdf:type owl:InverseFunctionalProperty ;
+        rdfs:domain thomas:Warehouse ,
+         [rdf:type owl:Restriction ;
+            owl:onProperty thomas:employs ;
+            owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass thomas:Employee] ;
+        rdfs:range thomas:Employee ;
+        rdfs:comment "relation to an employee working in the warehouse"@en ;
+        rdfs:label "employs"@en .
+
+### http://www.example.com/thomas#delivers
+thomas:delivers rdf:type owl:ObjectProperty ;
+        rdf:type owl:InverseFunctionalProperty ;
+        rdfs:domain thomas:Delivery,
+        [rdf:type owl:Restriction ;
+        owl:onProperty thomas:delivers ;
+        owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+        owl:onClass thomas:Product] ;
+        rdfs:range thomas:Product ;
+        rdfs:comment "relation to a product that is part of a delivery"@en ;
+        rdfs:label "delivers"@en .
+
+### http://www.example.com/thomas#processedBy
+thomas:processedBy rdf:type owl:ObjectProperty ;
+        rdfs:domain thomas:Delivery ,
+        [rdf:type owl:Restriction ;
+        owl:onProperty thomas:processedBy ;
+        owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+        owl:onClass thomas:Employee] ;
+        rdfs:range thomas:Employee ;
+        rdfs:comment "relation to an employee that processes a delivery"@en ;
+        rdfs:label "processed by"@en .
+
+### http://www.example.com/thomas#isStock
+thomas:stockOfProduct rdf:type owl:ObjectProperty ;
+        rdfs:domain thomas:Stock;
+        rdfs:range thomas:Product;
+        rdfs:comment "relation that a product is part of a stock in a warehouse"@en ;
+        rdfs:label "stock of"@en.
+
+### http://www.example.com/thomas#stockOf
+thomas:stockOfWarehouse rdf:type owl:ObjectProperty ;
+        rdfs:domain thomas:Stock;
+        rdfs:range thomas:Warehouse;
+        rdfs:comment "relation that a warehouse has stock of a product"@en ;
+        rdfs:label "stock of"@en.
+
+### http://www.example.com/thomas#hasAmount
+thomas:deliverySizeOfProduct rdf:type owl:ObjectProperty ;
+        rdfs:domain thomas:DeliverySize;
+        rdfs:range thomas:Product;
+        rdfs:comment "relation of how many pieces of a product there are in a delivery"@en ;
+        rdfs:label "has amount of"@en.
+
+### http://www.example.com/thomas#isSize
+thomas:deliverySizeOfDelivery rdf:type owl:ObjectProperty ;
+        rdfs:domain thomas:DeliverySize;
+        rdfs:range thomas:Delivery;
+        rdfs:comment "relation of how many pieces a delivery has of a product"@en ;
+        rdfs:label "is size of"@en.
+
+### http://www.example.com/thomas#hasSchedule
+thomas:scheduleOfEmployee rdf:type owl:ObjectProperty ;
+        rdfs:domain thomas:Schedule;
+        rdfs:range thomas:Employee;
+        rdfs:comment "relation of an employee that has a schedule for a delivery"@en ;
+        rdfs:label "is schedule of"@en.
+
+### http://www.example.com/thomas#isWorkingSlot
+thomas:ScheduleOfDelivery rdf:type owl:ObjectProperty ;
+        rdfs:domain thomas:Schedule;
+        rdfs:range thomas:Delivery;
+        rdfs:comment "relation of a delivery that is scheduled to an employee"@en ;
+        rdfs:label "is schedule of"@en.
+
+#3. Data Properties
+
+### http://www.example.com/thomas#productUUID
+thomas:productUUID rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Product ;
+        rdfs:range xsd:integer ;
+        rdfs:comment "Unique identifier of warehouse products"@en ;
+        rdfs:label "product UUID"@en .
+
+### http://www.example.com/thomas#price
+thomas:price rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Product ;
+        rdfs:range xsd:double ;
+        rdfs:comment "total selling price of a product"@en ;
+        rdfs:label "price"@en .
+
+### http://www.example.com/thomas#volume
+thomas:volume rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Product ;
+        rdfs:range xsd:double ;
+        rdfs:comment "volume in cubic meters"@en ;
+        rdfs:label "volume"@en .
+
+### http://www.example.com/thomas#commision
+thomas:commision rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Product ;
+        rdfs:range xsd:double ;
+        rdfs:comment "percentage of the profit that our e-commerce business takes from a sale"@en ;
+        rdfs:label "commision"@en .
+
+###  http://www.example.com/thomas#address
+thomas:address rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Warehouse ;
+        rdfs:range xsd:string ;
+        rdfs:comment "warehouse address"@en ;
+        rdfs:label "address"@en .
+
+###  http://www.example.com/thomas#spaceLimit
+thomas:spaceLimit rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Warehouse ;
+        rdfs:range xsd:double ;
+        rdfs:comment "storage capacity of a warehouse in cubic meters"@en ;
+        rdfs:label "space limit"@en .
+
+### http://www.example.com/thomas#fullName
+thomas:fullName rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Employee ;
+        rdfs:range xsd:string ;
+        rdfs:comment "first name and family name of an employee"@en ;
+        rdfs:label "full name"@en .
+
+### http://www.example.com/thomas#salary
+thomas:salary rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Employee ;
+        rdfs:range xsd:double ;
+        rdfs:comment "gaining of an employee for one hour of work"@en ;
+        rdfs:label "salary"@en .
+
+### http://www.example.com/thomas#deliveryUUID
+thomas:deliveryUUID rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Delivery ;
+        rdfs:range xsd:integer ;
+        rdfs:comment "Unique identifier for a delivery"@en ;
+        rdfs:label "delivery UUID"@en .
+
+### http://www.example.com/thomas#deliveryService
+thomas:deliveryService rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Delivery ;
+        rdfs:range xsd:string ;
+        rdfs:comment "Company that is charged with the delivery"@en ;
+        rdfs:label "delivery company"@en .
+
+### http://www.example.com/thomas#isOrder
+thomas:isOrder rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Delivery ;
+        rdfs:range xsd:boolean ;
+        rdfs:comment "indicates if delivery is a customer order. Otherwise it is a stock refilling."@en ;
+        rdfs:label "delivery is order?"@en .
+
+### http://www.example.com/thomas#transportCosts
+thomas:transportCosts rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Delivery ;
+        rdfs:range xsd:double ;
+        rdfs:comment "compensation for the service of the delivery company"@en ;
+        rdfs:label "transport costs"@en .
+
+### http://www.example.com/thomas#destinationAddress
+thomas:destinationAddress rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Delivery ;
+        rdfs:range xsd:string ;
+        rdfs:comment "address where the delivery will be shipped to"@en ;
+        rdfs:label "destination address"@en .
+
+### http://www.example.com/thomas#arrivalTime
+thomas:arrivalTime rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Delivery ;
+        rdfs:range xsd:date ;
+        rdfs:comment "Time of arrival"@en ;
+        rdfs:label "arrival time"@en .
+
+### http://www.example.com/thomas#departureTime
+thomas:departureTime rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Delivery ;
+        rdfs:range xsd:date ;
+        rdfs:comment "Time of departure"@en ;
+        rdfs:label "departure time"@en .
+
+### http://www.example.com/thomas#productStock
+thomas:productStock rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Stock ;
+        rdfs:range xsd:integer ;
+        rdfs:comment "The number of pieces of a product in stock in a warehouse"@en ;
+        rdfs:label "warehouse stock"@en .
+
+### http://www.example.com/thomas#productAmount
+thomas:productAmount rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:DeliverySize ;
+        rdfs:range xsd:integer ;
+        rdfs:comment "total number of this product in this delivery"@en ;
+        rdfs:label "delivery size"@en .
+
+### http://www.example.com/thomas#hoursWorked
+thomas:hoursWorked rdf:type owl:DatatypeProperty ;
+        rdfs:domain thomas:Schedule ;
+        rdfs:range xsd:integer ;
+        rdfs:comment "the total hours an employee needed to process this delivery"@en ;
+        rdfs:label "hourse worked"@en .
+
+
+# =======================
+# -----------------------
+#    Supplier ontology
+# -----------------------
+# =======================
+
+# ============
+#  1. Classes
+# ============
+
+### http://www.example.com/lars#Supplier
+lars:Supplier rdf:type owl:Class ;
+    rdfs:comment "Supplier class, Supplier provides products for the ecommerce platform"@en ;
+    rdfs:label "Supplier"@en .
+
+### http://www.example.com/lars#LoyaltyCard
+lars:LoyaltyCard rdf:type owl:Class ; 
+    rdfs:comment "Loyalty card class, users can get a loyalty card for a certain supplier. After a specific amount of purchases, the user gets a discount"@en ;
+    rdfs:label "Loyalty Card"@en .
+
+### http://www.example.com/lars#Rating
+lars:Rating rdf:type owl:Class ; 
+    rdfs:comment "Rating class, users can rate each supplier based on their experience with them. This would give future customers an idea about the reliability of the supplier"@en ; 
+    rdfs:label "Rating"@en .
+
+### http://www.example.com/lars#User
+lars:User rdf:type owl:Class ; 
+    owl:equivalentClass xhulio:Customer ; 
+    owl:equivalentClass christophe:Customer ; 
+    rdfs:comment "User class, users can own a loyalty card or write a review for a supplier"@en ;
+    rdfs:label "User"@en .
+
+### http://www.example.com/lars#Product
+lars:Product rdf:type owl:Class ; 
+        owl:equivalentClass nastya:Product ; 
+        owl:equivalentClass thomas:Product ; 
+        owl:equivalentClass christophe:Product ; 
+    rdfs:comment "Product class. Users can add products to their orders. Suppliers can supply products"@en ;
+    rdfs:label "Product"@en .
+
+### http://www.example.com/lars#Order
+lars:Order rdf:type owl:Class ;
+    owl:equivalentClass xhulio:DeliveryOrder ; 
+    owl:equivalentClass christophe:Purchase ;
+    #[rdf:type thomas:Delivery, owl:NegativePropertyAssertion ;
+	#owl:assertionProperty thomas:isOrder ;
+	#owl:targetValue '1'] ;
+
+    rdfs:comment "Order class. Users can place orders that consists of products. Users can also return orders."@en ;
+    rdfs:label "Order"@en .
+
+### http://www.example.com/lars#Review
+lars:Review rdf:type owl:Class ;
+    rdfs:subClassOf
+        [
+            rdf:type owl:Restriction ;
+            owl:allValuesFrom lars:Rating ;
+            owl:onProperty lars:reviewHasRating
+        ] ;
+    rdfs:subClassOf
+        [
+            rdf:type owl:Restriction ;
+            owl:allValuesFrom lars:Supplier ; 
+            owl:onProperty lars:reviewHasSupplier
+        ] ;
+    rdfs:comment "Review class. This class is an abstraction of the ternary relation between User, Rating and Supplier."@en ;
+    ## Source: https://www.w3.org/TR/swbp-n-aryRelations/
+    rdfs:label "Review"@en .
+
+# ======================
+#  2. Object properties
+# ======================
+
+## Supplier <--- provides/isProvidedBy ---> Loyalty Card
+
+### https://www.example.com/lars#provides
+lars:provides rdf:type owl:ObjectProperty ; 
+    rdf:type owl:InverseFunctionalProperty ;
+    owl:inverseOf lars:isProvidedBy ; 
+    rdfs:domain lars:Supplier ;
+    rdfs:range lars:LoyaltyCard ;
+    rdfs:comment "Relation to a Loyalty Card, that a Supplier provides"@en ;
+    rdfs:label "provides "@en .
+
+### https://www.example.com/lars#isProvidedBy
+lars:isProvidedBy rdf:type owl:ObjectProperty ;
+    rdf:type owl:FunctionalProperty ; 
+    owl:inverseOf lars:provides ; 
+    rdfs:domain lars:LoyaltyCard ,
+        [
+            rdf:type owl:Restriction ;
+            owl:onProperty lars:isProvidedBy ;
+            owl:cardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass lars:Supplier ;
+        ] ;
+    rdfs:range lars:Supplier ;
+    rdfs:comment "Relation to a Supplier, that provides a Loyalty Card"@en ; 
+    rdfs:label "is provided by"@en .
+
+
+## Supplier <--- supplies/isSuppliedBy ---> Product 
+
+### https://www.example.com/lars#supplies
+lars:supplies rdf:type owl:ObjectProperty ;
+    rdf:type owl:FunctionalProperty ; 
+    owl:inverseOf lars:isSuppliedBy ; 
+    rdfs:domain lars:Supplier ,
+        [
+            rdf:type owl:Restriction ;
+            owl:onProperty lars:supplies ;
+            owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass lars:Product ;
+        ] ;
+    rdfs:range lars:Product ;
+    rdfs:comment "Relation to a Product, that is supplied by a Supplier"@en ; 
+    rdfs:label "supplies"@en .
+
+### https://www.example.com/lars#isSuppliedBy
+lars:isSuppliedBy rdf:type owl:ObjectProperty ;
+    rdf:type owl:InverseFunctionalProperty ; 
+    owl:inverseOf lars:supplies ; 
+    rdfs:domain lars:Product ,
+        [
+            rdf:type owl:Restriction ;
+            owl:onProperty lars:isSuppliedBy ;
+            owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass lars:Supplier ;
+        ] ;
+    rdfs:range lars:Supplier ;
+    rdfs:comment "Relation to a Supplier, that supplies the products"@en ; 
+    rdfs:label "is supplied by"@en .
+
+
+## User <--- owns/belongsTo ---> Loyalty Card
+
+### https://www.example.com/lars#owns
+lars:owns rdf:type owl:ObjectProperty ;
+    rdf:type owl:FunctionalProperty ;
+    owl:inverseOf lars:belongsTo ;
+    rdfs:domain lars:User ;
+    rdfs:range lars:LoyaltyCard ;
+    rdfs:comment "Relation to a Loyalty Card, that belongs to a user."@en ;
+    rdfs:label "owns"@en .
+
+### https://www.example.com/lars#belongsTo
+lars:belongsTo rdf:type owl:ObjectProperty ;
+    rdf:type owl:InverseFunctionalProperty ;
+    owl:inverseOf lars:owns ;
+    rdfs:domain lars:LoyaltyCard ,
+        [
+            rdf:type owl:Restriction ;
+            owl:onProperty lars:belongsTo ;
+            owl:cardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass lars:User ;
+        ] ;
+    rdfs:range lars:User ;
+    rdfs:comment "Relation to a User, that owns a loyaty card"@en ;
+    rdfs:label "belongs to"@en .
+
+
+## User <--- places/isPlacedBy ---> Order 
+
+### https://www.example.com/lars#places
+lars:places rdf:type owl:ObjectProperty ;
+    rdf:type owl:InverseFunctionalProperty ; 
+    owl:inverseOf lars:isPlacedBy ;
+    rdfs:domain lars:User ;
+    rdfs:range lars:Order ;
+    rdfs:comment "Relation to a order, that is placed by a User"@en ;
+    rdfs:label "places"@en .
+
+### https://www.example.com/lars#isPlacedBy
+lars:isPlacedBy rdf:type owl:ObjectProperty ;
+    rdf:type owl:FunctionalProperty ; 
+    owl:inverseOf lars:places ;
+    rdfs:domain lars:Order ,
+        [
+            rdf:type owl:Restriction ;
+            owl:onProperty lars:isPlacedBy ;
+            owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass lars:User ;
+        ] ;
+    rdfs:range lars:User ;
+    rdfs:comment "Relation to a user, who can place an order"@en ;
+    rdfs:label "is placed by"@en .
+
+
+## User <--- returns/isReturnedBy ---> Order
+
+### https://www.example.com/lars#returns
+lars:returns rdf:type owl:ObjectProperty ;
+    rdf:type owl:FunctionalProperty ; 
+    owl:inverseOf lars:isReturnedBy ;
+    rdfs:domain lars:User ;
+    rdfs:range lars:Order ;
+    rdfs:comment "Relation to an Order, that can be returned by a user"@en ;
+    rdfs:label "returns"@en .
+
+### https://www.example.com/lars#isReturnedBy
+lars:isReturnedBy rdf:type owl:ObjectProperty ;
+    rdf:type owl:FunctionalProperty ; 
+    owl:inverseOf lars:returns ;
+    rdfs:domain lars:Order ,
+        [
+            rdf:type owl:Restriction ;
+            owl:onProperty lars:isReturnedBy ;
+            owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass lars:User ;
+        ] ;
+    rdfs:range lars:User ;
+    rdfs:comment "Relation to a User, that can return the order"@en ;
+    rdfs:label "is returned by"@en .
+
+
+## Product <--- isAddedTo/contains ---> Order
+
+### https://www.example.com/lars#isAddedTo
+lars:isAddedTo rdf:type owl:ObjectProperty ; 
+    owl:inverseOf lars:contains ;
+    rdfs:domain lars:Product ;
+    rdfs:range lars:Order ;
+    rdfs:comment "Relation to an Order, that consists of products."@en ;
+    rdfs:label "is added to"@en .
+
+### https://www.example.com/lars#contains
+lars:contains rdf:type owl:ObjectProperty ; 
+    owl:inverseOf lars:isAddedTo ;
+    rdfs:domain lars:Order ,
+        [
+            rdf:type owl:Restriction ;
+            owl:onProperty lars:contains ;
+            owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass lars:Product ;
+        ] ;
+    rdfs:range lars:Product ;
+    rdfs:comment "Relation to a Product, an order contains one or more products."@en ;
+    rdfs:label "contains"@en .
+
+
+## Review <--- reviewHasSupplier --- Supplier
+### https://www.example.com/lars#reviewHasSupplier
+lars:reviewHasSupplier rdf:type owl:ObjectProperty ;
+    rdfs:domain lars:Review ;
+    rdfs:range lars:Supplier ;
+    rdfs:comment "Indicates the supplier of the review"@en ;
+    rdfs:label "review has supplier"@en .
+
+## Review <--- reviewHasRating --- Rating
+### https://www.example.com/lars#reviewHasRating
+lars:reviewHasRating rdf:type owl:ObjectProperty ;
+    rdfs:domain lars:Review ;
+    rdfs:range lars:Rating ;
+    rdfs:comment "Relation between a Review and the Rating. Rating contains the information about the review."@en ; 
+    rdfs:label "review has rating"@en .
+
+## User --- writes ---> Review
+### https://www.example.com/lars@writes
+lars:writes rdf:type owl:ObjectProperty ;
+    rdfs:domain lars:User ;
+    rdfs:range lars:Review ;
+    rdfs:comment "Relation to a review, that can be written by a User"@en ; 
+    rdfs:label "writes"@en .
+
+
+### http://www.example.com/lars#SuppliedPrice
+lars:SuppliedPrice rdf:type owl:Class ; 
+    rdfs:comment "Class that keeps track of the price of a supplied product."@en ; 
+    rdfs:label "Supplied price"@en .
+
+### http://www.example.com/lars#Return
+lars:Return rdf:type owl:Class ; 
+    rdfs:comment "Class that keeps track of the returned orders"@en ;
+    rdfs:label "Returned orders"@en .
+
+
+# ====================
+#  3. Data properties
+# ====================
+
+## Supplier data properties
+### http://www.example.com/lars#supplierID
+lars:supplierID rdf:type owl:DatatypeProperty ;
+    rdfs:domain lars:Supplier ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "Unique id for suppliers"@en ;
+    rdfs:label "Supplier ID"@en .
+
+### http://www.example.com/lars#phone
+lars:phone rdf:type owl:DatatypeProperty ;
+    rdfs:domain lars:Supplier ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Phone number of the supplier"@en ;
+    rdfs:label "Supplier phone number"@en .
+
+### http://www.example.com/lars#semail
+lars:semail rdf:type owl:DatatypeProperty ;
+    rdfs:domain lars:Supplier ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Email address of the supplier"@en ;
+    rdfs:label "Supplier email"@en . 
+
+### http://www.example.com/lars#sname
+lars:sname rdf:type owl:DatatypeProperty ;
+    rdfs:domain lars:Supplier ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Name of the supplier"@en ;
+    rdfs:label "Supplier name"@en .
+
+
+## Rating data properties
+### http://www.example.com/lars#ratingID
+lars:ratingID rdf:type owl:DatatypeProperty ;
+    rdfs:domain lars:Rating ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "Unique id for ratings"@en ;
+    rdfs:label "Rating ID"@en .
+
+### http://www.example.com/lars#ratingText
+lars:ratingText rdf:type owl:DatatypeProperty ;
+    rdfs:domain lars:Rating ;
+    rdfs:range xsd:string ;
+    rdfs:comment "The text in the review of the user."@en ;
+    rdfs:label "Rating text"@en .
+
+### http://www.example.com/lars#stars
+lars:stars rdf:type owl:DatatypeProperty ;
+    rdfs:domain lars:Rating ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "Amount of stars the user the supplier gives in the Review"@en ;
+    rdfs:label "Stars"@en .    
+
+
+## Loyalty Card data properties
+### http://www.example.com/lars#loyaltyCardID
+lars:loyaltyCardID rdf:type owl:DatatypeProperty ;
+    rdfs:domain lars:LoyaltyCard ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "Unique id for loyalty cards"@en ;
+    rdfs:label "Loyalty Card ID"@en .
+
+### http://www.example.com/lars#orderCount
+lars:orderCount rdf:type owl:DatatypeProperty ; 
+    rdfs:domain lars:LoyaltyCard ; 
+    rdfs:range xsd:integer ; 
+    rdfs:comment "Amount of orders a certain loyalty card has"@en ;
+    rdfs:label "Order count"@en .
+
+
+## User data properties
+### http://www.example.com/lars#userID
+lars:userID rdf:type owl:DatatypeProperty ;
+    rdfs:domain lars:User ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "Unique id for users"@en ;
+    rdfs:label "User ID"@en .
+
+### http://www.example.com/lars#userEmail
+lars:userEmail rdf:type owl:DatatypeProperty ; 
+    rdfs:domain lars:User ; 
+    rdfs:range xsd:string ; 
+    rdfs:comment "Email of the user on the platform"@en ;
+    rdfs:label "User email"@en .
+
+### http://www.example.com/lars#userAddress
+lars:userAddress rdf:type owl:DatatypeProperty ; 
+    rdfs:domain lars:User ; 
+    rdfs:range xsd:string ; 
+    rdfs:comment "Address of the user on the platform. This is where orders are shipped to."@en ;
+    rdfs:label "User address"@en .
+
+
+## Product data properties
+### http://www.example.com/lars#productID
+lars:productID rdf:type owl:DatatypeProperty ; 
+    rdfs:domain lars:Product ; 
+    rdfs:range xsd:integer ; 
+    rdfs:comment "Unique id for products"@en ;
+    rdfs:label "Product ID"@en .
+
+### http://www.example.com/lars#productName
+lars:productName rdf:type owl:DatatypeProperty ; 
+    rdfs:domain lars:Product ;
+    rdfs:range xsd:string ; 
+    rdfs:comment "Name of the product"@en ;
+    rdfs:label "Product name"@en .
+
+
+## Order data properties
+### https://www.example.com/lars#orderID
+lars:orderID rdf:type owl:DatatypeProperty ;
+    rdfs:domain lars:Order ; 
+    rdfs:range xsd:integer ;
+    rdfs:comment "Unique id for an Order"@en ;
+    rdfs:label "Order ID"@en .
+
+### https://www.example.com/lars#totalPrice
+lars:totalPrice rdf:type owl:DatatypeProperty ;
+    rdfs:domain lars:Order ;
+    rdfs:range xsd:double ;
+    rdfs:comment "Total price of an Order"@en ; 
+    rdfs:label "Order Price"@en .
+
+### http://www.example.com/lars#productPrice
+lars:productPrice rdf:type owl:DatatypeProperty ; 
+    rdfs:domain lars:SuppliedPrice ;
+    rdfs:range xsd:double ;
+    rdfs:comment "Price of the product"@en ;
+    rdfs:label "Product price"@en .
+
+### http://www.example.com/lars#returnReason
+lars:returnReason rdf:type owl:DatatypeProperty ; 
+    rdfs:domain lars:Return ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Reason of the return"@en ;
+    rdfs:label "Return reason"@en .
+
+#                           Delivery Services
+
+#Classes 
+xhulio:DeliveryCompanies rdf:type owl:Class;
+    rdfs:comment "The names of the delivery companies"@en ;
+    rdfs:label "DeliveryCompanies"@en.
+
+xhulio:PhysicalDeliveryPointsLocation rdf:type owl:Class;
+    owl:equivalentClass christophe:PickupLocation ;
+    rdfs:comment "The physical locations of Delivery Companies"@en ;
+    rdfs:label "PhysicalDeliveryPointsLocation"@en.
+
+xhulio:Address rdf:type owl:Class;
+    rdfs:comment "The class that holds all the addreses such as delivery points, or the address where the product should arrive"@en ;
+    rdfs:label "Address"@en.
+
+xhulio:DeliveryOrder rdf:type owl:Class;
+    owl:equivalentClass thomas:Delivery ;
+    rdfs:comment "The class that indicates what is a delivery order"@en ;
+    rdfs:label "DeliveryOrder"@en.
+
+xhulio:CallCustomerService rdf:type owl:Class;
+    rdfs:comment "An employee that replies customer question about delivery"@en ;
+    rdfs:label "CallCustomerService"@en.
+
+xhulio:Departments rdf:type owl:Class;
+    rdfs:comment "The class that hires some employees"@en ;
+    rdfs:label "Departments"@en.
+
+xhulio:Employee rdf:type owl:Class;
+    rdfs:comment "An Employee is a someone who has job in the company with a position history"@en ;
+    rdfs:label "Employee"@en.
+
+xhulio:PositionHistory rdf:type owl:Class;
+    rdfs:comment "Is a class that indicates all the position histories of the employees"@en ;
+    rdfs:label "PositionHistory"@en.
+
+xhulio:Courier rdf:type owl:Class;
+    rdfs:comment "A courier is a person that works in the company and deliver orders"@en ;
+    rdfs:label "Courier"@en.
+
+xhulio:DeliveryVehicles rdf:type owl:Class;
+    rdfs:comment "The vehicle that the courier will use to deliver a order"@en ;
+    rdfs:label "DeliveryVehicles"@en.
+
+xhulio:Customer rdf:type owl:Class;
+    owl:equivalentClass christophe:Customer ;
+    owl:equivalentClass lars:User ;
+    rdfs:comment "The customer that purchase a delivery service from the compnay"@en ;
+    rdfs:label "Customer"@en.
+
+
+
+#                                       Object Properties
+# delivery comany has location
+xhulio:have rdf:type owl:ObjectProperty;
+    rdf:type owl:FunctionalProperty;
+    owl:inverseOf xhulio:belongs;
+    rdfs:domain xhulio:DeliveryCompanies,
+                [rdf:type owl:Restriction;
+                 owl:onProperty xhulio:have;
+                 owl:minCardinality "1"^^xsd:nonNegativeInteger;
+                 owl:onClass xhulio:PhysicalDeliveryPointsLocation];
+    rdfs:range xhulio:PhysicalDeliveryPointsLocation;
+    rdfs:comment "relation that says that delivery services companies have location"@en ;
+    rdfs:label "have"@en.
+
+xhulio:belongs rdf:type owl:ObjectProperty;
+    rdf:type owl:InverseFunctionalProperty;
+    owl:inverseOf xhulio:have;
+    rdfs:domain xhulio:PhysicalDeliveryPointsLocation,
+                [rdf:type owl:Restriction;
+                 owl:onProperty xhulio:belongs;
+                 owl:minCardinality "1"^^xsd:nonNegativeInteger;
+                 owl:maxCardinality "1"^^xsd:nonNegativeInteger;
+                 owl:onClass xhulio:DeliveryCompanies];
+    rdfs:range xhulio:DeliveryCompanies;
+    rdfs:comment "relation to a point location that is part of a delivery service company"@en ;
+    rdfs:label "have"@en.    
+
+# location have address
+xhulio:include rdf:type owl:ObjectProperty;
+    rdf:type owl:FunctionalProperty;
+    owl:inverseOf xhulio:isIncluded; 
+    rdfs:domain xhulio:PhysicalDeliveryPointsLocation,
+                [rdf:type owl:Restriction;
+                 owl:onProperty xhulio:include;
+                 owl:maxCardinality "1"^^xsd:nonNegativeInteger;
+                 owl:minCardinality "1"^^xsd:nonNegativeInteger; # double check 
+                 owl:onClass xhulio:Address];
+    rdfs:range xhulio:Address;
+    rdfs:comment "relation that says that locations of a delivery company have addresses"@en ;
+    rdfs:label "have"@en.
+
+xhulio:isIncluded rdf:type owl:ObjectProperty;
+    rdf:type owl:InverseFunctionalProperty;
+    owl:inverseOf xhulio:include;
+    rdfs:domain xhulio:Address,
+                [rdf:type owl:Restriction;
+                 owl:onProperty xhulio:isIncluded;
+                 owl:minCardinality "1"^^xsd:nonNegativeInteger;
+                 owl:maxCardinality "1"^^xsd:nonNegativeInteger;
+                 owl:onClass xhulio:PhysicalDeliveryPointsLocation];
+    rdfs:range xhulio:PhysicalDeliveryPointsLocation;
+    rdfs:comment "One address can define one delivry/pick up location of the company "@en ;
+    rdfs:label "have"@en.
+
+# order owns address
+xhulio:owns rdf:type owl:ObjectProperty;
+    rdf:type owl:FunctionalProperty;
+    owl:inverseOf xhulio:isOwned; 
+    rdfs:domain xhulio:DeliveryOrder,
+                [rdf:type owl:Restriction;
+                 owl:onProperty xhulio:owns;
+                 owl:maxCardinality "1"^^xsd:nonNegativeInteger;
+                 owl:minCardinality "1"^^xsd:nonNegativeInteger;
+                 owl:onClass xhulio:Address];
+    rdfs:range xhulio:Address;
+    rdfs:comment "relation that says that delivery order must have an address where to go to"@en ;
+    rdfs:label "have"@en.
+
+xhulio:isOwned rdf:type owl:ObjectProperty;
+    rdf:type owl:InverseFunctionalProperty;
+    owl:inverseOf xhulio:owns;
+    rdfs:domain xhulio:Address;
+    rdfs:range xhulio:DeliveryOrder;
+    rdfs:comment "One of the addresses of our database might be one of the delivery orders"@en ;
+    rdfs:label "have"@en.
+
+# company isDiveded into departments        
+xhulio:isDivided rdf:type owl:ObjectProperty;
+    rdf:type owl:FunctionalProperty;
+    rdfs:domain xhulio:DeliveryCompanies;
+    rdfs:range xhulio:Departments;
+    rdfs:comment "1 delivery company has many departments"@en ;
+    rdfs:label "have"@en.
+
+# departments record delivery order || ASK HERE
+xhulio:record rdf:type owl:ObjectProperty;
+    rdf:type owl:FunctionalProperty;
+    owl:inverseOf xhulio:isRecorded;
+    rdfs:domain xhulio:Departments;
+    rdfs:range xhulio:DeliveryOrder;
+    rdfs:comment "One of the departments of the company is in charge of keeping track of orders"@en ;
+    rdfs:label "have"@en.
+
+xhulio:isRecorded rdf:type owl:ObjectProperty;
+    rdf:type owl:InverseFunctionalProperty;
+    owl:inverseOf xhulio:record;
+    rdfs:domain xhulio:DeliveryOrder,
+                [rdf:type owl:Restriction;
+                 owl:onProperty xhulio:isRecorded;
+                 owl:minCardinality "1"^^xsd:nonNegativeInteger; # one delivery order isRecorded by 1 department
+                 owl:maxCardinality "1"^^xsd:nonNegativeInteger;
+                 owl:onClass xhulio:Departments];
+    rdfs:range xhulio:Departments;
+    rdfs:comment "When an order happen it is recorded by a department "@en ;
+    rdfs:label "have"@en.
+
+
+# departments offer customer service
+xhulio:offers rdf:type owl:ObjectProperty;
+    rdf:type owl:FunctionalProperty;
+    owl:inverseOf xhulio:isOfferedBy;
+    rdfs:domain xhulio:Departments;
+    rdfs:range xhulio:CallCustomerService;
+    rdfs:comment "This relation shows that one department might offer call customer as a service"@en ;
+    rdfs:label "have"@en.
+
+xhulio:isOfferedBy rdf:type owl:ObjectProperty;
+    rdf:type owl:InverseFunctionalProperty;
+    owl:inverseOf xhulio:offers;
+    rdfs:domain xhulio:CallCustomerService,
+                [rdf:type owl:Restriction;
+                 owl:onProperty xhulio:isOfferedBy;
+                 owl:minCardinality "1"^^xsd:nonNegativeInteger; 
+                 owl:maxCardinality "1"^^xsd:nonNegativeInteger;
+                 owl:onClass xhulio:Departments];
+    rdfs:range xhulio:Departments;
+    rdfs:comment "This relationship shows that all customer service are offered by 1 department "@en ;
+    rdfs:label "have"@en.
+
+# departments register customers
+xhulio:register rdf:type owl:ObjectProperty;
+    rdf:type owl:FunctionalProperty;
+    owl:inverseOf xhulio:isRegisteredBy;
+    rdfs:domain xhulio:Departments;
+    rdfs:range xhulio:Customer;
+    rdfs:comment "This relation shows that one department might register customers"@en ;
+    rdfs:label "have"@en.
+
+xhulio:isRegisteredBy rdf:type owl:ObjectProperty;
+    rdf:type owl:InverseFunctionalProperty;
+    owl:inverseOf xhulio:register;
+    rdfs:domain xhulio:Customer,
+                [rdf:type owl:Restriction;
+                 owl:onProperty xhulio:isRegisteredBy;
+                 owl:minCardinality "1"^^xsd:nonNegativeInteger; 
+                 owl:maxCardinality "1"^^xsd:nonNegativeInteger;
+                 owl:onClass xhulio:Departments];
+    rdfs:range xhulio:Departments;
+    rdfs:comment "This relationship shows that all customer are registered by 1 department "@en ;
+    rdfs:label "have"@en.
+
+
+# departments enables delivery vehicle 
+xhulio:facilitate rdf:type owl:ObjectProperty;
+    rdf:type owl:FunctionalProperty;
+    owl:inverseOf xhulio:isFacilitatedBy;
+    rdfs:domain xhulio:Departments;
+    rdfs:range xhulio:DeliveryVehicles;
+    rdfs:comment "This relation shows that one department might facilitate delivery vehicles"@en ;
+    rdfs:label "have"@en.
+
+xhulio:isFacilitatedBy rdf:type owl:ObjectProperty;
+    rdf:type owl:InverseFunctionalProperty;
+    owl:inverseOf xhulio:facilitate;
+    rdfs:domain xhulio:DeliveryVehicles,
+                [rdf:type owl:Restriction;
+                 owl:onProperty xhulio:isFacilitatedBy;
+                 owl:minCardinality "1"^^xsd:nonNegativeInteger; 
+                 owl:maxCardinality "1"^^xsd:nonNegativeInteger;
+                 owl:onClass xhulio:Departments];
+    rdfs:range xhulio:Departments;
+    rdfs:comment "This relationship shows that all delivery vehicles must be registered by 1 department "@en ;
+    rdfs:label "have"@en.
+
+
+
+# departments hires employees
+xhulio:hires rdf:type owl:ObjectProperty;
+    rdf:type owl:FunctionalProperty;
+    owl:inverseOf xhulio:isHiredBy;
+    rdfs:domain xhulio:Departments;
+    rdfs:range xhulio:Employee;
+    rdfs:comment "This relation shows that one department might hires employee/s"@en ;
+    rdfs:label "have"@en.
+
+xhulio:isHiredBy rdf:type owl:ObjectProperty;
+    rdf:type owl:InverseFunctionalProperty;
+    owl:inverseOf xhulio:hires;
+    rdfs:domain xhulio:Employee,
+                [rdf:type owl:Restriction;
+                 owl:onProperty xhulio:isHiredBy;
+                 owl:minCardinality "1"^^xsd:nonNegativeInteger; 
+                 owl:maxCardinality "1"^^xsd:nonNegativeInteger;
+                 owl:onClass xhulio:Departments];
+    rdfs:range xhulio:Departments;
+    rdfs:comment "This relationship shows that all employees must be hired by only 1 department "@en ;
+    rdfs:label "have"@en.
+
+# departments recruit courier
+xhulio:recruit rdf:type owl:ObjectProperty;
+    rdf:type owl:FunctionalProperty;
+    owl:inverseOf xhulio:isRecruitedBy;
+    rdfs:domain xhulio:Departments;
+    rdfs:range xhulio:Courier;
+    rdfs:comment "This relation shows that one department might hires courier/s"@en ;
+    rdfs:label "have"@en.
+
+xhulio:isRecruitedBy rdf:type owl:ObjectProperty;
+    rdf:type owl:InverseFunctionalProperty;
+    owl:inverseOf xhulio:recruit;
+    rdfs:domain xhulio:Courier,
+                [rdf:type owl:Restriction;
+                 owl:onProperty xhulio:isRecruitedBy;
+                 owl:minCardinality "1"^^xsd:nonNegativeInteger; 
+                 owl:maxCardinality "1"^^xsd:nonNegativeInteger;
+                 owl:onClass xhulio:Departments];
+    rdfs:range xhulio:Departments;
+    rdfs:comment "This relationship shows that all couriers must be hired by only 1 department "@en ;
+    rdfs:label "have"@en.
+
+
+# department is headed by 1 employee
+xhulio:isHeadedBy rdf:type owl:ObjectProperty;
+    rdf:type owl:FunctionalProperty;
+    owl:inverseOf xhulio:heads; 
+    rdfs:domain xhulio:Departments,
+                [rdf:type owl:Restriction;
+                 owl:onProperty xhulio:isHeadedBy;
+                 owl:maxCardinality "1"^^xsd:nonNegativeInteger;
+                 owl:minCardinality "1"^^xsd:nonNegativeInteger; 
+                 owl:onClass xhulio:Employee];
+    rdfs:range xhulio:Employee;
+    rdfs:comment "This relation expresses that 1 department must be managed by 1 employee"@en ;
+    rdfs:label "have"@en.
+
+xhulio:heads rdf:type owl:ObjectProperty;
+    rdf:type owl:InverseFunctionalProperty;
+    owl:inverseOf xhulio:isHeadedBy;
+    rdfs:domain xhulio:Employee,
+                [rdf:type owl:Restriction;
+                 owl:onProperty xhulio:heads; 
+                 owl:maxCardinality "1"^^xsd:nonNegativeInteger;
+                 owl:onClass xhulio:Departments];
+    rdfs:range xhulio:Departments;
+    rdfs:comment "This relationship shows that 1 employee might be in charge of 1 department "@en ;
+    rdfs:label "have"@en.
+
+
+
+
+
+# courier enables orders
+xhulio:enables rdf:type owl:ObjectProperty;
+    rdf:type owl:FunctionalProperty;
+    owl:inverseOf xhulio:isEnabled;
+    rdfs:domain xhulio:Courier;
+    rdfs:range xhulio:DeliveryOrder;
+    rdfs:comment "Courier enables Delivery Order"@en ;
+    rdfs:label "have"@en.
+
+xhulio:isEnabled rdf:type owl:ObjectProperty;
+    rdf:type owl:InverseFunctionalProperty;
+    owl:inverseOf xhulio:enables;
+    rdfs:domain xhulio:DeliveryOrder,
+                [rdf:type owl:Restriction;
+                 owl:onProperty xhulio:isEnabled;
+                 owl:maxCardinality "1"^^xsd:nonNegativeInteger;
+                 owl:onClass xhulio:Courier];
+    rdfs:range xhulio:Courier;
+    rdfs:comment "relation that says that delivery order is enabled by the courier"@en ;
+    rdfs:label "have"@en.
+
+# employee manage courier
+xhulio:manage rdf:type owl:ObjectProperty;
+    rdf:type owl:FunctionalProperty;
+    owl:inverseOf xhulio:isManagedBy;
+    rdfs:domain xhulio:Employee;
+    rdfs:range xhulio:Courier;
+    rdfs:comment "1 Employee can manage many customers"@en ;
+    rdfs:label "have"@en.
+
+xhulio:isManagedBy rdf:type owl:ObjectProperty;
+    rdf:type owl:InverseFunctionalProperty;
+    owl:inverseOf xhulio:manage;
+    rdfs:domain xhulio:Courier,
+                [rdf:type owl:Restriction;
+                 owl:onProperty xhulio:isManagedBy;
+                 owl:maxCardinality "1"^^xsd:nonNegativeInteger;
+                 owl:onClass xhulio:Employee];
+    rdfs:range xhulio:Employee;
+    rdfs:comment "relation that implies that coutrier is managed by maximum 1 employee"@en ;
+    rdfs:label "have"@en.
+
+# employee has position history
+xhulio:involve rdf:type owl:ObjectProperty;
+    rdf:type owl:FunctionalProperty;
+    owl:inverseOf xhulio:isInvolvedBy;
+    rdfs:domain xhulio:Employee;
+    rdfs:range xhulio:PositionHistory;
+    rdfs:comment "Each employee might have had previos worked experience"@en ;
+    rdfs:label "have"@en.
+
+xhulio:isInvolvedBy rdf:type owl:ObjectProperty;
+    rdf:type owl:InverseFunctionalProperty;
+    owl:inverseOf xhulio:involve;
+    rdfs:domain xhulio:PositionHistory,
+                [rdf:type owl:Restriction;
+                 owl:onProperty xhulio:isInvolvedBy;
+                 owl:maxCardinality "1"^^xsd:nonNegativeInteger;
+                 owl:onClass xhulio:Employee];
+    rdfs:range xhulio:Employee;
+    rdfs:comment "Each postion history belongs to only 1 employee"@en ;
+    rdfs:label "have"@en.
+
+# employee supervize employee
+xhulio:supervize rdf:type owl:ObjectProperty;
+    rdf:type owl:FunctionalProperty;
+    owl:inverseOf xhulio:isSupervisedBy;
+    rdfs:domain xhulio:Employee;
+    rdfs:range xhulio:Employee;
+    rdfs:comment "1 employe have the chance to supervize another employee"@en ;
+    rdfs:label "have"@en.
+
+xhulio:isSupervisedBy rdf:type owl:ObjectProperty;
+    rdf:type owl:InverseFunctionalProperty;
+    rdf:type owl:AsymmetricProperty; 
+    owl:inverseOf xhulio:supervize;
+    rdfs:domain xhulio:Employee,
+                [rdf:type owl:Restriction;
+                 owl:onProperty xhulio:isSupervisedBy;
+                 owl:minCardinality "1"^^xsd:nonNegativeInteger;
+                 owl:maxCardinality "1"^^xsd:nonNegativeInteger;
+                 owl:onClass xhulio:Employee];
+    rdfs:range xhulio:Employee;
+    rdfs:comment "Each employee must be supervised by only 1 other employee"@en ;
+    rdfs:label "have"@en.
+
+
+# courier uses delivery vehicle
+xhulio:use rdf:type owl:ObjectProperty;
+    rdf:type owl:FunctionalProperty;
+    owl:inverseOf xhulio:isUsedBy; 
+    rdfs:domain xhulio:Courier,
+                [rdf:type owl:Restriction;
+                 owl:onProperty xhulio:use;
+                 owl:maxCardinality "1"^^xsd:nonNegativeInteger;
+                 owl:minCardinality "1"^^xsd:nonNegativeInteger;
+                 owl:onClass xhulio:DeliveryVehicles];
+    rdfs:range xhulio:DeliveryVehicles;
+    rdfs:comment "This relation expresses that 1 courier must be in charge of 1 vehicle"@en ;
+    rdfs:label "have"@en.
+
+xhulio:isUsedBy rdf:type owl:ObjectProperty;
+    rdf:type owl:InverseFunctionalProperty;
+    owl:inverseOf xhulio:use;
+    rdfs:domain xhulio:DeliveryVehicles,
+                [rdf:type owl:Restriction;
+                 owl:onProperty xhulio:isUsedBy;
+                 owl:minCardinality "1"^^xsd:nonNegativeInteger;
+                 owl:maxCardinality "1"^^xsd:nonNegativeInteger;
+                 owl:onClass xhulio:Courier];
+    rdfs:range xhulio:Courier;
+    rdfs:comment "Each vehicle must be driven by 1 courier"@en ;
+    rdfs:label "have"@en.
+
+
+
+# customers purchase orders
+xhulio:purchase rdf:type owl:ObjectProperty;
+    rdf:type owl:FunctionalProperty; 
+    rdfs:domain xhulio:Customer,
+                [rdf:type owl:Restriction;
+                 owl:onProperty xhulio:purchase;
+                 owl:minCardinality "1"^^xsd:nonNegativeInteger;
+                 owl:onClass xhulio:DeliveryOrder];
+    rdfs:range xhulio:DeliveryOrder;
+    rdfs:comment "This relation expresses that 1 customer must purchasse at least 1 order"@en ;
+    rdfs:label "purchase"@en.
+
+
+# customers call customerService
+xhulio:call rdf:type owl:ObjectProperty;
+    rdf:type owl:FunctionalProperty;
+    rdfs:domain xhulio:Customers;
+    rdfs:range xhulio:CallCustomerService;
+    rdfs:comment "This relationship shows that customers can call customer service"@en ;
+    rdfs:label "call"@en.
+
+# Data Properties
+
+xhulio:companyName rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:DeliveryCompanies;
+    rdfs:range xsd:string;
+    rdfs:comment "The name of the delivery service company"@en;
+    rdfs:label "company name"@en.
+
+
+xhulio:branch_id rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:DeliveryCompanies;
+    rdfs:range xsd:integer;
+    rdfs:comment "The id of the delivery service company"@en;
+    rdfs:label "branch id"@en.
+
+xhulio:deliveryPointId rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:PhysicalDeliveryPointsLocation;
+    rdfs:range xsd:integer;
+    rdfs:comment "Unique identifier of each location of a company"@en;
+    rdfs:label "delivery point Id"@en.
+
+xhulio:region rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:Address;
+    rdfs:range xsd:string;
+    rdfs:comment "Region of an Addres"@en;
+    rdfs:label "region"@en.
+
+xhulio:city rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:Address;
+    rdfs:range xsd:string;
+    rdfs:comment "City of an Addres"@en;
+    rdfs:label "city"@en.
+
+xhulio:postalCode rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:Address;
+    rdfs:range xsd:integer;
+    rdfs:comment "Postal Code of an Addres"@en;
+    rdfs:label "postal code"@en.
+
+xhulio:streetName rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:Address;
+    rdfs:range xsd:string;
+    rdfs:comment "The street name of an Addres"@en;
+    rdfs:label "street name"@en.
+
+xhulio:addressId rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:Address;
+    rdfs:range xsd:integer;
+    rdfs:comment "Unique value that identify each address"@en;
+    rdfs:label "address id"@en.
+
+xhulio:buildingNumber rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:Address;
+    rdfs:range xsd:integer;
+    rdfs:comment "Building number of an Addres"@en;
+    rdfs:label "building number"@en.
+
+xhulio:shippingType rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:DeliveryOrder;
+    rdfs:range xsd:string;
+    rdfs:comment "Type of shippment for an delivery order"@en;
+    rdfs:label "shipping type"@en.
+
+xhulio:deliveryID rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:DeliveryOrder;
+    rdfs:range xsd:integer;
+    rdfs:comment "Unique Value that identify each delivery order that a customer has made"@en;
+    rdfs:label "delivery id"@en.
+
+xhulio:packageWeight rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:DeliveryOrder;
+    rdfs:range xsd:integer;
+    rdfs:comment "The weight of each delivery order"@en;
+    rdfs:label "package weight"@en.
+
+xhulio:stage rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:DeliveryOrder;
+    rdfs:range xsd:string;
+    rdfs:comment "The stage at which a delivery order is at"@en;
+    rdfs:label "stage"@en.
+
+xhulio:comments rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:DeliveryOrder;
+    rdfs:range xsd:string;
+    rdfs:comment "Comments/Details that a customer add to his/her delivery order"@en;
+    rdfs:label "comments"@en.
+
+xhulio:review rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:CallCustomerService;
+    rdfs:range xsd:string;
+    rdfs:comment "Reviews that a customer service employee gets from a customer"@en;
+    rdfs:label "review"@en.
+
+xhulio:phoneNumber rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:CallCustomerService;
+    rdfs:range xsd:string;
+    rdfs:comment "Phone number that a customer service employee has that the customer can call at"@en;
+    rdfs:label "phone number"@en.
+
+xhulio:supporterId rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:CallCustomerService;
+    rdfs:range xsd:integer;
+    rdfs:comment "Unique value that identify customer service employees between each other"@en;
+    rdfs:label "supporter id"@en.
+
+xhulio:supporterFirstName rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:CallCustomerService;
+    rdfs:range xsd:string;
+    rdfs:comment "First name of customer service employee"@en;
+    rdfs:label "supporter first name"@en.
+
+xhulio:supporterLastName rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:CallCustomerService;
+    rdfs:range xsd:string;
+    rdfs:comment "First name of customer service employee"@en;
+    rdfs:label "supporter last name"@en.
+
+xhulio:numberOfEmployees rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:Departments;
+    rdfs:range xsd:integer;
+    rdfs:comment "Number of employees that each department has"@en;
+    rdfs:label "number of employees"@en.
+
+xhulio:departmentName rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:Departments;
+    rdfs:range xsd:string;
+    rdfs:comment "The name of the department"@en;
+    rdfs:label "department name"@en.
+
+xhulio:departmentId rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:Departments;
+    rdfs:range xsd:integer;
+    rdfs:comment "Unique value that identify each department"@en;
+    rdfs:label "department id"@en.
+
+xhulio:vehicleSeriesNumber rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:DeliveryVehicles;
+    rdfs:range xsd:integer;
+    rdfs:comment "Unique number that identify a vehicle that courier uses"@en;
+    rdfs:label "vehicle series number"@en.
+
+xhulio:plateNumber rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:DeliveryVehicles;
+    rdfs:range xsd:string;
+    rdfs:comment "Plate values of a vehicle"@en;
+    rdfs:label "plate number"@en.
+
+xhulio:type rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:DeliveryVehicles;
+    rdfs:range xsd:string;
+    rdfs:comment "The type of each vehicle"@en;
+    rdfs:label "type"@en.
+
+xhulio:brandName rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:DeliveryVehicles;
+    rdfs:range xsd:string;
+    rdfs:comment "Brand name that a vehicle has"@en;
+    rdfs:label "brand name"@en.
+
+xhulio:consumption rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:DeliveryVehicles;
+    rdfs:range xsd:string;
+    rdfs:comment "Fuel consumption that a vehicle has"@en;
+    rdfs:label "consumption"@en.
+
+xhulio:dateOfHiringEmployee rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:Employee;
+    rdfs:range xsd:date;
+    rdfs:comment "Date that an employee started the job at a department"@en;
+    rdfs:label "date of hiring employee"@en.
+
+xhulio:employeeFirstName rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:Employee;
+    rdfs:range xsd:string;
+    rdfs:comment "First name of an employee"@en;
+    rdfs:label "employee first name"@en.
+
+xhulio:employeeLastName rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:Employee;
+    rdfs:range xsd:string;
+    rdfs:comment "Last name of an employee"@en;
+    rdfs:label "employee last name"@en.
+
+xhulio:EmployeeSalary rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:Employee;
+    rdfs:range xsd:double;
+    rdfs:comment "Salary of an employee"@en;
+    rdfs:label "employee salary"@en.
+
+xhulio:employeeEmail rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:Employee;
+    rdfs:range xsd:string;
+    rdfs:comment "E-mail of an employee"@en;
+    rdfs:label "employee email"@en.
+
+xhulio:employeeId rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:Employee;
+    rdfs:range xsd:integer;
+    rdfs:comment "Unique value that identify an employee"@en;
+    rdfs:label "employee id"@en.
+
+xhulio:employeeContactNumber rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:Employee;
+    rdfs:range xsd:string;
+    rdfs:comment "Contact/Phone number of each employee"@en;
+    rdfs:label "employee contact number"@en.
+
+xhulio:dateOfHiringCourier rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:Courier;
+    rdfs:range xsd:date;
+    rdfs:comment "Date that an courier started the job at a department"@en;
+    rdfs:label "date of hiring courier"@en.
+
+xhulio:courierFirstName rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:Courier;
+    rdfs:range xsd:string;
+    rdfs:comment "First Name of the courier"@en;
+    rdfs:label "courier first name"@en.
+
+xhulio:courierLastName rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:Courier;
+    rdfs:range xsd:string;
+    rdfs:comment "Courier Last Name"@en;
+    rdfs:label "courier last name"@en.
+
+xhulio:courierSalary rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:Courier;
+    rdfs:range xsd:double;
+    rdfs:comment "Salary that a courier earns per month"@en;
+    rdfs:label "courier salary"@en.
+
+xhulio:courierId rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:Courier;
+    rdfs:range xsd:integer;
+    rdfs:comment "Unique value that identifies a courier"@en;
+    rdfs:label "courier id"@en.
+
+xhulio:dateOfBirth rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:Courier;
+    rdfs:range xsd:date;
+    rdfs:comment "Date of birth of an courier"@en;
+    rdfs:label "date of birth"@en.
+
+xhulio:gender rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:Courier;
+    rdfs:range xsd:string;
+    rdfs:comment "Gender of a courier"@en;
+    rdfs:label "gender"@en.
+
+xhulio:startDate rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:PositionHistory;
+    rdfs:range xsd:date;
+    rdfs:comment "Date that an employee started a specifc job in the past"@en;
+    rdfs:label "start date"@en.
+
+xhulio:endDate rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:PositionHistory;
+    rdfs:range xsd:date;
+    rdfs:comment "Date that an employee ended a specifc job in the past"@en;
+    rdfs:label "end date"@en.
+
+xhulio:positionName rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:PositionHistory;
+    rdfs:range xsd:string;
+    rdfs:comment "Name of a job that an employee did in the past"@en;
+    rdfs:label "position name"@en.
+
+xhulio:positionDescribtion rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:PositionHistory;
+    rdfs:range xsd:string;
+    rdfs:comment "Describtion of a job that an employee did in the past"@en;
+    rdfs:label "position describtion"@en.
+
+xhulio:customerName rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:Customer;
+    rdfs:range xsd:string;
+    rdfs:comment "First name of a customer"@en;
+    rdfs:label "customer name"@en.
+
+xhulio:customerSurname rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:Customer;
+    rdfs:range xsd:string;
+    rdfs:comment "Last name of a customer"@en;
+    rdfs:label "customer surname"@en.
+
+xhulio:customerEmail rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:Customer;
+    rdfs:range xsd:string;
+    rdfs:comment "E-mail address of a customer"@en;
+    rdfs:label "customer email"@en.
+
+xhulio:customerPhoneNumber rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:Customer;
+    rdfs:range xsd:string;
+    rdfs:comment "Customer phone number"@en;
+    rdfs:label "customer phone number"@en.
+
+xhulio:customerId rdf:type owl:DatatypeProperty;
+    rdfs:domain xhulio:Customer;
+    rdfs:range xsd:integer;
+    rdfs:comment "Unique value that a customer has, with which can be indentified from other customers"@en;
+    rdfs:label "customer id"@en.
