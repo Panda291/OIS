@@ -1,0 +1,25 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX christophe: <http://www.example.com/christophe#>
+PREFIX thomas: <http://www.example.com/thomas#>
+PREFIX lars: <http://www.example.com/lars#>
+PREFIX nastya: <http://www.example.com/nastya#>
+PREFIX xhulio: <http://www.example.com/xhulio#>
+
+
+# Gives the average rating of a supplier/brand by looking at it's rating or review.
+SELECT ?brand (AVG(?rev) AS ?quality)  WHERE {
+  
+   {?n_review_nastya nastya:on ?product.
+    ?product nastya:brand ?brand. 
+    ?n_review_nastya nastya:num_stars ?rev.}
+  	UNION 
+    {?supplier lars:sname ?brand.
+  	?l_review_lars lars:reviewHasSupplier ?supplier .
+  	?l_review_lars lars:reviewHasRating ?rating .
+  	?rating lars:stars ?rev. }
+} 
+GROUP BY ?brand
+ORDER BY ?brand
+
+
